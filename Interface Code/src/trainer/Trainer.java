@@ -5,83 +5,82 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Trainer implements Serializable{
-	/**
-	 * Public class that represents the trainers of pokemon.
-	 * Trainers can have a party of pokemon, hold items and have personal 
-	 * accolades associated with them
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	String name;
-	String title;
-	String hometown;
-	ArrayList<Pokemon> party = new ArrayList<>();
-	
-	public Trainer(String name) {
-		super();
-		this.name = name;
-		this.title = "Rookie Trainer";
-		this.hometown = "Battle Frontier";
-	}
-	
-	public void addToParty(Pokemon pokemon)
-	{
-		party.add(pokemon);
-	}
-	
-	public void displayPartyDetailed()
-	{
-		System.out.println("\n" + this.name + "'" + this.title + "'");
-		System.out.println("Party Pokemon");
-		for(Pokemon pokemon : party)
-		{
-                    pokemon.displayInformation();
-		}
-		System.out.println();
-	}
+    /**
+     * Public class that represents the trainers of pokemon.
+     * Trainers can have a party of pokemon, hold items and have personal 
+     * accolades associated with them
+     */
+    private static final long serialVersionUID = 1L;
 
-	public void displayPartyBasic()
-	{
-		System.out.println("\n" + this.name + "'s Party");
-		for(int i = 0; i < party.size(); i++)
-		{
-			System.out.print((i+1) + ". " + party.get(i).getName());
-			if(party.get(i).isFainted()) System.out.println(" FNT");
-			else System.out.println();
-		}
-		System.out.println();
-	}
-	
-	public String getName() {
-		return name;
-	}
+    String name;
+    String title;
+    String hometown;
+    ArrayList<Pokemon> party = new ArrayList<>();
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public Trainer(String name) {
+        super();
+        this.name = name;
+        this.title = "Rookie Trainer";
+        this.hometown = "Battle Frontier";
+    }
 
-	public ArrayList<Pokemon> getParty() {
-		return party;
-	}
+    public void addToParty(Pokemon pokemon)
+    {
+        party.add(pokemon);
+    }
 
-	public void setParty(ArrayList<Pokemon> party) {
-		this.party = party;
-	}
+    public void displayPartyDetailed()
+    {
+        System.out.println("\n" + this.name + "'" + this.title + "'");
+        System.out.println("Party Pokemon");
+        for(Pokemon pokemon : party)
+        {
+            pokemon.displayInformation();
+        }
+        System.out.println();
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public void displayPartyBasic()
+    {
+        System.out.println("\n" + this.name + "'s Party");
+        for(int i = 0; i < party.size(); i++)
+        {
+            System.out.print((i+1) + ". " + party.get(i).getName());
+            if(party.get(i).isFainted()) System.out.println(" FNT");
+            else System.out.println();
+        }
+        System.out.println();
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getHometown() {
-		return hometown;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setHometown(String hometown) {
-		this.hometown = hometown;
-	}
-	
+    public ArrayList<Pokemon> getParty() {
+        return party;
+    }
+
+    public void setParty(ArrayList<Pokemon> party) {
+        this.party = party;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getHometown() {
+        return hometown;
+    }
+
+    public void setHometown(String hometown) {
+        this.hometown = hometown;
+    }
 }

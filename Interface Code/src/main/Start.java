@@ -8,6 +8,8 @@ import utilities.startup;
 import trainer.Trainer;
 import move.Move;
 
+import client.Client;
+
 public class Start {
     public static void main(String[] args) {
 
@@ -29,14 +31,15 @@ public class Start {
         // Objects for basic testin
 
         System.out.println("Program begin");
-        Trainer ash = startup.createAsh(pokedex, movedex);
-        ash.displayPartyDetailed();
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            
-//            @Override
-//            public void run() {
+//        Trainer ash = startup.createAsh(pokedex, movedex);
+//        ash.displayPartyDetailed();
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            
+            @Override
+            public void run() {
 //                new MainMenu(pokedex).setVisible(true);
-//            }
-//        });
+                  new Client().setVisible(true);
+            }
+        });
     }
 }

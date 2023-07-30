@@ -12,9 +12,6 @@ public class Client extends javax.swing.JFrame {
     CardLayout menuCard;
     CardLayout navCard;
     
-    /*  List of all information to customize pokemon trainers
-    TODO: Move this to a better spot
-    */
     ImageIcon pikachu = new ImageIcon("pikachu.png");
     //ArrayList<Pokemon> pokelist;
     

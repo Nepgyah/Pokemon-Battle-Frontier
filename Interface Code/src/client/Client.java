@@ -1,7 +1,11 @@
 package client;
 
 import java.awt.CardLayout;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
+import java.awt.*;
+import pokemon.Pokemon;
+import battle.gamemodes.*;
 
 public class Client extends javax.swing.JFrame {
 
@@ -14,7 +18,7 @@ public class Client extends javax.swing.JFrame {
     ImageIcon pikachu = new ImageIcon("pikachu.png");
     //ArrayList<Pokemon> pokelist;
     
-    public Client() {
+    public Client(ArrayList<Pokemon> pokedex) {
         initComponents();
      
         // Lable for MainMenu picture
@@ -29,12 +33,13 @@ public class Client extends javax.swing.JFrame {
         this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
         
         contentPanel.add(new NewsPanel(contentPanel), "newsCard");
-        contentPanel.add(new PokedexPanel(contentPanel), "pokedexCard");
+        contentPanel.add(new PokedexPanel(contentPanel, pokedex), "pokedexCard");
         contentPanel.add(new MovedexPanel(contentPanel), "movedexCard");
         contentPanel.add(new CreateTrainerPanel(contentPanel), "createTrainerCard");
         contentPanel.add(new ViewEditTrainerPanel(contentPanel), "viewEditTrainerCard");
         contentPanel.add(new HallOfFamePanel(contentPanel), "HOFCard");
-
+        contentPanel.add(new SelectGameModePanel(contentPanel, navPanel), "selectMode");
+        
         // panel settings for navCard
         navCard = (CardLayout) navPanel.getLayout();
         
@@ -79,7 +84,7 @@ public class Client extends javax.swing.JFrame {
             newsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(newsPanelLayout.createSequentialGroup()
                 .addGroup(newsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(newsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
+                    .addComponent(newsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, newsPanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(pictureLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -128,7 +133,7 @@ public class Client extends javax.swing.JFrame {
                 .addComponent(homeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(battleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 127, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -143,7 +148,6 @@ public class Client extends javax.swing.JFrame {
                 .addGap(16, 16, 16))
         );
 
-        navPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         navPanel.setLayout(new java.awt.CardLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -154,10 +158,12 @@ public class Client extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(contentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 715, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(topnavPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(contentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(navPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(topnavPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(navPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -177,7 +183,12 @@ public class Client extends javax.swing.JFrame {
 
     private void battleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_battleButtonActionPerformed
         // TODO add your handling code here:
+//        menuCard.show(contentPanel, "selectMode");
         navCard.show(navPanel, "altCard");
+        SingleBattleWindow singleBattle = new SingleBattleWindow();
+        singleBattle.setVisible(true);
+        singleBattle.beginBattle();
+//        this.setState(Frame.ICONIFIED);
     }//GEN-LAST:event_battleButtonActionPerformed
 
     private void homeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeButtonActionPerformed

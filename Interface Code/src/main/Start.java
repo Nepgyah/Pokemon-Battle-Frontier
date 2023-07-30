@@ -38,7 +38,7 @@ public class Start {
             @Override
             public void run() {
 //                new MainMenu(pokedex).setVisible(true);
-                  new Client().setVisible(true);
+                  new Client(pokedex).setVisible(true);
             }
         });
     }

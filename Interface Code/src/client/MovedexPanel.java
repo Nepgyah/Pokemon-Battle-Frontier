@@ -1,6 +1,8 @@
 package client;
 
 import javax.swing.JPanel;
+import move.Move;
+import java.util.ArrayList;
 
 public class MovedexPanel extends javax.swing.JPanel {
 

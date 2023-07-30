@@ -1,6 +1,5 @@
 package main;
 
-
 import gameInterface.MainMenu;
 import java.util.ArrayList;
 import pokemon.pokedex.P_025_Pikachu;
@@ -9,15 +8,8 @@ import utilities.startup;
 import trainer.Trainer;
 import move.Move;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+import client.Client;
 
-/**
- *
- * @author Auston
- */
 public class Start {
     public static void main(String[] args) {
 
@@ -34,20 +26,20 @@ public class Start {
         System.out.println("Loading Success");
         System.out.println("Loading Interface");
         
-   
         // Loadup custom data
         
         // Objects for basic testin
 
         System.out.println("Program begin");
-        Trainer ash = startup.createAsh(pokedex, movedex);
-        ash.displayPartyDetailed();
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            
-//            @Override
-//            public void run() {
+//        Trainer ash = startup.createAsh(pokedex, movedex);
+//        ash.displayPartyDetailed();
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            
+            @Override
+            public void run() {
 //                new MainMenu(pokedex).setVisible(true);
-//            }
-//        });
+                  new Client(pokedex).setVisible(true);
+            }
+        });
     }
 }

@@ -2,15 +2,19 @@ package battle.gamemodes;
 
 import javax.swing.JPanel;
 import move.Move;
-
+import battle.gamemodes.SingleBattleController;
+import java.awt.CardLayout;
 public class movePanel extends javax.swing.JPanel {
 
     JPanel contentPanel;
-    
-    public movePanel(JPanel panel, String trainer, Move[] moveList) {
+    CardLayout card;
+    SingleBattleController controller;
+    public movePanel(JPanel panel, String trainer, Move[] moveList, SingleBattleController controller) {
         initComponents();
         this.contentPanel = panel;
-        titleLabel.setText("Move inventory for " + trainer);
+        this.controller = controller;
+        card = (CardLayout) panel.getLayout();
+        titleLabel.setText("Moveset for " + trainer);
         setMoveButtons(moveList);
     }
 
@@ -113,19 +117,23 @@ public class movePanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void moveOneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveOneButtonActionPerformed
-        // TODO add your handling code here:
+        controller.setMoveChoice(0);
+        card.show(contentPanel, "waitingPanel");
     }//GEN-LAST:event_moveOneButtonActionPerformed
 
     private void moveTwoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveTwoButtonActionPerformed
-        // TODO add your handling code here:
+        controller.setMoveChoice(1);
+        card.show(contentPanel, "waitingPanel");
     }//GEN-LAST:event_moveTwoButtonActionPerformed
 
     private void moveThreeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveThreeButtonActionPerformed
-        // TODO add your handling code here:
+        controller.setMoveChoice(2);
+        card.show(contentPanel, "waitingPanel");
     }//GEN-LAST:event_moveThreeButtonActionPerformed
 
     private void moveFourButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveFourButtonActionPerformed
-        // TODO add your handling code here:
+        controller.setMoveChoice(3);
+        card.show(contentPanel, "waitingPanel");
     }//GEN-LAST:event_moveFourButtonActionPerformed
 
 

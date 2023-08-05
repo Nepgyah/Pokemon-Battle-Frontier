@@ -9,11 +9,16 @@ import trainer.Trainer;
 public class SingleBattleWindow extends javax.swing.JFrame {
 
     CardLayout controlCard;
-    boolean playerOneTurn = true;
+    boolean leftTrainerTurn = true;
+    SingleBattleController battleController;
+    
     public SingleBattleWindow(Trainer leftTrainer, Trainer rightTrainer) {
         initComponents();
         
+        battleController = new SingleBattleController(leftTrainer.getParty().get(0), rightTrainer.getParty().get(0), true);
         controlCard = (CardLayout) detailedPanel.getLayout();
+        
+        detailedPanel.add(new waitingPanel(detailedPanel), "waitingPanel");
         
         detailedPanel.add(new bagPanel(detailedPanel, leftTrainer.getName()), "leftBagPanel");
         detailedPanel.add(new bagPanel(detailedPanel, rightTrainer.getName()), "rightBagPanel");
@@ -21,12 +26,13 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         detailedPanel.add(new pokemonPanel(detailedPanel, leftTrainer.getName()), "leftPokemonPanel");
         detailedPanel.add(new pokemonPanel(detailedPanel, rightTrainer.getName()), "rightPokemonPanel");
         
-        detailedPanel.add(new movePanel(detailedPanel, leftTrainer.getName(), leftTrainer.getParty().get(0).getMoveset()), "leftMovePanel");
-        detailedPanel.add(new movePanel(detailedPanel, rightTrainer.getName(), rightTrainer.getParty().get(0).getMoveset()), "rightMovePanel");
+        detailedPanel.add(new movePanel(detailedPanel, leftTrainer.getName(), leftTrainer.getParty().get(0).getMoveset(), battleController), "leftMovePanel");
+        detailedPanel.add(new movePanel(detailedPanel, rightTrainer.getName(), rightTrainer.getParty().get(0).getMoveset(), battleController), "rightMovePanel");
         
         setLeftPokemonLabels(leftTrainer.getParty().get(0));
         setRightPokemonLabels(rightTrainer.getParty().get(0));
         
+        System.out.println("WINDOW CONSOLE: Initializing battle between " + leftTrainer.getName() + " vs " + rightTrainer.getName());
     }
 
     private void setRightPokemonLabels(Pokemon pokemon) {
@@ -336,7 +342,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
 
     private void fightButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fightButtonActionPerformed
         // TODO add your handling code here:
-        if (playerOneTurn) {
+        if (battleController.getLeftTrainerTurn()) {
             controlCard.show(detailedPanel, "leftMovePanel");
         } else {
             controlCard.show(detailedPanel, "rightMovePanel");
@@ -345,7 +351,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
 
     private void bagButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bagButtonActionPerformed
         // TODO add your handling code here:
-        if (playerOneTurn) {
+        if (battleController.getLeftTrainerTurn()) {
             controlCard.show(detailedPanel, "leftBagPanel");
         } else {
             controlCard.show(detailedPanel, "rightBagPanel");
@@ -354,7 +360,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
 
     private void pokemonButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonButtonActionPerformed
         // TODO add your handling code here:
-        if (playerOneTurn) {
+        if (battleController.getLeftTrainerTurn()) {
             controlCard.show(detailedPanel, "leftPokemonPanel");
         } else {
             controlCard.show(detailedPanel, "rightPokemonPanel");

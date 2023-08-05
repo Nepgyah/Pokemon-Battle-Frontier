@@ -187,7 +187,7 @@ public class Client extends javax.swing.JFrame {
         System.out.println("CLIENT CONSOLE: Initializing Single Battle Window");
         SingleBattleWindow battleWindow = new SingleBattleWindow(trainers.get(0), trainers.get(1));
         battleWindow.setVisible(true);
-        System.out.println("CLIENT CONSOLE: Battle Window initialization complete");
+        System.out.println("CLIENT CONSOLE: Battle Window initialization complete. Battle Start");
 //        this.setState(Frame.ICONIFIED);
     }//GEN-LAST:event_battleButtonActionPerformed
 

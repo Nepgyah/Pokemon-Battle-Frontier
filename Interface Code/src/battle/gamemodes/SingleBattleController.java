@@ -22,33 +22,34 @@ public class SingleBattleController {
     private int input;
     
     boolean leftMoveMade = false, rightMoveMade = false;
+    boolean leftTrainerTurn = true;
     
     SingleBattleWindow battleWindow;
     
-    public SingleBattleController(Trainer leftTrainer, Trainer rightTrainer, boolean showConsole) {
+    public SingleBattleController(Pokemon leftPokemon, Pokemon rightPokemon, boolean showConsole) {
         super();
-        this.leftTrainer = leftTrainer;
-        this.rightTrainer = rightTrainer;
-        this.leftPokemon = leftTrainer.getParty().get(0);
-        this.rightPokemon = rightTrainer.getParty().get(0);
-        this.showConsole = showConsole;
         
-        System.out.println("CONTROL CONSOLE: Initializing GUI window");
-        this.battleWindow = new SingleBattleWindow(leftPokemon, rightPokemon);
+        System.out.println("CONTROL CONSOLE: Initializing battle controller");
+        
+        this.leftPokemon = leftPokemon;
+        this.rightPokemon = rightPokemon;
+        this.showConsole = showConsole;
+        System.out.println("CONTROL CONSOLE: Initialization complete");
     }
     
-    public void initializeBattle() {
-        System.out.println("CONTROL CONSOLE: Initializing battle -> " + leftTrainer.getName() + " vs " + rightTrainer.getName());
-        System.out.println("CONTROL CONSOLE: Opening battle window");
-        battleWindow.setVisible(true);
-        battle();
+    public void setMoveChoice(int pos){
+        if (leftTrainerTurn) {
+            leftMove = leftPokemon.getMoveset()[pos];
+            if (showConsole) System.out.println("CONTROL CONSOLE: Left Pokemon move selected -> " + leftMove.getName());
+            leftTrainerTurn = false;
+        } else {
+            rightMove = rightPokemon.getMoveset()[pos];
+            if (showConsole) System.out.println("CONTROL CONSOLE: Right Pokemon move selected -> " + rightMove.getName());
+            leftTrainerTurn = true;
+        }
     }
     
-    public void battle() {
-        System.out.println("CONTROL CONSOLE: Battle start");
-    }
-    
-    private void turn() {
-      
+    public boolean getLeftTrainerTurn() {
+        return leftTrainerTurn;
     }
 }

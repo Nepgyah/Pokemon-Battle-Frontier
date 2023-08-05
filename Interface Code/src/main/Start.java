@@ -31,14 +31,18 @@ public class Start {
         // Objects for basic testin
 
         System.out.println("Program begin");
-//        Trainer ash = startup.createAsh(pokedex, movedex);
+        ArrayList<Trainer> trainers = new ArrayList<>();
+        Trainer ash = startup.createAsh(pokedex, movedex);
+        Trainer gary = startup.createGary(pokedex, movedex);
+        trainers.add(ash);
+        trainers.add(gary);
 //        ash.displayPartyDetailed();
         java.awt.EventQueue.invokeLater(new Runnable() {
             
             @Override
             public void run() {
 //                new MainMenu(pokedex).setVisible(true);
-                  new Client(pokedex).setVisible(true);
+                  new Client(pokedex, trainers).setVisible(true);
             }
         });
     }

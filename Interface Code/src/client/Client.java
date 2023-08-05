@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 import java.awt.*;
 import pokemon.Pokemon;
 import battle.gamemodes.*;
+import trainer.Trainer;
 
 public class Client extends javax.swing.JFrame {
 
@@ -15,7 +16,7 @@ public class Client extends javax.swing.JFrame {
     ImageIcon pikachu = new ImageIcon("pikachu.png");
     //ArrayList<Pokemon> pokelist;
     
-    public Client(ArrayList<Pokemon> pokedex) {
+    public Client(ArrayList<Pokemon> pokedex, ArrayList<Trainer> trainers) {
         initComponents();
      
         // Lable for MainMenu picture
@@ -182,9 +183,8 @@ public class Client extends javax.swing.JFrame {
         // TODO add your handling code here:
 //        menuCard.show(contentPanel, "selectMode");
         navCard.show(navPanel, "altCard");
-        SingleBattleWindow singleBattle = new SingleBattleWindow();
-        singleBattle.setVisible(true);
-        singleBattle.beginBattle();
+        System.out.println("CLIENT CONSOLE: Starting battle, calling single battle controller");
+//        new SingleBattleController battleController();
 //        this.setState(Frame.ICONIFIED);
     }//GEN-LAST:event_battleButtonActionPerformed
 

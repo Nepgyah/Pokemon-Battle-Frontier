@@ -39,4 +39,17 @@ public class startup {
         }
         return ash;
     }
+    
+     public static Trainer createGary(ArrayList<Pokemon> pokedex, ArrayList<Move> movedex)
+    {
+        Trainer ash = new Trainer("Ash");
+
+        ash.addToParty(pokedex.get(0).copy());
+        for(Pokemon pokemon : ash.getParty())
+        {
+            pokemon.setLevel(20);
+            pokemon.assignRandomMoves(movedex);
+        }
+        return ash;
+    }
 }

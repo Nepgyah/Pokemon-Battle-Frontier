@@ -28,11 +28,4 @@ public class SingleBattleController {
         this.showConsole = showConsole;
         this.keyboardInput = scanner;
     }
-    
-    public void Battle() {
-        if (showConsole) {
-            System.out.println(leftTrainer.getName() + " sent out " + leftPokemon.getNickname()+ "!");
-            System.out.println(rightTrainer.getName() + " sent out " + rightPokemon.getNickname() + "!");
-        }
-    }
 }

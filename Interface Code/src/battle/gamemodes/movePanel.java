@@ -4,15 +4,20 @@ import javax.swing.JPanel;
 import move.Move;
 import battle.gamemodes.SingleBattleController;
 import java.awt.CardLayout;
+import javax.swing.JLabel;
 public class movePanel extends javax.swing.JPanel {
 
     JPanel contentPanel;
     CardLayout card;
     SingleBattleController controller;
+    JLabel hpLabel;
+    
     public movePanel(JPanel panel, String trainer, Move[] moveList, SingleBattleController controller) {
         initComponents();
         this.contentPanel = panel;
         this.controller = controller;
+        this.hpLabel = hpLabel;
+        
         card = (CardLayout) panel.getLayout();
         titleLabel.setText("Moveset for " + trainer);
         setMoveButtons(moveList);
@@ -119,21 +124,33 @@ public class movePanel extends javax.swing.JPanel {
     private void moveOneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveOneButtonActionPerformed
         controller.setMoveChoice(0);
         card.show(contentPanel, "waitingPanel");
+        if (controller.getLeftTrainerTurn() == true) {
+            System.out.println("WINDOW CONSOLE: Updating pokemon labels");
+        }
     }//GEN-LAST:event_moveOneButtonActionPerformed
 
     private void moveTwoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveTwoButtonActionPerformed
         controller.setMoveChoice(1);
         card.show(contentPanel, "waitingPanel");
+        if (controller.getLeftTrainerTurn() == true) {
+            System.out.println("WINDOW CONSOLE: Updating pokemon labels");
+        }
     }//GEN-LAST:event_moveTwoButtonActionPerformed
 
     private void moveThreeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveThreeButtonActionPerformed
         controller.setMoveChoice(2);
         card.show(contentPanel, "waitingPanel");
+        if (controller.getLeftTrainerTurn() == true) {
+            System.out.println("WINDOW CONSOLE: Updating pokemon labels");
+        }
     }//GEN-LAST:event_moveThreeButtonActionPerformed
 
     private void moveFourButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveFourButtonActionPerformed
         controller.setMoveChoice(3);
         card.show(contentPanel, "waitingPanel");
+        if (controller.getLeftTrainerTurn() == true) {
+            System.out.println("WINDOW CONSOLE: Updating pokemon labels");
+        }
     }//GEN-LAST:event_moveFourButtonActionPerformed
 
 

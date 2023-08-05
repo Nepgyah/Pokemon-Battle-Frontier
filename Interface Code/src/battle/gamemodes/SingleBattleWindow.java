@@ -5,6 +5,7 @@ import java.awt.CardLayout;
 import battle.gui.utilities.*;
 import pokemon.Pokemon;
 import trainer.Trainer;
+import javax.swing.SwingUtilities;
 
 public class SingleBattleWindow extends javax.swing.JFrame {
 
@@ -15,7 +16,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
     public SingleBattleWindow(Trainer leftTrainer, Trainer rightTrainer) {
         initComponents();
         
-        battleController = new SingleBattleController(leftTrainer.getParty().get(0), rightTrainer.getParty().get(0), true);
+        battleController = new SingleBattleController(leftTrainer.getParty().get(0), rightTrainer.getParty().get(0), true, eventLabel, leftCurrentHP, rightCurrentHP);
         controlCard = (CardLayout) detailedPanel.getLayout();
         
         detailedPanel.add(new waitingPanel(detailedPanel), "waitingPanel");
@@ -26,12 +27,12 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         detailedPanel.add(new pokemonPanel(detailedPanel, leftTrainer.getName()), "leftPokemonPanel");
         detailedPanel.add(new pokemonPanel(detailedPanel, rightTrainer.getName()), "rightPokemonPanel");
         
-        detailedPanel.add(new movePanel(detailedPanel, leftTrainer.getName(), leftTrainer.getParty().get(0).getMoveset(), battleController), "leftMovePanel");
+        detailedPanel.add(new movePanel(detailedPanel, leftTrainer.getName(), leftTrainer.getParty().get(0).getMoveset(), battleController ), "leftMovePanel");
         detailedPanel.add(new movePanel(detailedPanel, rightTrainer.getName(), rightTrainer.getParty().get(0).getMoveset(), battleController), "rightMovePanel");
         
         setLeftPokemonLabels(leftTrainer.getParty().get(0));
         setRightPokemonLabels(rightTrainer.getParty().get(0));
-        
+        eventTextArea.setText("BALLS");
         System.out.println("WINDOW CONSOLE: Initializing battle between " + leftTrainer.getName() + " vs " + rightTrainer.getName());
     }
 
@@ -48,6 +49,15 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         leftCurrentHP.setText(Integer.toString(pokemon.getCurrent_hp()));
         leftMaxHP.setText(Integer.toString(pokemon.getCurrent_max_hp()));
     }
+    
+    private void updateLeftHP() {
+        leftLevelValue.setText(Integer.toString(battleController.getLeftPokemon().getCurrent_hp()));
+    }
+    
+    private void updateRightHP() {
+        rightLevelValue.setText(Integer.toString(battleController.getRightPokemon().getCurrent_hp()));
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -78,6 +88,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         fightButton = new javax.swing.JButton();
         pokemonButton = new javax.swing.JButton();
         quitButton = new javax.swing.JButton();
+        eventLabel = new javax.swing.JLabel();
 
         jButton1.setText("jButton1");
 
@@ -247,6 +258,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         eventTextArea.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         eventTextArea.setLineWrap(true);
         eventTextArea.setRows(5);
+        eventTextArea.setFocusable(false);
         eventPanel.setViewportView(eventTextArea);
 
         detailedPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -308,6 +320,8 @@ public class SingleBattleWindow extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        eventLabel.setText("event label");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -315,8 +329,10 @@ public class SingleBattleWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(eventPanel)
-                    .addComponent(battlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(eventLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(eventPanel)
+                        .addComponent(battlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(controlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -334,7 +350,9 @@ public class SingleBattleWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(eventPanel)
                     .addComponent(controlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(98, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(eventLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(62, Short.MAX_VALUE))
         );
 
         pack();
@@ -373,8 +391,9 @@ public class SingleBattleWindow extends javax.swing.JFrame {
     private javax.swing.JPanel battlePanel;
     private javax.swing.JPanel controlPanel;
     private javax.swing.JPanel detailedPanel;
+    private javax.swing.JLabel eventLabel;
     private javax.swing.JScrollPane eventPanel;
-    private javax.swing.JTextArea eventTextArea;
+    public javax.swing.JTextArea eventTextArea;
     private javax.swing.JButton fightButton;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel leftCurrentHP;

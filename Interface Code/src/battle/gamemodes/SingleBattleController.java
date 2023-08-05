@@ -2,11 +2,13 @@ package battle.gamemodes;
 
 import java.util.Collections;
 import java.util.Scanner;
-
 import move.Move;
 import move.modifiers.*;
 import pokemon.Pokemon;
 import trainer.Trainer;
+import battle.gamemodes.SingleBattleWindow;
+
+import java.util.Scanner;
 
 public class SingleBattleController {
     
@@ -19,13 +21,34 @@ public class SingleBattleController {
     private Scanner keyboardInput;
     private int input;
     
-    public SingleBattleController(Trainer leftTrainer, Trainer rightTrainer, Scanner scanner, boolean showConsole) {
+    boolean leftMoveMade = false, rightMoveMade = false;
+    
+    SingleBattleWindow battleWindow;
+    
+    public SingleBattleController(Trainer leftTrainer, Trainer rightTrainer, boolean showConsole) {
         super();
         this.leftTrainer = leftTrainer;
         this.rightTrainer = rightTrainer;
         this.leftPokemon = leftTrainer.getParty().get(0);
         this.rightPokemon = rightTrainer.getParty().get(0);
         this.showConsole = showConsole;
-        this.keyboardInput = scanner;
+        
+        System.out.println("CONTROL CONSOLE: Initializing GUI window");
+        this.battleWindow = new SingleBattleWindow(leftPokemon, rightPokemon);
+    }
+    
+    public void initializeBattle() {
+        System.out.println("CONTROL CONSOLE: Initializing battle -> " + leftTrainer.getName() + " vs " + rightTrainer.getName());
+        System.out.println("CONTROL CONSOLE: Opening battle window");
+        battleWindow.setVisible(true);
+        battle();
+    }
+    
+    public void battle() {
+        System.out.println("CONTROL CONSOLE: Battle start");
+    }
+    
+    private void turn() {
+      
     }
 }

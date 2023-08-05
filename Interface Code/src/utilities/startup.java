@@ -42,7 +42,7 @@ public class startup {
     
      public static Trainer createGary(ArrayList<Pokemon> pokedex, ArrayList<Move> movedex)
     {
-        Trainer ash = new Trainer("Ash");
+        Trainer ash = new Trainer("Gary");
 
         ash.addToParty(pokedex.get(0).copy());
         for(Pokemon pokemon : ash.getParty())

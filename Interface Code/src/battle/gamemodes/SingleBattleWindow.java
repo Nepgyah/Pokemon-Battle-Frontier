@@ -16,7 +16,13 @@ public class SingleBattleWindow extends javax.swing.JFrame {
     public SingleBattleWindow(Trainer leftTrainer, Trainer rightTrainer) {
         initComponents();
         
-        battleController = new SingleBattleController(leftTrainer.getParty().get(0), rightTrainer.getParty().get(0), true, eventLabel, leftCurrentHP, rightCurrentHP);
+        battleController = new SingleBattleController(
+                leftTrainer.getParty().get(0), rightTrainer.getParty().get(0), 
+                true, 
+                eventTextArea, leftCurrentHP, rightCurrentHP,
+                leftHPBar,
+                rightHPBar
+        );
         controlCard = (CardLayout) detailedPanel.getLayout();
         
         detailedPanel.add(new waitingPanel(detailedPanel), "waitingPanel");
@@ -32,6 +38,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         
         setLeftPokemonLabels(leftTrainer.getParty().get(0));
         setRightPokemonLabels(rightTrainer.getParty().get(0));
+        
         eventTextArea.setText("BALLS");
         System.out.println("WINDOW CONSOLE: Initializing battle between " + leftTrainer.getName() + " vs " + rightTrainer.getName());
     }
@@ -41,6 +48,8 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         rightLevelValue.setText(Integer.toString(pokemon.getLevel()));
         rightCurrentHP.setText(Integer.toString(pokemon.getCurrent_hp()));
         rightMaxHP.setText(Integer.toString(pokemon.getCurrent_max_hp()));
+        rightHPBar.setMaximum(pokemon.getCurrent_max_hp());
+        rightHPBar.setValue(pokemon.getCurrent_hp());
     }
     
     private void setLeftPokemonLabels(Pokemon pokemon) {
@@ -48,6 +57,8 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         leftLevelValue.setText(Integer.toString(pokemon.getLevel()));
         leftCurrentHP.setText(Integer.toString(pokemon.getCurrent_hp()));
         leftMaxHP.setText(Integer.toString(pokemon.getCurrent_max_hp()));
+        leftHPBar.setMaximum(pokemon.getCurrent_max_hp());
+        leftHPBar.setValue(pokemon.getCurrent_hp());
     }
     
     private void updateLeftHP() {
@@ -330,9 +341,8 @@ public class SingleBattleWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(eventLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(eventPanel)
-                        .addComponent(battlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(eventPanel)
+                    .addComponent(battlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(controlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)

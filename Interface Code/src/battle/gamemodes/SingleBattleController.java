@@ -1,20 +1,24 @@
 package battle.gamemodes;
 
-import java.util.Collections;
-import java.util.Scanner;
 import move.Move;
-import move.modifiers.*;
 import pokemon.Pokemon;
 import trainer.Trainer;
-import battle.gamemodes.SingleBattleWindow;
 import battle.BattleMechanics;
+import java.awt.Color;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 
-public class SingleBattleController {
+
+import java.util.Timer;
+import java.util.TimerTask;
+import javax.swing.JProgressBar;
+
+
+public class SingleBattleController{
+   
+    private Timer timer;
+    private TimerTask task;
     
     private Trainer leftTrainer, rightTrainer;
     private Pokemon leftPokemon, rightPokemon;
@@ -29,21 +33,32 @@ public class SingleBattleController {
     boolean leftTrainerTurn = true;
     
     JLabel leftHpLabel, rightHpLabel;
-    JLabel textArea;
+    JTextArea textArea;
+    JProgressBar leftHpBar, rightHpBar;
     
-    public SingleBattleController(Pokemon leftPokemon, Pokemon rightPokemon, boolean showConsole, JLabel textArea, JLabel leftHp, JLabel rightHp) {
+    public SingleBattleController(Pokemon leftPokemon, Pokemon rightPokemon, 
+            boolean showConsole, 
+            JTextArea textArea, 
+            JLabel leftHp, JLabel rightHp, 
+            JProgressBar leftHpBar, JProgressBar rightHpBar) {
         super();
         
+        this.timer = new Timer();
         System.out.println("CONTROL CONSOLE: Initializing battle controller");
         
         this.leftPokemon = leftPokemon;
         this.rightPokemon = rightPokemon;
         this.showConsole = showConsole;
+        
         this.textArea = textArea;
         this.leftHpLabel = leftHp;
         this.rightHpLabel = rightHp;
+        this.leftHpBar = leftHpBar;
+        this.rightHpBar = rightHpBar;
         
         System.out.println("CONTROL CONSOLE: Initialization complete");
+        
+        
     }
     
     public void setMoveChoice(int pos){
@@ -60,21 +75,47 @@ public class SingleBattleController {
     }
     
     public void runTurn() {
+        
         if (showConsole) System.out.println("CONTROL CONSOLE: Executing current turn");
         // Right Going first
         if (leftPokemon.getBattle_speed() < rightPokemon.getBattle_speed()) {
             BattleMechanics.useMove(rightPokemon, leftPokemon, rightMove, leftMove);
             leftHpLabel.setText(Integer.toString(leftPokemon.getCurrent_hp()));
             
+            textArea.setText(rightPokemon.getName() + " used " + rightMove.getName());
+            
             BattleMechanics.useMove(leftPokemon, rightPokemon, leftMove, rightMove);
             rightHpLabel.setText(Integer.toString(rightPokemon.getCurrent_hp()));
+            
+
         } else {
             // Left Going First
             BattleMechanics.useMove(leftPokemon, rightPokemon, leftMove, rightMove);
+            textArea.setText(leftPokemon.getName() + " used " + leftMove.getName());
             rightHpLabel.setText(Integer.toString(rightPokemon.getCurrent_hp()));
-           
+            updateHPBar(rightPokemon, rightHpBar);
+            
+            
+            // Delay needed to display text area information for appropriate time
             BattleMechanics.useMove(rightPokemon, leftPokemon, rightMove, leftMove);
-            leftHpLabel.setText(Integer.toString(leftPokemon.getCurrent_hp()));
+            TimerTask taskOne = new TimerTask() {
+                @Override
+                public void run() {
+                    textArea.setText(rightPokemon.getName() + " used " + rightMove.getName());
+                    leftHpLabel.setText(Integer.toString(leftPokemon.getCurrent_hp()));
+                    updateHPBar(leftPokemon, leftHpBar);
+                }
+            };
+            TimerTask taskTwo = new TimerTask() {
+                @Override
+                public void run() {
+                    textArea.setText("DONE!");
+                }
+            };
+            
+            timer.schedule(taskOne, 3000);
+            timer.schedule(taskTwo, 6000);
+            
         }
         if (showConsole) {
             System.out.println("CONTROL CONSOLE: Turn results");
@@ -84,6 +125,13 @@ public class SingleBattleController {
        
     }
     
+    private void updateHPBar(Pokemon pokemon, JProgressBar hpBar) {
+        System.out.println("Updating " + pokemon.getName());
+        hpBar.setValue(pokemon.getCurrent_hp());
+        if (pokemon.getCurrent_hp() < (pokemon.getCurrent_max_hp() / 2)) {
+            hpBar.setForeground(Color.yellow);
+        }
+    }
 
     public boolean getLeftTrainerTurn() {
         return leftTrainerTurn;
@@ -96,4 +144,6 @@ public class SingleBattleController {
     public Pokemon getRightPokemon() {
         return rightPokemon;
     }
+
+   
 }

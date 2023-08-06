@@ -10,7 +10,6 @@ import javax.swing.SwingUtilities;
 public class SingleBattleWindow extends javax.swing.JFrame {
 
     CardLayout controlCard;
-    boolean leftTrainerTurn = true;
     SingleBattleController battleController;
     
     public SingleBattleWindow(Trainer leftTrainer, Trainer rightTrainer) {
@@ -21,7 +20,10 @@ public class SingleBattleWindow extends javax.swing.JFrame {
                 true, 
                 eventTextArea, leftCurrentHP, rightCurrentHP,
                 leftHPBar,
-                rightHPBar
+                rightHPBar,
+                fightButton,
+                bagButton,
+                pokemonButton
         );
         controlCard = (CardLayout) detailedPanel.getLayout();
         
@@ -39,7 +41,6 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         setLeftPokemonLabels(leftTrainer.getParty().get(0));
         setRightPokemonLabels(rightTrainer.getParty().get(0));
         
-        eventTextArea.setText("BALLS");
         System.out.println("WINDOW CONSOLE: Initializing battle between " + leftTrainer.getName() + " vs " + rightTrainer.getName());
     }
 

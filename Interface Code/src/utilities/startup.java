@@ -59,6 +59,7 @@ public class startup {
         
         gary.addToParty(pokedex.get(3).copy());
         gary.addToParty(pokedex.get(4).copy());
+        
         for(Pokemon pokemon : gary.getParty())
         {
             pokemon.setLevel(20);

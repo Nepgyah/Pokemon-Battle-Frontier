@@ -37,7 +37,9 @@ public class Start {
         Trainer gary = startup.createGary(pokedex, movedex);
         trainers.add(ash);
         trainers.add(gary);
-        
+//        for (Pokemon pokemon : ash.getParty()) {
+//            System.out.println(pokemon.getName());
+//        }
 //        Timer timer = new Timer();
 //        
 //        TimerTask task = new TimerTask() {

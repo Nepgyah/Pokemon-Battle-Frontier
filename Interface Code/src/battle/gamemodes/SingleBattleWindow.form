@@ -39,8 +39,8 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="controlPanel" max="32767" attributes="0"/>
-                  <Component id="detailedPanel" max="32767" attributes="0"/>
+                  <Component id="buttonPanel" max="32767" attributes="0"/>
+                  <Component id="detailPanel" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -52,12 +52,12 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="battlePanel" max="32767" attributes="0"/>
-                  <Component id="detailedPanel" max="32767" attributes="0"/>
+                  <Component id="detailPanel" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="eventPanel" max="32767" attributes="0"/>
-                  <Component id="controlPanel" max="32767" attributes="0"/>
+                  <Component id="buttonPanel" max="32767" attributes="0"/>
               </Group>
               <EmptySpace pref="98" max="32767" attributes="0"/>
           </Group>
@@ -151,7 +151,7 @@
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Component id="rightHPBar" min="-2" pref="300" max="-2" attributes="0"/>
                                   <Group type="102" attributes="0">
-                                      <Component id="rightNameLabel" min="-2" pref="300" max="-2" attributes="0"/>
+                                      <Component id="rightName" min="-2" pref="300" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="rightLevelLabel" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
@@ -169,7 +169,7 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="rightNameLabel" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                          <Component id="rightName" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                           <Component id="rightLevelLabel" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                           <Component id="rightLevelValue" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                       </Group>
@@ -195,7 +195,7 @@
                 <Property name="text" type="java.lang.String" value="Lv."/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="rightNameLabel">
+            <Component class="javax.swing.JLabel" name="rightName">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="24" style="0"/>
@@ -260,7 +260,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
-                              <Component id="leftNameLabel" min="-2" pref="300" max="-2" attributes="0"/>
+                              <Component id="leftName" min="-2" pref="300" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="leftLevelLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -289,7 +289,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="leftNameLabel" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                          <Component id="leftName" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                           <Component id="leftLevelLabel" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                           <Component id="leftLevelValue" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                       </Group>
@@ -315,7 +315,7 @@
                 <Property name="text" type="java.lang.String" value="Lv."/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="leftNameLabel">
+            <Component class="javax.swing.JLabel" name="leftName">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="24" style="0"/>
@@ -405,7 +405,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Container class="javax.swing.JPanel" name="detailedPanel">
+    <Container class="javax.swing.JPanel" name="detailPanel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -416,7 +416,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignCardLayout"/>
     </Container>
-    <Container class="javax.swing.JPanel" name="controlPanel">
+    <Container class="javax.swing.JPanel" name="buttonPanel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">

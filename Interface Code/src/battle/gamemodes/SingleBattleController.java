@@ -7,17 +7,12 @@ import battle.BattleMechanics;
 import battle.BattleUtilities;
 import battle.gui.utilities.pokemonPanel;
 import java.awt.Color;
-import java.util.Scanner;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
-
-
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-
 
 public class SingleBattleController{
    
@@ -30,18 +25,16 @@ public class SingleBattleController{
     private int leftNextPokemon, rightNextPokemon;
     private String leftPrevName, rightPrevName;
     
-    boolean leftPlayerForfeit, 
-            rightPlayerForfeit, 
+    boolean leftTrainerTurn = true,
             leftSwap = false, 
-            rightSwap = false, 
+            rightSwap = false,
+            leftPlayerForfeit, 
+            rightPlayerForfeit, 
             leftWins, 
             rightWins, 
             showConsole;
-    private Scanner keyboardInput;
-    private int input;
     
     boolean leftMoveMade = false, rightMoveMade = false;
-    boolean leftTrainerTurn = true;
     
     JLabel leftHpLabel, rightHpLabel;
     JLabel [] leftLabels, rightLabels;
@@ -49,6 +42,7 @@ public class SingleBattleController{
     JProgressBar leftHpBar, rightHpBar;
     JButton fightButton, bagButton, pokemonButton;
     pokemonPanel leftPokemonPanel, rightPokemonPanel;
+    movePanel leftMovePanel, rightMovePanel;
     
     public SingleBattleController(Trainer leftTrainer, Trainer rightTrainer, 
             boolean showConsole, 
@@ -56,10 +50,11 @@ public class SingleBattleController{
             JLabel [] leftLabels, JLabel [] rightLabels,
             JProgressBar leftHpBar, JProgressBar rightHpBar,
             JButton fightButton, JButton bagButton, JButton pokemonButton) {
+        
         super();
         
-        this.timer = new Timer();
         System.out.println("CONTROL CONSOLE: Initializing battle controller");
+        this.timer = new Timer();
         
         this.leftTrainer = leftTrainer;
         this.rightTrainer = rightTrainer;
@@ -68,6 +63,7 @@ public class SingleBattleController{
         this.rightPokemon = rightTrainer.getParty().get(0);
         this.showConsole = showConsole;
         
+        // GUI Window variables
         this.textArea = textArea;
         this.leftLabels = leftLabels;
         this.rightLabels = rightLabels;
@@ -81,38 +77,10 @@ public class SingleBattleController{
         
         setPokemonLabels(leftPokemon, leftLabels, leftHpBar);
         setPokemonLabels(rightPokemon, rightLabels, rightHpBar);
+        
         System.out.println("CONTROL CONSOLE: Initialization complete");
-   
     }
     
-    // Methods for GUI
-    public void setMoveChoice(int pos){
-        if (leftTrainerTurn) {
-            leftMove = leftPokemon.getMoveset()[pos];
-            if (showConsole) System.out.println("CONTROL CONSOLE: Left Pokemon move selected -> " + leftMove.getName());
-            leftTrainerTurn = false;
-        } else {
-            rightMove = rightPokemon.getMoveset()[pos];
-            if (showConsole) System.out.println("CONTROL CONSOLE: Right Pokemon move selected -> " + rightMove.getName());
-            leftTrainerTurn = true;
-            runTurn();
-        }
-    }
-    
-    public void setPokemonSwap(int pos) {
-        if(leftTrainerTurn) {
-            leftNextPokemon = pos;
-            System.out.println(leftTrainer.getName() + " is swapping " + leftPokemon.getName() + " for " + leftTrainer.getParty().get(pos).getName());
-            leftSwap = true;
-            leftTrainerTurn = false;
-        } else {
-            rightNextPokemon = pos;
-            System.out.println(rightTrainer.getName() + " is swapping " + rightPokemon.getName() + " for " + rightTrainer.getParty().get(pos).getName());
-            rightSwap = true;
-            leftTrainerTurn = true;
-            runTurn();
-        }
-    }
     public void runTurn() {
         
         disableControls();
@@ -120,18 +88,19 @@ public class SingleBattleController{
             System.out.println("CONTROL CONSOLE: Executing current turn");
             consoleFlags();
         }
-        
         if (leftSwap == true) {
             BattleUtilities.swapPokemon(leftTrainer, leftNextPokemon);
             leftPokemon = leftTrainer.getParty().get(0);
             setPokemonLabels(leftPokemon, leftLabels, leftHpBar);
             leftPokemonPanel.setPokemonButtons();
+            leftMovePanel.setMoveButtons(leftPokemon.getMoveset());
         }
         if (rightSwap == true) {
             BattleUtilities.swapPokemon(rightTrainer, rightNextPokemon);
             rightPokemon = rightTrainer.getParty().get(0);
             setPokemonLabels(rightPokemon, rightLabels, rightHpBar);
             rightPokemonPanel.setPokemonButtons();
+            rightMovePanel.setMoveButtons(rightPokemon.getMoveset());
         }
         
         // Right Going first
@@ -140,12 +109,15 @@ public class SingleBattleController{
                 BattleMechanics.useMove(rightPokemon, leftPokemon, rightMove, leftMove);
                 leftHpLabel.setText(Integer.toString(leftPokemon.getCurrent_hp()));
                 textArea.setText(rightPokemon.getName() + " used " + rightMove.getName() + "!");
+                updateHPBar(leftPokemon, leftHpBar);
             }
             if (leftMove != null) {
                 BattleMechanics.useMove(leftPokemon, rightPokemon, leftMove, rightMove);
                 rightHpLabel.setText(Integer.toString(rightPokemon.getCurrent_hp()));
+                updateHPBar(rightPokemon, rightHpBar);
             }
         } 
+        
         // Left Going First
         if (leftPokemon.getBattle_speed() > rightPokemon.getBattle_speed()) {
             // Left turn
@@ -184,9 +156,8 @@ public class SingleBattleController{
             // Post turn
             
 //            timer.schedule(taskOne, 3000);
-        
-            
         }
+        
         TimerTask taskTwo = new TimerTask() {
             @Override
             public void run() {
@@ -194,17 +165,48 @@ public class SingleBattleController{
                 enableControls();
             }
         };
-        timer.schedule(taskTwo, 6000);
+        timer.schedule(taskTwo, 3000);
+        
         if (showConsole) {
             System.out.println("CONTROL CONSOLE: Turn results");
             System.out.println("Left Pokemon - " + leftPokemon.getName() + " " + leftPokemon.getCurrent_hp() + "/" + leftPokemon.getCurrent_max_hp());
             System.out.println("Right Pokemon - " + rightPokemon.getName() + " " + rightPokemon.getCurrent_hp() + "/" + rightPokemon.getCurrent_max_hp());
         }
+        
         // RESET FLAGS
         leftMove = rightMove = null;
         leftSwap = rightSwap = false;
     }
     
+    // Methods for window to call
+    public void setMoveChoice(int pos){
+        if (leftTrainerTurn) {
+            leftMove = leftPokemon.getMoveset()[pos];
+            if (showConsole) System.out.println("CONTROL CONSOLE: Left Pokemon move selected -> " + leftMove.getName());
+            leftTrainerTurn = false;
+        } else {
+            rightMove = rightPokemon.getMoveset()[pos];
+            if (showConsole) System.out.println("CONTROL CONSOLE: Right Pokemon move selected -> " + rightMove.getName());
+            leftTrainerTurn = true;
+            runTurn();
+        }
+    }
+    
+    public void setPokemonSwap(int pos) {
+        if(leftTrainerTurn) {
+            leftNextPokemon = pos;
+            System.out.println(leftTrainer.getName() + " is swapping " + leftPokemon.getName() + " for " + leftTrainer.getParty().get(pos).getName());
+            leftSwap = true;
+            leftTrainerTurn = false;
+        } else {
+            rightNextPokemon = pos;
+            System.out.println(rightTrainer.getName() + " is swapping " + rightPokemon.getName() + " for " + rightTrainer.getParty().get(pos).getName());
+            rightSwap = true;
+            leftTrainerTurn = true;
+            runTurn();
+        }
+    }
+   
      private void consoleFlags() {
         System.out.println("CONTROL CONSOLE: Displaying turn flags");
         System.out.print("LEFT: ");
@@ -223,7 +225,7 @@ public class SingleBattleController{
         }
     }
      
-    // GUI Controllers
+    // Methods to control GUI components
     private void updateHPBar(Pokemon pokemon, JProgressBar hpBar) {
         hpBar.setValue(pokemon.getCurrent_hp());
         if (pokemon.getCurrent_hp() < (pokemon.getCurrent_max_hp() / 2)) {
@@ -242,15 +244,6 @@ public class SingleBattleController{
         labelArray[4].setIcon(pokemon.getIcon());
         hpBar.setMaximum(pokemon.getCurrent_max_hp());
         hpBar.setValue(pokemon.getCurrent_hp());
-        
-    }
-    
-    public void setLeftPokePanel(pokemonPanel panel) {
-        this.leftPokemonPanel = panel;
-    }
-    
-    public void setRightPokePanel(pokemonPanel panel) {
-        this.rightPokemonPanel = panel;
     }
     
     private void disableControls() {
@@ -264,6 +257,24 @@ public class SingleBattleController{
         bagButton.setEnabled(true);
         pokemonButton.setEnabled(true);
     }
+    
+    // Methods for the window to call
+    public void setLeftPokePanel(pokemonPanel panel) {
+        this.leftPokemonPanel = panel;
+    }
+    
+    public void setRightPokePanel(pokemonPanel panel) {
+        this.rightPokemonPanel = panel;
+    }
+    
+    public void setLeftMovePanel(movePanel panel) {
+        this.leftMovePanel = panel;
+    }
+    
+    public void setRightMovePanel(movePanel panel) {
+        this.rightMovePanel = panel;
+    }
+    
     public boolean getLeftTrainerTurn() {
         return leftTrainerTurn;
     }
@@ -276,5 +287,4 @@ public class SingleBattleController{
         return rightPokemon;
     }
 
-   
 }

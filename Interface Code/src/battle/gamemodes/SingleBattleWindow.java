@@ -18,7 +18,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         initComponents();
         
         battleController = new SingleBattleController(
-                leftTrainer.getParty().get(0), rightTrainer.getParty().get(0), 
+                leftTrainer, rightTrainer, 
                 true, 
                 eventTextArea, leftCurrentHP, rightCurrentHP,
                 leftHPBar,
@@ -34,8 +34,8 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         detailedPanel.add(new bagPanel(detailedPanel, leftTrainer.getName()), "leftBagPanel");
         detailedPanel.add(new bagPanel(detailedPanel, rightTrainer.getName()), "rightBagPanel");
         
-        detailedPanel.add(new pokemonPanel(detailedPanel, leftTrainer), "leftPokemonPanel");
-        detailedPanel.add(new pokemonPanel(detailedPanel, rightTrainer), "rightPokemonPanel");
+        detailedPanel.add(new pokemonPanel(detailedPanel, leftTrainer, battleController), "leftPokemonPanel");
+        detailedPanel.add(new pokemonPanel(detailedPanel, rightTrainer, battleController), "rightPokemonPanel");
         
         detailedPanel.add(new movePanel(detailedPanel, leftTrainer.getName(), leftTrainer.getParty().get(0).getMoveset(), battleController ), "leftMovePanel");
         detailedPanel.add(new movePanel(detailedPanel, rightTrainer.getName(), rightTrainer.getParty().get(0).getMoveset(), battleController), "rightMovePanel");
@@ -53,7 +53,6 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         rightMaxHP.setText(Integer.toString(pokemon.getCurrent_max_hp()));
         rightHPBar.setMaximum(pokemon.getCurrent_max_hp());
         rightHPBar.setValue(pokemon.getCurrent_hp());
-        System.out.println(pokemon.getIconPath());
         rightIcon.setIcon(new ImageIcon(new ImageIcon(pokemon.getIconPath()).getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT)));
     }
     
@@ -64,7 +63,6 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         leftMaxHP.setText(Integer.toString(pokemon.getCurrent_max_hp()));
         leftHPBar.setMaximum(pokemon.getCurrent_max_hp());
         leftHPBar.setValue(pokemon.getCurrent_hp());
-        System.out.println(pokemon.getIconPath());
         leftIcon.setIcon(new ImageIcon(new ImageIcon(pokemon.getIconPath()).getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT)));
     }
     
@@ -400,7 +398,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void fightButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fightButtonActionPerformed
-        // TODO add your handling code here:
+
         if (battleController.getLeftTrainerTurn()) {
             controlCard.show(detailedPanel, "leftMovePanel");
         } else {

@@ -24,6 +24,7 @@ public class SingleBattleController{
     private Trainer leftTrainer, rightTrainer;
     private Pokemon leftPokemon, rightPokemon;
     private Move leftMove, rightMove;
+    private Pokemon leftNextPokemon, rightNextPokemon;
     private String leftPrevName, rightPrevName;
     
     boolean leftPlayerForfeit, rightPlayerForfeit, leftSwapMade, rightSwapMade, leftWins, rightWins, showConsole;
@@ -38,7 +39,7 @@ public class SingleBattleController{
     JProgressBar leftHpBar, rightHpBar;
     JButton fightButton, bagButton, pokemonButton;
             
-    public SingleBattleController(Pokemon leftPokemon, Pokemon rightPokemon, 
+    public SingleBattleController(Trainer leftTrainer, Trainer rightTrainer, 
             boolean showConsole, 
             JTextArea textArea, 
             JLabel leftHp, JLabel rightHp, 
@@ -49,8 +50,11 @@ public class SingleBattleController{
         this.timer = new Timer();
         System.out.println("CONTROL CONSOLE: Initializing battle controller");
         
-        this.leftPokemon = leftPokemon;
-        this.rightPokemon = rightPokemon;
+        this.leftTrainer = leftTrainer;
+        this.rightTrainer = rightTrainer;
+        
+        this.leftPokemon = leftTrainer.getParty().get(0);
+        this.rightPokemon = rightTrainer.getParty().get(0);
         this.showConsole = showConsole;
         
         this.textArea = textArea;
@@ -66,6 +70,7 @@ public class SingleBattleController{
    
     }
     
+    // Methods for GUI
     public void setMoveChoice(int pos){
         if (leftTrainerTurn) {
             leftMove = leftPokemon.getMoveset()[pos];
@@ -79,6 +84,17 @@ public class SingleBattleController{
         }
     }
     
+    public void setPokemonSwap(int pos) {
+        if(leftTrainerTurn) {
+            leftNextPokemon = leftTrainer.getParty().get(pos);
+            System.out.println(leftTrainer.getName() + " is swapping " + leftPokemon.getName() + " for " + leftNextPokemon.getName());
+            leftTrainerTurn = false;
+        } else {
+            rightNextPokemon = rightTrainer.getParty().get(pos);
+            System.out.println(rightTrainer.getName() + " is swapping " + rightPokemon.getName() + " for " + rightNextPokemon.getName());
+            leftTrainerTurn = true;
+        }
+    }
     public void runTurn() {
         
         disableControls();

@@ -1,17 +1,24 @@
 package battle.gui.utilities;
 
+import battle.gamemodes.SingleBattleController;
+import java.awt.CardLayout;
 import javax.swing.JPanel;
 import trainer.Trainer;
 
 public class pokemonPanel extends javax.swing.JPanel {
 
     JPanel contentPanel;
+    CardLayout card;
     Trainer trainer;
+    SingleBattleController controller;
     
-    public pokemonPanel(JPanel panel, Trainer trainer) {
+    public pokemonPanel(JPanel panel, Trainer trainer, SingleBattleController controller) {
         initComponents();
         this.contentPanel = panel;
         this.trainer = trainer;
+        this.controller = controller;
+        card = (CardLayout) panel.getLayout();
+        
         initializeParty();
         titleLabel.setText("Party Pokemon for " + trainer.getName());
         
@@ -60,16 +67,47 @@ public class pokemonPanel extends javax.swing.JPanel {
         titleLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         pokemonOne.setText("Pokemon One");
+        pokemonOne.setEnabled(false);
+        pokemonOne.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pokemonOneActionPerformed(evt);
+            }
+        });
 
         pokemonTwo.setText("Pokemon Two");
+        pokemonTwo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pokemonTwoActionPerformed(evt);
+            }
+        });
 
         pokemonThree.setText("Pokemon Three");
+        pokemonThree.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pokemonThreeActionPerformed(evt);
+            }
+        });
 
         pokemonFour.setText("Pokemon Four");
+        pokemonFour.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pokemonFourActionPerformed(evt);
+            }
+        });
 
         pokemonFive.setText("Pokemon Five");
+        pokemonFive.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pokemonFiveActionPerformed(evt);
+            }
+        });
 
         pokemonSix.setText("Pokemon Six");
+        pokemonSix.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pokemonSixActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -113,6 +151,36 @@ public class pokemonPanel extends javax.swing.JPanel {
                 .addContainerGap(90, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void pokemonOneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonOneActionPerformed
+        controller.setPokemonSwap(0);
+        card.show(contentPanel, "waitingPanel");
+    }//GEN-LAST:event_pokemonOneActionPerformed
+
+    private void pokemonTwoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonTwoActionPerformed
+        controller.setPokemonSwap(1);
+        card.show(contentPanel, "waitingPanel");
+    }//GEN-LAST:event_pokemonTwoActionPerformed
+
+    private void pokemonThreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonThreeActionPerformed
+        controller.setPokemonSwap(2);
+        card.show(contentPanel, "waitingPanel");
+    }//GEN-LAST:event_pokemonThreeActionPerformed
+
+    private void pokemonFourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonFourActionPerformed
+        controller.setPokemonSwap(3);
+        card.show(contentPanel, "waitingPanel");
+    }//GEN-LAST:event_pokemonFourActionPerformed
+
+    private void pokemonFiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonFiveActionPerformed
+        controller.setPokemonSwap(4);
+        card.show(contentPanel, "waitingPanel");
+    }//GEN-LAST:event_pokemonFiveActionPerformed
+
+    private void pokemonSixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonSixActionPerformed
+        controller.setPokemonSwap(5);
+        card.show(contentPanel, "waitingPanel");
+    }//GEN-LAST:event_pokemonSixActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

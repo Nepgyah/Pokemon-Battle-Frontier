@@ -76,32 +76,51 @@
     <Component class="javax.swing.JButton" name="pokemonOne">
       <Properties>
         <Property name="text" type="java.lang.String" value="Pokemon One"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pokemonOneActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="pokemonTwo">
       <Properties>
         <Property name="text" type="java.lang.String" value="Pokemon Two"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pokemonTwoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="pokemonThree">
       <Properties>
         <Property name="text" type="java.lang.String" value="Pokemon Three"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pokemonThreeActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="pokemonFour">
       <Properties>
         <Property name="text" type="java.lang.String" value="Pokemon Four"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pokemonFourActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="pokemonFive">
       <Properties>
         <Property name="text" type="java.lang.String" value="Pokemon Five"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pokemonFiveActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="pokemonSix">
       <Properties>
         <Property name="text" type="java.lang.String" value="Pokemon Six"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pokemonSixActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

@@ -5,8 +5,8 @@
         <group>
             <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/battle/gamemodes/SingleBattleWindow.java</file>
             <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/battle/gamemodes/SingleBattleController.java</file>
-            <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/utilities/startup.java</file>
-            <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/main/Start.java</file>
+            <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/pokemon/Pokemon.java</file>
+            <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/battle/gamemodes/movePanel.java</file>
             <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/battle/gui/utilities/pokemonPanel.java</file>
         </group>
     </open-files>

@@ -7,6 +7,9 @@ import pokemon.Pokemon;
 import utilities.startup;
 import trainer.Trainer;
 import move.Move;
+import java.util.Timer;
+import java.util.TimerTask;
+import client.Client;
 
 public class Start {
     public static void main(String[] args) {
@@ -29,14 +32,33 @@ public class Start {
         // Objects for basic testin
 
         System.out.println("Program begin");
+        ArrayList<Trainer> trainers = new ArrayList<>();
         Trainer ash = startup.createAsh(pokedex, movedex);
-        ash.displayPartyDetailed();
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            
+        Trainer gary = startup.createGary(pokedex, movedex);
+        trainers.add(ash);
+        trainers.add(gary);
+//        for (Pokemon pokemon : ash.getParty()) {
+//            System.out.println(pokemon.getName());
+//        }
+//        Timer timer = new Timer();
+//        
+//        TimerTask task = new TimerTask() {
 //            @Override
 //            public void run() {
-//                new MainMenu(pokedex).setVisible(true);
+//                System.out.println("DONE!");
 //            }
-//        });
+//        };
+//        
+//        timer.schedule(task, 3000);
+//        ash.displayPartyDetailed();
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            
+            @Override
+            public void run() {
+//                new MainMenu(pokedex).setVisible(true);
+                  new Client(pokedex, trainers).setVisible(true);
+            }
+        });
     }
 }

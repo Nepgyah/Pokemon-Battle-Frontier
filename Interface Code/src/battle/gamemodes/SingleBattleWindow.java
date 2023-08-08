@@ -11,6 +11,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
     CardLayout controlCard;
     SingleBattleController battleController;
     pokemonPanel leftPokemonPanel, rightPokemonPanel;
+    movePanel leftMovePanel, rightMovePanel;
     
     public SingleBattleWindow(Trainer leftTrainer, Trainer rightTrainer) {
         initComponents();
@@ -44,8 +45,13 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         leftPokemonPanel = new pokemonPanel(detailPanel, leftTrainer, battleController);
         rightPokemonPanel = new pokemonPanel(detailPanel, rightTrainer, battleController);
         
+        leftMovePanel = new movePanel(detailPanel, leftTrainer.getName(), leftTrainer.getParty().get(0).getMoveset(), battleController );
+        rightMovePanel = new movePanel(detailPanel, rightTrainer.getName(), rightTrainer.getParty().get(0).getMoveset(), battleController);
+        
         battleController.setLeftPokePanel(leftPokemonPanel);
         battleController.setRightPokePanel(rightPokemonPanel);
+        battleController.setLeftMovePanel(leftMovePanel);
+        battleController.setRightMovePanel(rightMovePanel);
         
         controlCard = (CardLayout) detailPanel.getLayout();
        
@@ -57,8 +63,8 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         detailPanel.add(leftPokemonPanel, "leftPokemonPanel");
         detailPanel.add(rightPokemonPanel, "rightPokemonPanel");
         
-        detailPanel.add(new movePanel(detailPanel, leftTrainer.getName(), leftTrainer.getParty().get(0).getMoveset(), battleController ), "leftMovePanel");
-        detailPanel.add(new movePanel(detailPanel, rightTrainer.getName(), rightTrainer.getParty().get(0).getMoveset(), battleController), "rightMovePanel");
+        detailPanel.add(leftMovePanel, "leftMovePanel");
+        detailPanel.add(rightMovePanel, "rightMovePanel");
         
         System.out.println("WINDOW CONSOLE: Initializing battle between " + leftTrainer.getName() + " vs " + rightTrainer.getName());
     }

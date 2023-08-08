@@ -24,25 +24,38 @@ public class movePanel extends javax.swing.JPanel {
     }
 
     public void setMoveButtons(Move[] moveList) {
+        System.out.println("MoveList");
+        for (int i = 0; i < 4; i++) {
+            if(moveList[i] != null) System.out.println(moveList[i].getName());
+            else System.out.println("--");
+        }
         if (moveList[0] != null) {
+            moveOneButton.setEnabled(true);
             moveOneButton.setText(moveList[0].getName());
         } else {
             moveOneButton.setEnabled(false);
+            moveOneButton.setText("Move 1");
         }
         if (moveList[1] != null) {
+            moveTwoButton.setEnabled(true);
             moveTwoButton.setText(moveList[1].getName());
         } else {
             moveTwoButton.setEnabled(false);
+            moveTwoButton.setText("Move 2");
         }
         if (moveList[2] != null) {
+            moveThreeButton.setEnabled(true);
             moveThreeButton.setText(moveList[2].getName());
         } else {
             moveThreeButton.setEnabled(false);
+            moveThreeButton.setText("Move 3");
         }
         if (moveList[3] != null) {
+            moveFourButton.setEnabled(true);
             moveFourButton.setText(moveList[3].getName());
         } else {
             moveFourButton.setEnabled(false);
+            moveFourButton.setText("Move 4");
         }
     }
     @SuppressWarnings("unchecked")

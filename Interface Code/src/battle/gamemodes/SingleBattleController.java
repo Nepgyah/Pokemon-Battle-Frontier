@@ -42,6 +42,7 @@ public class SingleBattleController{
     JProgressBar leftHpBar, rightHpBar;
     JButton fightButton, bagButton, pokemonButton;
     pokemonPanel leftPokemonPanel, rightPokemonPanel;
+    movePanel leftMovePanel, rightMovePanel;
     
     public SingleBattleController(Trainer leftTrainer, Trainer rightTrainer, 
             boolean showConsole, 
@@ -92,12 +93,14 @@ public class SingleBattleController{
             leftPokemon = leftTrainer.getParty().get(0);
             setPokemonLabels(leftPokemon, leftLabels, leftHpBar);
             leftPokemonPanel.setPokemonButtons();
+            leftMovePanel.setMoveButtons(leftPokemon.getMoveset());
         }
         if (rightSwap == true) {
             BattleUtilities.swapPokemon(rightTrainer, rightNextPokemon);
             rightPokemon = rightTrainer.getParty().get(0);
             setPokemonLabels(rightPokemon, rightLabels, rightHpBar);
             rightPokemonPanel.setPokemonButtons();
+            rightMovePanel.setMoveButtons(rightPokemon.getMoveset());
         }
         
         // Right Going first
@@ -260,6 +263,14 @@ public class SingleBattleController{
     
     public void setRightPokePanel(pokemonPanel panel) {
         this.rightPokemonPanel = panel;
+    }
+    
+    public void setLeftMovePanel(movePanel panel) {
+        this.leftMovePanel = panel;
+    }
+    
+    public void setRightMovePanel(movePanel panel) {
+        this.rightMovePanel = panel;
     }
     
     public boolean getLeftTrainerTurn() {

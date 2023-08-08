@@ -3,28 +3,52 @@ package battle.gamemodes;
 import battle.gui.utilities.bagPanel;
 import java.awt.CardLayout;
 import battle.gui.utilities.*;
-import pokemon.Pokemon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import trainer.Trainer;
-import javax.swing.SwingUtilities;
+import battle.gui.utilities.*;
+import javax.swing.JButton;
 
 public class SingleBattleWindow extends javax.swing.JFrame {
 
     CardLayout controlCard;
     SingleBattleController battleController;
-    
+    pokemonPanel leftPokemonPanel, rightPokemonPanel;
     public SingleBattleWindow(Trainer leftTrainer, Trainer rightTrainer) {
         initComponents();
         
+        JLabel [] leftLabels = new JLabel[]{
+            leftNameLabel, 
+            leftLevelValue,
+            leftCurrentHP,
+            leftMaxHP,
+            leftIcon
+        };
+        JLabel [] rightLabels = new JLabel[]{
+            rightNameLabel,
+            rightLevelValue,
+            rightCurrentHP,
+            rightMaxHP,
+            rightIcon
+        };
+        
         battleController = new SingleBattleController(
-                leftTrainer.getParty().get(0), rightTrainer.getParty().get(0), 
+                leftTrainer, rightTrainer, 
                 true, 
-                eventTextArea, leftCurrentHP, rightCurrentHP,
-                leftHPBar,
-                rightHPBar,
+                eventTextArea,
+                leftLabels, rightLabels,
+                leftHPBar,rightHPBar,
                 fightButton,
                 bagButton,
                 pokemonButton
         );
+        
+        leftPokemonPanel = new pokemonPanel(detailedPanel, leftTrainer, battleController);
+        rightPokemonPanel = new pokemonPanel(detailedPanel, rightTrainer, battleController);
+        
+        battleController.setLeftPokePanel(leftPokemonPanel);
+        battleController.setRightPokePanel(rightPokemonPanel);
+        
         controlCard = (CardLayout) detailedPanel.getLayout();
         
         detailedPanel.add(new waitingPanel(detailedPanel), "waitingPanel");
@@ -32,42 +56,17 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         detailedPanel.add(new bagPanel(detailedPanel, leftTrainer.getName()), "leftBagPanel");
         detailedPanel.add(new bagPanel(detailedPanel, rightTrainer.getName()), "rightBagPanel");
         
-        detailedPanel.add(new pokemonPanel(detailedPanel, leftTrainer.getName()), "leftPokemonPanel");
-        detailedPanel.add(new pokemonPanel(detailedPanel, rightTrainer.getName()), "rightPokemonPanel");
+        detailedPanel.add(leftPokemonPanel, "leftPokemonPanel");
+        detailedPanel.add(rightPokemonPanel, "rightPokemonPanel");
         
         detailedPanel.add(new movePanel(detailedPanel, leftTrainer.getName(), leftTrainer.getParty().get(0).getMoveset(), battleController ), "leftMovePanel");
         detailedPanel.add(new movePanel(detailedPanel, rightTrainer.getName(), rightTrainer.getParty().get(0).getMoveset(), battleController), "rightMovePanel");
         
-        setLeftPokemonLabels(leftTrainer.getParty().get(0));
-        setRightPokemonLabels(rightTrainer.getParty().get(0));
+   
+//        setLeftPokemonLabels(leftTrainer.getParty().get(0));
+//        setRightPokemonLabels(rightTrainer.getParty().get(0));
         
         System.out.println("WINDOW CONSOLE: Initializing battle between " + leftTrainer.getName() + " vs " + rightTrainer.getName());
-    }
-
-    private void setRightPokemonLabels(Pokemon pokemon) {
-        rightNameLabel.setText(pokemon.getName());
-        rightLevelValue.setText(Integer.toString(pokemon.getLevel()));
-        rightCurrentHP.setText(Integer.toString(pokemon.getCurrent_hp()));
-        rightMaxHP.setText(Integer.toString(pokemon.getCurrent_max_hp()));
-        rightHPBar.setMaximum(pokemon.getCurrent_max_hp());
-        rightHPBar.setValue(pokemon.getCurrent_hp());
-    }
-    
-    private void setLeftPokemonLabels(Pokemon pokemon) {
-        leftNameLabel.setText(pokemon.getName());
-        leftLevelValue.setText(Integer.toString(pokemon.getLevel()));
-        leftCurrentHP.setText(Integer.toString(pokemon.getCurrent_hp()));
-        leftMaxHP.setText(Integer.toString(pokemon.getCurrent_max_hp()));
-        leftHPBar.setMaximum(pokemon.getCurrent_max_hp());
-        leftHPBar.setValue(pokemon.getCurrent_hp());
-    }
-    
-    private void updateLeftHP() {
-        leftLevelValue.setText(Integer.toString(battleController.getLeftPokemon().getCurrent_hp()));
-    }
-    
-    private void updateRightHP() {
-        rightLevelValue.setText(Integer.toString(battleController.getRightPokemon().getCurrent_hp()));
     }
     
     @SuppressWarnings("unchecked")
@@ -76,7 +75,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
 
         jButton1 = new javax.swing.JButton();
         battlePanel = new javax.swing.JPanel();
-        leftPokemonPane = new javax.swing.JPanel();
+        rightPokemonLabels = new javax.swing.JPanel();
         rightLevelLabel = new javax.swing.JLabel();
         rightNameLabel = new javax.swing.JLabel();
         rightHPBar = new javax.swing.JProgressBar();
@@ -84,7 +83,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         rightMaxHP = new javax.swing.JLabel();
         rightSlash = new javax.swing.JLabel();
         rightLevelValue = new javax.swing.JLabel();
-        leftPokemonPane1 = new javax.swing.JPanel();
+        leftPokemonLabels = new javax.swing.JPanel();
         leftLevelLabel = new javax.swing.JLabel();
         leftNameLabel = new javax.swing.JLabel();
         leftHPBar = new javax.swing.JProgressBar();
@@ -92,6 +91,8 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         leftMaxHP = new javax.swing.JLabel();
         leftSlash = new javax.swing.JLabel();
         leftLevelValue = new javax.swing.JLabel();
+        leftIcon = new javax.swing.JLabel();
+        rightIcon = new javax.swing.JLabel();
         eventPanel = new javax.swing.JScrollPane();
         eventTextArea = new javax.swing.JTextArea();
         detailedPanel = new javax.swing.JPanel();
@@ -100,7 +101,6 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         fightButton = new javax.swing.JButton();
         pokemonButton = new javax.swing.JButton();
         quitButton = new javax.swing.JButton();
-        eventLabel = new javax.swing.JLabel();
 
         jButton1.setText("jButton1");
 
@@ -109,7 +109,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
 
         battlePanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        leftPokemonPane.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        rightPokemonLabels.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
         rightLevelLabel.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         rightLevelLabel.setText("Lv.");
@@ -131,24 +131,24 @@ public class SingleBattleWindow extends javax.swing.JFrame {
 
         rightLevelValue.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
 
-        javax.swing.GroupLayout leftPokemonPaneLayout = new javax.swing.GroupLayout(leftPokemonPane);
-        leftPokemonPane.setLayout(leftPokemonPaneLayout);
-        leftPokemonPaneLayout.setHorizontalGroup(
-            leftPokemonPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(leftPokemonPaneLayout.createSequentialGroup()
-                .addGroup(leftPokemonPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(leftPokemonPaneLayout.createSequentialGroup()
+        javax.swing.GroupLayout rightPokemonLabelsLayout = new javax.swing.GroupLayout(rightPokemonLabels);
+        rightPokemonLabels.setLayout(rightPokemonLabelsLayout);
+        rightPokemonLabelsLayout.setHorizontalGroup(
+            rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(rightPokemonLabelsLayout.createSequentialGroup()
+                .addGroup(rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(rightPokemonLabelsLayout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(rightCurrentHP)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(rightSlash)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(rightMaxHP, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(leftPokemonPaneLayout.createSequentialGroup()
+                    .addGroup(rightPokemonLabelsLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(leftPokemonPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(rightHPBar, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(leftPokemonPaneLayout.createSequentialGroup()
+                            .addGroup(rightPokemonLabelsLayout.createSequentialGroup()
                                 .addComponent(rightNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(rightLevelLabel)
@@ -156,25 +156,25 @@ public class SingleBattleWindow extends javax.swing.JFrame {
                                 .addComponent(rightLevelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(6, 6, 6))
         );
-        leftPokemonPaneLayout.setVerticalGroup(
-            leftPokemonPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(leftPokemonPaneLayout.createSequentialGroup()
+        rightPokemonLabelsLayout.setVerticalGroup(
+            rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(rightPokemonLabelsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(leftPokemonPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rightNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(rightLevelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(rightLevelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rightHPBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(leftPokemonPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rightCurrentHP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(rightMaxHP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(rightSlash, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        leftPokemonPane1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        leftPokemonLabels.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
         leftLevelLabel.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         leftLevelLabel.setText("Lv.");
@@ -196,23 +196,23 @@ public class SingleBattleWindow extends javax.swing.JFrame {
 
         leftLevelValue.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
 
-        javax.swing.GroupLayout leftPokemonPane1Layout = new javax.swing.GroupLayout(leftPokemonPane1);
-        leftPokemonPane1.setLayout(leftPokemonPane1Layout);
-        leftPokemonPane1Layout.setHorizontalGroup(
-            leftPokemonPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(leftPokemonPane1Layout.createSequentialGroup()
+        javax.swing.GroupLayout leftPokemonLabelsLayout = new javax.swing.GroupLayout(leftPokemonLabels);
+        leftPokemonLabels.setLayout(leftPokemonLabelsLayout);
+        leftPokemonLabelsLayout.setHorizontalGroup(
+            leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(leftPokemonLabelsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(leftPokemonPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPokemonPane1Layout.createSequentialGroup()
+                .addGroup(leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPokemonLabelsLayout.createSequentialGroup()
                         .addComponent(leftNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(leftLevelLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(leftLevelValue, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPokemonPane1Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPokemonLabelsLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(leftPokemonPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPokemonPane1Layout.createSequentialGroup()
+                        .addGroup(leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPokemonLabelsLayout.createSequentialGroup()
                                 .addComponent(leftCurrentHP)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(leftSlash)
@@ -221,18 +221,18 @@ public class SingleBattleWindow extends javax.swing.JFrame {
                             .addComponent(leftHPBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(6, 6, 6))
         );
-        leftPokemonPane1Layout.setVerticalGroup(
-            leftPokemonPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(leftPokemonPane1Layout.createSequentialGroup()
+        leftPokemonLabelsLayout.setVerticalGroup(
+            leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(leftPokemonLabelsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(leftPokemonPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(leftNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(leftLevelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(leftLevelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(leftHPBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(leftPokemonPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(leftMaxHP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(leftSlash, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(leftCurrentHP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -244,21 +244,36 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         battlePanelLayout.setHorizontalGroup(
             battlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(battlePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(leftPokemonPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(443, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, battlePanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(leftPokemonPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(battlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(battlePanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(rightPokemonLabels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(battlePanelLayout.createSequentialGroup()
+                        .addGap(114, 114, 114)
+                        .addComponent(leftIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addGroup(battlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(leftPokemonLabels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, battlePanelLayout.createSequentialGroup()
+                        .addComponent(rightIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(119, 119, 119)))
                 .addContainerGap())
         );
         battlePanelLayout.setVerticalGroup(
             battlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(battlePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(leftPokemonPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 140, Short.MAX_VALUE)
-                .addComponent(leftPokemonPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(battlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(battlePanelLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(rightPokemonLabels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(38, 38, 38)
+                        .addComponent(leftIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25))
+                    .addGroup(battlePanelLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(rightIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(leftPokemonLabels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -278,21 +293,33 @@ public class SingleBattleWindow extends javax.swing.JFrame {
 
         controlPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        bagButton.setBackground(new java.awt.Color(255, 102, 0));
+        bagButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        bagButton.setForeground(new java.awt.Color(255, 255, 255));
         bagButton.setText("Bag");
+        bagButton.setFocusable(false);
         bagButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bagButtonActionPerformed(evt);
             }
         });
 
+        fightButton.setBackground(new java.awt.Color(204, 0, 51));
+        fightButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        fightButton.setForeground(new java.awt.Color(255, 255, 255));
         fightButton.setText("Fight");
+        fightButton.setFocusable(false);
         fightButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fightButtonActionPerformed(evt);
             }
         });
 
+        pokemonButton.setBackground(new java.awt.Color(51, 153, 0));
+        pokemonButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        pokemonButton.setForeground(new java.awt.Color(255, 255, 255));
         pokemonButton.setText("Pokemon");
+        pokemonButton.setFocusable(false);
         pokemonButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pokemonButtonActionPerformed(evt);
@@ -300,6 +327,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         });
 
         quitButton.setText("Quit");
+        quitButton.setFocusable(false);
 
         javax.swing.GroupLayout controlPanelLayout = new javax.swing.GroupLayout(controlPanel);
         controlPanel.setLayout(controlPanelLayout);
@@ -332,8 +360,6 @@ public class SingleBattleWindow extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        eventLabel.setText("event label");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -341,7 +367,6 @@ public class SingleBattleWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(eventLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE)
                     .addComponent(eventPanel)
                     .addComponent(battlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -361,16 +386,14 @@ public class SingleBattleWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(eventPanel)
                     .addComponent(controlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(eventLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(62, Short.MAX_VALUE))
+                .addContainerGap(98, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void fightButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fightButtonActionPerformed
-        // TODO add your handling code here:
+
         if (battleController.getLeftTrainerTurn()) {
             controlCard.show(detailedPanel, "leftMovePanel");
         } else {
@@ -402,28 +425,29 @@ public class SingleBattleWindow extends javax.swing.JFrame {
     private javax.swing.JPanel battlePanel;
     private javax.swing.JPanel controlPanel;
     private javax.swing.JPanel detailedPanel;
-    private javax.swing.JLabel eventLabel;
     private javax.swing.JScrollPane eventPanel;
     public javax.swing.JTextArea eventTextArea;
     private javax.swing.JButton fightButton;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel leftCurrentHP;
     private javax.swing.JProgressBar leftHPBar;
+    private javax.swing.JLabel leftIcon;
     private javax.swing.JLabel leftLevelLabel;
     private javax.swing.JLabel leftLevelValue;
     private javax.swing.JLabel leftMaxHP;
     private javax.swing.JLabel leftNameLabel;
-    private javax.swing.JPanel leftPokemonPane;
-    private javax.swing.JPanel leftPokemonPane1;
+    private javax.swing.JPanel leftPokemonLabels;
     private javax.swing.JLabel leftSlash;
     private javax.swing.JButton pokemonButton;
     private javax.swing.JButton quitButton;
     private javax.swing.JLabel rightCurrentHP;
     private javax.swing.JProgressBar rightHPBar;
+    private javax.swing.JLabel rightIcon;
     private javax.swing.JLabel rightLevelLabel;
     private javax.swing.JLabel rightLevelValue;
     private javax.swing.JLabel rightMaxHP;
     private javax.swing.JLabel rightNameLabel;
+    private javax.swing.JPanel rightPokemonLabels;
     private javax.swing.JLabel rightSlash;
     // End of variables declaration//GEN-END:variables
 }

@@ -16,7 +16,8 @@ public class Trainer implements Serializable{
     String title;
     String hometown;
     ArrayList<Pokemon> party = new ArrayList<>();
-
+    protected Pokemon[] moveset = new Pokemon[6];
+    
     public Trainer(String name) {
         super();
         this.name = name;

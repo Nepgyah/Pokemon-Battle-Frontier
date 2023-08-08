@@ -1,7 +1,9 @@
 package pokemon;
 
+import java.awt.Image;
 import java.io.Serializable;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 
 import move.Move;
 import types.*;
@@ -18,7 +20,8 @@ public abstract class Pokemon implements Serializable{
     protected int pokedex_number;
     protected String name;
     protected String nickname;
-
+    protected String iconPath;
+    
     protected Move[] moveset = new Move[4];
     protected ArrayList<Integer> learnable_moves = new ArrayList<>();
 
@@ -106,6 +109,10 @@ public abstract class Pokemon implements Serializable{
         }
     }
 
+    public String getIconPath() {
+        String path = "pokedexPhotos/" + Integer.toString(this.pokedex_number) + ".png";
+        return path;
+    }
     /* =============================
      * MOVE RELATED MEMBER FUNCTIONS
      * =============================
@@ -202,7 +209,13 @@ public abstract class Pokemon implements Serializable{
             }
         }
     }
-
+    
+    public String displayButtonInfo() {
+        String text = "";
+        text = this.name + " (" + this.current_hp + " / " + this.current_max_hp + ") ";
+        return text;
+    }
+    
     private void displayTypes()
     {
         if(this instanceof Bug) System.out.print("Bug ");
@@ -262,6 +275,10 @@ public abstract class Pokemon implements Serializable{
      * =====================
      */
 
+    public ImageIcon getIcon() {
+        ImageIcon icon = new ImageIcon(new ImageIcon(this.getIconPath()).getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
+        return icon;
+    }
     public void setLevel(int level)
     {
         this.level = level;
@@ -677,4 +694,6 @@ public abstract class Pokemon implements Serializable{
     public void setLeeched(boolean isLeeched) {
         this.isLeeched = isLeeched;
     }
+    
+    
 }

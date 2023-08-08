@@ -14,6 +14,15 @@ public class startup {
         ArrayList<Pokemon> pokedex = new ArrayList<>();
         
         pokedex.add(new P_001_Bulbasaur());
+        
+        pokedex.add(new P_004_Charmander());
+        
+        pokedex.add(new P_007_Squirtle());
+        
+        pokedex.add(new P_016_Pidgey());
+        
+        pokedex.add(new P_019_Rattata());
+        
         pokedex.add(new P_025_Pikachu());
         
         return pokedex;
@@ -31,7 +40,11 @@ public class startup {
     {
         Trainer ash = new Trainer("Ash");
 
+        ash.addToParty(pokedex.get(5).copy());
+        ash.addToParty(pokedex.get(0).copy());
         ash.addToParty(pokedex.get(1).copy());
+        ash.addToParty(pokedex.get(2).copy());
+        
         for(Pokemon pokemon : ash.getParty())
         {
             pokemon.setLevel(20);
@@ -42,14 +55,16 @@ public class startup {
     
      public static Trainer createGary(ArrayList<Pokemon> pokedex, ArrayList<Move> movedex)
     {
-        Trainer ash = new Trainer("Gary");
-
-        ash.addToParty(pokedex.get(0).copy());
-        for(Pokemon pokemon : ash.getParty())
+        Trainer gary = new Trainer("Gary");
+        
+        gary.addToParty(pokedex.get(3).copy());
+        gary.addToParty(pokedex.get(4).copy());
+        
+        for(Pokemon pokemon : gary.getParty())
         {
             pokemon.setLevel(20);
             pokemon.assignRandomMoves(movedex);
         }
-        return ash;
+        return gary;
     }
 }

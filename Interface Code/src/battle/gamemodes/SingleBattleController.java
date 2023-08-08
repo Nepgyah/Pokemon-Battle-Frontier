@@ -109,10 +109,12 @@ public class SingleBattleController{
                 BattleMechanics.useMove(rightPokemon, leftPokemon, rightMove, leftMove);
                 leftHpLabel.setText(Integer.toString(leftPokemon.getCurrent_hp()));
                 textArea.setText(rightPokemon.getName() + " used " + rightMove.getName() + "!");
+                updateHPBar(leftPokemon, leftHpBar);
             }
             if (leftMove != null) {
                 BattleMechanics.useMove(leftPokemon, rightPokemon, leftMove, rightMove);
                 rightHpLabel.setText(Integer.toString(rightPokemon.getCurrent_hp()));
+                updateHPBar(rightPokemon, rightHpBar);
             }
         } 
         

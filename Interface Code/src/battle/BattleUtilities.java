@@ -33,7 +33,12 @@ public class BattleUtilities {
         Collections.swap(trainer.getParty(), 0, input-1);
         System.out.println(trainer.getName() + " sent out " + trainer.getParty().get(0).getName());
     }
-
+    
+    // NEW
+    public static void swapPokemon(Trainer trainer, int partyPosition) {
+        Collections.swap(trainer.getParty(), 0, partyPosition);
+    }
+    // OLD
     public static String swapPokemon(Trainer trainer, Scanner kb)
     {
         int input = -1;

@@ -1,7 +1,9 @@
 package pokemon;
 
+import java.awt.Image;
 import java.io.Serializable;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 
 import move.Move;
 import types.*;
@@ -273,6 +275,10 @@ public abstract class Pokemon implements Serializable{
      * =====================
      */
 
+    public ImageIcon getIcon() {
+        ImageIcon icon = new ImageIcon(new ImageIcon(this.getIconPath()).getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
+        return icon;
+    }
     public void setLevel(int level)
     {
         this.level = level;

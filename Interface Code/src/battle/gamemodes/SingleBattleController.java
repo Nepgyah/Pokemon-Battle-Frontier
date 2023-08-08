@@ -5,6 +5,7 @@ import pokemon.Pokemon;
 import trainer.Trainer;
 import battle.BattleMechanics;
 import battle.BattleUtilities;
+import battle.gui.utilities.pokemonPanel;
 import java.awt.Color;
 import java.util.Scanner;
 import javax.swing.JLabel;
@@ -14,6 +15,7 @@ import javax.swing.JTextArea;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
 
@@ -46,7 +48,8 @@ public class SingleBattleController{
     JTextArea textArea;
     JProgressBar leftHpBar, rightHpBar;
     JButton fightButton, bagButton, pokemonButton;
-            
+    pokemonPanel leftPokemonPanel, rightPokemonPanel;
+    
     public SingleBattleController(Trainer leftTrainer, Trainer rightTrainer, 
             boolean showConsole, 
             JTextArea textArea, 
@@ -115,19 +118,22 @@ public class SingleBattleController{
         disableControls();
         if (showConsole) {
             System.out.println("CONTROL CONSOLE: Executing current turn");
-//            consoleFlags();
+            consoleFlags();
         }
         
         if (leftSwap == true) {
             BattleUtilities.swapPokemon(leftTrainer, leftNextPokemon);
             leftPokemon = leftTrainer.getParty().get(0);
             setPokemonLabels(leftPokemon, leftLabels, leftHpBar);
+            leftPokemonPanel.setPokemonButtons();
         }
         if (rightSwap == true) {
             BattleUtilities.swapPokemon(rightTrainer, rightNextPokemon);
             rightPokemon = rightTrainer.getParty().get(0);
             setPokemonLabels(rightPokemon, rightLabels, rightHpBar);
+            rightPokemonPanel.setPokemonButtons();
         }
+        
         // Right Going first
         if (leftPokemon.getBattle_speed() < rightPokemon.getBattle_speed()) {
             if (rightMove != null) {
@@ -139,9 +145,8 @@ public class SingleBattleController{
                 BattleMechanics.useMove(leftPokemon, rightPokemon, leftMove, rightMove);
                 rightHpLabel.setText(Integer.toString(rightPokemon.getCurrent_hp()));
             }
-     
-        // Left Going First
         } 
+        // Left Going First
         if (leftPokemon.getBattle_speed() > rightPokemon.getBattle_speed()) {
             // Left turn
             TimerTask taskOne;
@@ -177,17 +182,19 @@ public class SingleBattleController{
 //            };
 //            
             // Post turn
-            TimerTask taskTwo = new TimerTask() {
-                @Override
-                public void run() {
-                    textArea.setText("TURN DONE!");
-                    enableControls();
-                }
-            };
+            
 //            timer.schedule(taskOne, 3000);
-            timer.schedule(taskTwo, 6000);
+        
             
         }
+        TimerTask taskTwo = new TimerTask() {
+            @Override
+            public void run() {
+                textArea.setText("TURN DONE!");
+                enableControls();
+            }
+        };
+        timer.schedule(taskTwo, 6000);
         if (showConsole) {
             System.out.println("CONTROL CONSOLE: Turn results");
             System.out.println("Left Pokemon - " + leftPokemon.getName() + " " + leftPokemon.getCurrent_hp() + "/" + leftPokemon.getCurrent_max_hp());
@@ -207,7 +214,7 @@ public class SingleBattleController{
         if (leftSwap == true) {
             System.out.println("SWAPPING - " + leftPokemon.getName());
         }
-        System.out.print("\nRIGHT: ");
+        System.out.print("RIGHT: ");
         if (rightMove != null) {
             System.out.println("ATTACKING - " + rightPokemon.getName() + " -> " + rightMove.getName());
         }
@@ -237,6 +244,15 @@ public class SingleBattleController{
         hpBar.setValue(pokemon.getCurrent_hp());
         
     }
+    
+    public void setLeftPokePanel(pokemonPanel panel) {
+        this.leftPokemonPanel = panel;
+    }
+    
+    public void setRightPokePanel(pokemonPanel panel) {
+        this.rightPokemonPanel = panel;
+    }
+    
     private void disableControls() {
         fightButton.setEnabled(false);
         bagButton.setEnabled(false);

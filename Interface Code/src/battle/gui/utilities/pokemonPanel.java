@@ -2,6 +2,7 @@ package battle.gui.utilities;
 
 import battle.gamemodes.SingleBattleController;
 import java.awt.CardLayout;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import trainer.Trainer;
 
@@ -19,37 +20,49 @@ public class pokemonPanel extends javax.swing.JPanel {
         this.controller = controller;
         card = (CardLayout) panel.getLayout();
         
-        initializeParty();
+        setPokemonButtons();
         titleLabel.setText("Party Pokemon for " + trainer.getName());
         
     }
-
-    private void initializeParty() {
-        pokemonOne.setText(trainer.getParty().get(0).displayButtonInfo());
+    
+    public JButton[] getPokemonButtons() {
+        JButton [] buttons = new JButton[] {
+            this.pokemonOne, 
+            this.pokemonTwo, 
+            this.pokemonThree, 
+            this.pokemonFour, 
+            this.pokemonFive, 
+            this.pokemonSix
+        };
+        return buttons;
+    }
+    
+    public void setPokemonButtons() {
+        this.pokemonOne.setText(trainer.getParty().get(0).displayButtonInfo());
         if (trainer.getParty().size() > 1) {
-            pokemonTwo.setText(trainer.getParty().get(1).displayButtonInfo());
+            this.pokemonTwo.setText(trainer.getParty().get(1).displayButtonInfo());
         } else {
-            pokemonTwo.setVisible(false);
+            this.pokemonTwo.setVisible(false);
         }
         if (trainer.getParty().size() > 2) {
-            pokemonThree.setText(trainer.getParty().get(2).displayButtonInfo());
+            this.pokemonThree.setText(trainer.getParty().get(2).displayButtonInfo());
         } else {
-            pokemonThree.setVisible(false);
+            this.pokemonThree.setVisible(false);
         }
         if (trainer.getParty().size() > 3) {
-            pokemonFour.setText(trainer.getParty().get(3).displayButtonInfo());
+            this.pokemonFour.setText(trainer.getParty().get(3).displayButtonInfo());
         } else {
-            pokemonFour.setVisible(false);
+            this.pokemonFour.setVisible(false);
         }
         if (trainer.getParty().size() > 4) {
-            pokemonFive.setText(trainer.getParty().get(4).displayButtonInfo());
+            this.pokemonFive.setText(trainer.getParty().get(4).displayButtonInfo());
         } else {
-            pokemonFive.setVisible(false);
+            this.pokemonFive.setVisible(false);
         }
         if (trainer.getParty().size() > 5) {
-            pokemonSix.setText(trainer.getParty().get(5).displayButtonInfo());
+            this.pokemonSix.setText(trainer.getParty().get(5).displayButtonInfo());
         } else {
-            pokemonSix.setVisible(false);
+            this.pokemonSix.setVisible(false);
         }
     }
     @SuppressWarnings("unchecked")

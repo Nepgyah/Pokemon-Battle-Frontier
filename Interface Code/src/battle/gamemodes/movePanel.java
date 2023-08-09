@@ -24,11 +24,6 @@ public class movePanel extends javax.swing.JPanel {
     }
 
     public void setMoveButtons(Move[] moveList) {
-        System.out.println("MoveList");
-        for (int i = 0; i < 4; i++) {
-            if(moveList[i] != null) System.out.println(moveList[i].getName());
-            else System.out.println("--");
-        }
         if (moveList[0] != null) {
             moveOneButton.setEnabled(true);
             moveOneButton.setText(moveList[0].getName());
@@ -137,33 +132,21 @@ public class movePanel extends javax.swing.JPanel {
     private void moveOneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveOneButtonActionPerformed
         controller.setMoveChoice(0);
         card.show(contentPanel, "waitingPanel");
-        if (controller.getLeftTrainerTurn() == true) {
-            System.out.println("WINDOW CONSOLE: Updating pokemon labels");
-        }
     }//GEN-LAST:event_moveOneButtonActionPerformed
 
     private void moveTwoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveTwoButtonActionPerformed
         controller.setMoveChoice(1);
         card.show(contentPanel, "waitingPanel");
-        if (controller.getLeftTrainerTurn() == true) {
-            System.out.println("WINDOW CONSOLE: Updating pokemon labels");
-        }
     }//GEN-LAST:event_moveTwoButtonActionPerformed
 
     private void moveThreeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveThreeButtonActionPerformed
         controller.setMoveChoice(2);
         card.show(contentPanel, "waitingPanel");
-        if (controller.getLeftTrainerTurn() == true) {
-            System.out.println("WINDOW CONSOLE: Updating pokemon labels");
-        }
     }//GEN-LAST:event_moveThreeButtonActionPerformed
 
     private void moveFourButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveFourButtonActionPerformed
         controller.setMoveChoice(3);
         card.show(contentPanel, "waitingPanel");
-        if (controller.getLeftTrainerTurn() == true) {
-            System.out.println("WINDOW CONSOLE: Updating pokemon labels");
-        }
     }//GEN-LAST:event_moveFourButtonActionPerformed
 
 

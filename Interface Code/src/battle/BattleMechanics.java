@@ -117,6 +117,7 @@ public class BattleMechanics {
      */
     public static void useMove(Pokemon user, Pokemon target, Move userMove, Move targetMove) 
     {
+//            System.out.println("useMove method print");
             /*
              * TODO: Mechanics to add
              * 		- Leeched
@@ -124,7 +125,7 @@ public class BattleMechanics {
              */
 
             if (canUseMove(user) == false) return;
-            System.out.println(user.getNickname() + " used " + userMove.getName() + "!");
+//            System.out.println(user.getNickname() + " used " + userMove.getName() + "!");
 
             userMove.setCurrent_pp(userMove.getCurrent_pp() - 1);
 

@@ -87,8 +87,8 @@ public class SingleBattleController{
         
         disableControls();
         if (showConsole) {
-            System.out.println("CONTROL CONSOLE: Executing current turn");
-            consoleFlags();
+            System.out.println("CONTROL CONSOLE: Running turn");
+//            consoleFlags();
         }
         if (leftSwap == true) {
             leftPrevName = leftPokemon.getName();
@@ -113,16 +113,12 @@ public class SingleBattleController{
         
         // Right Going first
         if (leftPokemon.getBattle_speed() < rightPokemon.getBattle_speed()) {
-            if (rightMove != null) {
-                textArea.setText(rightPokemon.getName() + " used " + rightMove.getName() + "!");
-                
+            if (rightMove != null) {   
                 BattleMechanics.useMove(rightPokemon, leftPokemon, rightMove, leftMove);
                 
                 addAttackEvent(rightPokemon, leftPokemon, rightMove, leftHpLabel, leftHpBar);
             }
             if (leftMove != null) {
-                textArea.setText(leftPokemon.getName() + " used " + leftMove.getName() + "!");
-                
                 BattleMechanics.useMove(leftPokemon, rightPokemon, leftMove, rightMove);
                 
                 addAttackEvent(leftPokemon, rightPokemon, leftMove, rightHpLabel, rightHpBar);
@@ -133,15 +129,11 @@ public class SingleBattleController{
         if (leftPokemon.getBattle_speed() > rightPokemon.getBattle_speed()) {
             // Left turn
             if( leftMove != null) {
-                textArea.setText(leftPokemon.getName() + " used " + leftMove.getName() + "!");
-                
                 BattleMechanics.useMove(leftPokemon, rightPokemon, leftMove, rightMove);
                 
-                 addAttackEvent(leftPokemon, rightPokemon, leftMove, rightHpLabel, rightHpBar);
+                addAttackEvent(leftPokemon, rightPokemon, leftMove, rightHpLabel, rightHpBar);
             }
-            if (rightMove != null) {
-                textArea.setText(rightPokemon.getName() + " used " + rightMove.getName() + "!");
-                
+            if (rightMove != null) { 
                 BattleMechanics.useMove(rightPokemon, leftPokemon, rightMove, leftMove);
                 
                 addAttackEvent(rightPokemon, leftPokemon, rightMove, leftHpLabel, leftHpBar);
@@ -156,14 +148,11 @@ public class SingleBattleController{
             }
         });
         
-        int val = 0;
         for (int i = 0; i < eventTextList.size(); i++) {
-            val = (i * 2000);
-            System.out.println("DELAY -> " + Integer.toString(val));
-            timer.schedule(eventTextList.get(i), val);
+            timer.schedule(eventTextList.get(i), i * 1000);
         }
         
-        if (showConsole) {
+        if (!showConsole) {
             System.out.println("CONTROL CONSOLE: Turn results");
             System.out.println("Left Pokemon - " + leftPokemon.getName() + " " + leftPokemon.getCurrent_hp() + "/" + leftPokemon.getCurrent_max_hp());
             System.out.println("Right Pokemon - " + rightPokemon.getName() + " " + rightPokemon.getCurrent_hp() + "/" + rightPokemon.getCurrent_max_hp());
@@ -195,18 +184,18 @@ public class SingleBattleController{
     
     private void addSwapEvent(String previousName, Pokemon pokemon, JLabel [] labelArray, JProgressBar hpBar) {
         eventTextList.add(new TimerTask() {
-                @Override
-                public void run() {
-                    textArea.setText(previousName + ", switch out!" + "\nCome back!");
-                }
-            });
-            eventTextList.add(new TimerTask() {
-                @Override
-                public void run() {
-                    setPokemonLabels(pokemon, labelArray, hpBar);
-                    textArea.setText("Go " + pokemon.getName() + "!");
-                }
-            });
+            @Override
+            public void run() {
+                textArea.setText(previousName + ", switch out!" + "\nCome back!");
+            }
+        });
+        eventTextList.add(new TimerTask() {
+            @Override
+            public void run() {
+                setPokemonLabels(pokemon, labelArray, hpBar);
+                textArea.setText("Go " + pokemon.getName() + "!");
+            }
+        });
     }
     
     private void addAttackEvent(Pokemon atkPokemon, Pokemon defPokemon, Move move, JLabel hpLabel, JProgressBar hpBar) {
@@ -241,12 +230,12 @@ public class SingleBattleController{
     public void setPokemonSwap(int pos) {
         if(leftTrainerTurn) {
             leftNextPokemon = pos;
-            System.out.println(leftTrainer.getName() + " is swapping " + leftPokemon.getName() + " for " + leftTrainer.getParty().get(pos).getName());
+            System.out.println("CONTROL CONSOLE: " + leftTrainer.getName() + " is swapping " + leftPokemon.getName() + " for " + leftTrainer.getParty().get(pos).getName());
             leftSwap = true;
             leftTrainerTurn = false;
         } else {
             rightNextPokemon = pos;
-            System.out.println(rightTrainer.getName() + " is swapping " + rightPokemon.getName() + " for " + rightTrainer.getParty().get(pos).getName());
+            System.out.println("CONTROL CONSOLE: " + rightTrainer.getName() + " is swapping " + rightPokemon.getName() + " for " + rightTrainer.getParty().get(pos).getName());
             rightSwap = true;
             leftTrainerTurn = true;
             runTurn();

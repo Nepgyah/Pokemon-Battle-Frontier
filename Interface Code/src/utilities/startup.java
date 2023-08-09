@@ -32,7 +32,18 @@ public class startup {
     {
         ArrayList<Move> movedex = new ArrayList<>();
 
+        movedex.add(new M_001_Pound());
+        
+        movedex.add(new M_014_SwordsDance());
+        
         movedex.add(new M_033_Tackle());
+        
+        movedex.add(new M_039_TailWhip());
+        
+        movedex.add(new M_055_WaterGun());
+        
+        movedex.add(new M_085_ThunderBolt());
+        
         return movedex;
     }
     

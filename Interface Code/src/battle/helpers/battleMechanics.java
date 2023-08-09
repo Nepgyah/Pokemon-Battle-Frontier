@@ -8,29 +8,15 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import move.Move;
-import move.modifiers.PhysicalAttack;
-import move.modifiers.SetDamage;
-import move.modifiers.SpecialAttack;
+import move.modifiers.*;
 import pokemon.Pokemon;
-import types.Bug;
-import types.Dark;
-import types.Dragon;
-import types.Electric;
-import types.Fighting;
-import types.Fire;
-import types.Flying;
-import types.Ghost;
-import types.Grass;
-import types.Ground;
-import types.Ice;
-import types.Normal;
-import types.Poison;
-import types.Psychic;
-import types.Rock;
-import types.Steel;
-import types.Water;
+import types.*;
+import move.statistic_effects_enemy.*;
+import move.statistic_effects_user.*;
 
 public class battleMechanics {
+    
+    final static int MAX_STAT_CHANGE = 2;
     
     public static int calcDamage(int level, int attack, int defense, int power, double type_bonus)
     {
@@ -51,9 +37,22 @@ public class battleMechanics {
             JLabel targetHpLabel, 
             JProgressBar targetHpBar) {
         
+        // Pre move check
+        
+        // Add event to describe the move
+        eventQueue.add(new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("BM: Describing move");
+                textArea.setText(user.getName() + " used " + userMove.getName() + "!");
+            }
+        });
+        
+        // Accuracy Check
+        
         // Calculate the damage
         double typeMultiplier = getTypeMultiplier(userMove, target);
-        
+
         int damage;
         if (userMove instanceof SetDamage)
         {
@@ -71,36 +70,29 @@ public class battleMechanics {
         {
             damage = 0;
         }
-        // Add event to describe the move
-        eventQueue.add(new TimerTask() {
-            @Override
-            public void run() {
-                System.out.println("BM: Describing move");
-                textArea.setText(user.getName() + " used " + userMove.getName() + "!");
-            }
-        });
         
-        // Add event to update hp
-        eventQueue.add(new TimerTask() {
-            @Override
-            public void run() {
-                 // IMPORTANT - TARGET RECIEVES THE DAMAGE HERE
-                target.takeDamage(damage);
-                
-                System.out.println("BM: Updating hp display");
-                targetHpLabel.setText(Integer.toString(target.getCurrent_hp()));
-                targetHpBar.setValue(target.getCurrent_hp());
-                
-                if (target.getCurrent_hp() < (target.getCurrent_max_hp() / 2)) {
-                    targetHpBar.setForeground(Color.yellow);
+        // Add damage dealing event
+        if (damage != 0) {
+            eventQueue.add(new TimerTask() {
+                @Override
+                public void run() {
+                     // IMPORTANT - TARGET RECIEVES THE DAMAGE HERE
+                    target.takeDamage(damage);
+
+                    System.out.println("BM: Updating hp display");
+                    targetHpLabel.setText(Integer.toString(target.getCurrent_hp()));
+                    targetHpBar.setValue(target.getCurrent_hp());
+
+                    if (target.getCurrent_hp() < (target.getCurrent_max_hp() / 2)) {
+                        targetHpBar.setForeground(Color.yellow);
+                    }
+                    if (target.getCurrent_hp() < (target.getCurrent_max_hp() / 4)) {
+                        targetHpBar.setForeground(Color.red);
+                    }
                 }
-                if (target.getCurrent_hp() < (target.getCurrent_max_hp() / 4)) {
-                    targetHpBar.setForeground(Color.red);
-                }
-            }
-        });
-        
-        // Add event to describe the damage multiplier
+            });
+        }
+        // Add effect multiplier effect
         if (typeMultiplier < 1.0 && typeMultiplier > 0) {
             eventQueue.add(new TimerTask() {
                 @Override
@@ -119,8 +111,499 @@ public class battleMechanics {
                 }
             });
         }
+        
+        // Add statistic change event
+        if (userMove instanceof ApplyStatChange) {
+            double statModChange = ( (ApplyStatChange) userMove).getApplyChance();
+            double statModResult = Math.random();
+            
+            if (statModChange > statModResult) {
+                // Note: two sets of modifiers (EX: userAttackPlusOne vs targetAttackPlusOne) requires two sepereate functions?
+//                applyStatEffectToTarget(target, userMove);
+                applyStatEffectsToUser(user, userMove, eventQueue, textArea);
+            }
+        }
+        // Add status change effect
+        
     }
-    
+    private static void applyStatEffectsToUser(Pokemon user, Move move, ArrayList<TimerTask> eventQueue, JTextArea textArea) {
+		
+        if (move instanceof UserAttackPlusOne || move instanceof UserAttackPlusTwo || move instanceof UserAttackMinusOne || move instanceof UserAttackMinusTwo)
+        {
+            if (user.getBattle_attack_count() >= MAX_STAT_CHANGE)
+            {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s attack cannot go any higher!");
+                    }
+                });
+                return;
+            }
+            if (user.getBattle_attack_count() <= -MAX_STAT_CHANGE)
+            {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s attack cannot go any lower!");
+                    }
+                });
+                return;
+            }
+            if(move instanceof UserAttackPlusOne)
+            {
+                user.setBattle_attack_count(user.getBattle_attack_count() + 1);
+                user.setBattle_attack(((user.getBase_attack() + user.getIv_values().get(1)) * 2 * (user.getLevel() + user.getBattle_attack_count()) / 100 ) + 5);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s attack rose!");
+                    }
+                });
+            }
+            if(move instanceof UserAttackPlusTwo)
+            {
+                user.setBattle_attack_count(user.getBattle_attack_count() + 2);
+                user.setBattle_attack(((user.getBase_attack() + user.getIv_values().get(1)) * 2 * (user.getLevel() + user.getBattle_attack_count()) / 100 ) + 5);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s attack sharply!");
+                    }
+                });
+            }
+            if(move instanceof UserAttackMinusOne)
+            {
+                user.setBattle_attack_count(user.getBattle_attack_count() - 1);
+                user.setBattle_attack(((user.getBase_attack() + user.getIv_values().get(1)) * 2 * (user.getLevel() + user.getBattle_attack_count()) / 100 ) + 5);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s attack fell!");
+                    }
+                });
+            }
+            if(move instanceof UserAttackMinusTwo)
+            {
+                user.setBattle_attack_count(user.getBattle_attack_count() - 2);
+                user.setBattle_attack(((user.getBase_attack() + user.getIv_values().get(1)) * 2 * (user.getLevel() + user.getBattle_attack_count()) / 100 ) + 5);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s attack fell harsly!");
+                    }
+                });
+            }
+        }
+
+        if (move instanceof UserDefensePlusOne || move instanceof UserDefensePlusTwo || move instanceof UserDefenseMinusOne || move instanceof UserDefenseMinusTwo)
+        {
+            if (user.getBattle_defense_count() >= MAX_STAT_CHANGE)
+            {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s defense cannot go any higher!");
+                    }
+                });
+                return;
+            }
+            if (user.getBattle_defense_count() <= -MAX_STAT_CHANGE)
+            {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s defense cannot go any lower!");
+                    }
+                });
+                return;
+            }
+            if (move instanceof UserDefensePlusOne)
+            {
+                user.setBattle_defense_count(user.getBattle_defense_count() + 1);
+                user.setBattle_defense(((user.getBase_defense() + user.getIv_values().get(2)) * 2 * (user.getLevel() + user.getBattle_defense_count()) / 100 ) + 5);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s defense rose!");
+                    }
+                });
+            }
+            if (move instanceof UserDefensePlusTwo)
+            {
+                user.setBattle_defense_count(user.getBattle_defense_count() + 2);
+                user.setBattle_defense(((user.getBase_defense() + user.getIv_values().get(2)) * 2 * (user.getLevel() + user.getBattle_defense_count()) / 100 ) + 5);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s defense rose sharply!");
+                    }
+                });
+            }
+            if (move instanceof UserDefenseMinusOne)
+            {
+                user.setBattle_defense_count(user.getBattle_defense_count() - 1);
+                user.setBattle_defense(((user.getBase_defense() + user.getIv_values().get(2)) * 2 * (user.getLevel() + user.getBattle_defense_count()) / 100 ) + 5);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s defense fell!");
+                    }
+                });
+            }
+            if (move instanceof UserDefenseMinusTwo)
+            {
+                user.setBattle_defense_count(user.getBattle_defense_count() - 2);
+                user.setBattle_defense(((user.getBase_defense() + user.getIv_values().get(2)) * 2 * (user.getLevel() + user.getBattle_defense_count()) / 100 ) + 5);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s defense fell sharply!");
+                    }
+                });
+            }
+        }
+
+        if (move instanceof UserSpecialAttackPlusOne || move instanceof UserSpecialAttackPlusTwo || move instanceof UserSpecialAttackMinusOne || move instanceof UserSpecialAttackMinusTwo)
+        {
+            if (user.getBattle_special_attack_count() >= MAX_STAT_CHANGE)
+            {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s special attack cannot go any higher!");
+                    }
+                });
+                return;
+            }
+            if (user.getBattle_special_attack_count() <= -MAX_STAT_CHANGE)
+            {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s special attack cannot go any lower!");
+                    }
+                });
+                return;
+            }
+            if (move instanceof UserSpecialAttackPlusOne)
+            {
+                user.setBattle_special_attack_count(user.getBattle_special_attack_count() + 1);
+                user.setBattle_special_attack(((user.getBase_special_attack() + user.getIv_values().get(3)) * 2 * (user.getLevel() + user.getBattle_special_attack_count()) / 100 ) + 5);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s special attack rose!");
+                    }
+                });
+            }
+            if (move instanceof UserSpecialAttackPlusTwo)
+            {
+                user.setBattle_special_attack_count(user.getBattle_special_attack_count() + 2);
+                user.setBattle_special_attack(((user.getBase_special_attack() + user.getIv_values().get(3)) * 2 * (user.getLevel() + user.getBattle_special_attack_count()) / 100 ) + 5);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s special attack rose sharply!");
+                    }
+                });
+            }
+            if (move instanceof UserSpecialAttackMinusOne)
+            {
+                user.setBattle_special_attack_count(user.getBattle_special_attack_count() - 1);
+                user.setBattle_special_attack(((user.getBase_special_attack() + user.getIv_values().get(3)) * 2 * (user.getLevel() + user.getBattle_special_attack_count()) / 100 ) + 5);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s special attack fell!");
+                    }
+                });
+            }
+            if (move instanceof UserSpecialAttackMinusTwo)
+            {
+                user.setBattle_special_attack_count(user.getBattle_special_attack_count() - 2);
+                user.setBattle_special_attack(((user.getBase_special_attack() + user.getIv_values().get(3)) * 2 * (user.getLevel() + user.getBattle_special_attack_count()) / 100 ) + 5);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s special attack fell harsly!");
+                    }
+                });
+            }
+        }
+
+        if (move instanceof UserSpecialDefensePlusOne || move instanceof UserSpecialDefensePlusTwo || move instanceof UserSpecialDefenseMinusOne || move instanceof UserSpecialDefenseMinusTwo)
+        {
+            if (user.getBattle_special_defense_count() <= MAX_STAT_CHANGE)
+            {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s special defense cannot go any higher!");
+                    }
+                });                
+                return;
+            }
+            if (user.getBattle_special_defense_count() <= -MAX_STAT_CHANGE)
+            {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s special defense cannot go any lower!");
+                    }
+                });  
+                return;
+            }
+            if (move instanceof UserSpecialDefensePlusOne)
+            {
+                user.setBattle_special_defense_count(user.getBattle_special_defense_count() + 1);
+                user.setBattle_special_defense(((user.getBase_special_defense() + user.getIv_values().get(4)) * 2 * (user.getLevel() + user.getBattle_special_defense_count()) / 100 ) + 5);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s special defense rose!");
+                    }
+                });  
+            }
+            if (move instanceof UserSpecialDefensePlusTwo)
+            {
+                user.setBattle_special_defense_count(user.getBattle_special_defense_count() + 2);
+                user.setBattle_special_defense(((user.getBase_special_defense() + user.getIv_values().get(4)) * 2 * (user.getLevel() + user.getBattle_special_defense_count()) / 100 ) + 5);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s special defense rose sharply!");
+                    }
+                });  
+            }
+            if (move instanceof UserSpecialDefenseMinusOne)
+            {
+                user.setBattle_special_defense_count(user.getBattle_special_defense_count() - 1);
+                user.setBattle_special_defense(((user.getBase_special_defense() + user.getIv_values().get(4)) * 2 * (user.getLevel() + user.getBattle_special_defense_count()) / 100 ) + 5);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s special defense fell!");
+                    }
+                });  
+            }
+            if (move instanceof UserSpecialDefenseMinusTwo)
+            {
+                user.setBattle_special_defense_count(user.getBattle_special_defense_count() - 2);
+                user.setBattle_special_defense(((user.getBase_special_defense() + user.getIv_values().get(4)) * 2 * (user.getLevel() + user.getBattle_special_defense_count()) / 100 ) + 5);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s special defense fell harsly!");
+                    }
+                });  
+            }
+        }
+
+        if (move instanceof UserSpeedPlusOne || move instanceof UserSpeedPlusTwo || move instanceof UserSpeedMinusOne || move instanceof UserSpeedMinusTwo)
+        {
+            if (user.getBattle_speed_count() >= MAX_STAT_CHANGE)
+            {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s speed cannot go any higher!");
+                    }
+                });
+                return;
+            }
+            if (user.getBattle_speed_count() <= -MAX_STAT_CHANGE)
+            {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s speed cannot go any lower!");
+                    }
+                });
+                return;
+            }
+            if (move instanceof UserSpeedPlusOne)
+            {
+                user.setBattle_speed_count(user.getBattle_speed_count() + 1);
+                user.setBattle_speed(((user.getBase_speed() + user.getIv_values().get(5)) * 2 * (user.getLevel() + user.getBattle_speed_count()) / 100 ) + 5);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s speed rose!");
+                    }
+                });
+            }
+            if (move instanceof UserSpeedPlusTwo)
+            {
+                user.setBattle_speed_count(user.getBattle_speed_count() + 2);
+                user.setBattle_speed(((user.getBase_speed() + user.getIv_values().get(5)) * 2 * (user.getLevel() + user.getBattle_speed_count()) / 100 ) + 5);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s speed rose sharply!");
+                    }
+                });
+            }
+            if (move instanceof UserSpeedMinusOne)
+            {
+                user.setBattle_speed_count(user.getBattle_speed_count() - 1);
+                user.setBattle_speed(((user.getBase_speed() + user.getIv_values().get(5)) * 2 * (user.getLevel() + user.getBattle_speed_count()) / 100 ) + 5);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s speed fell");
+                    }
+                });
+            }
+            if (move instanceof UserSpeedMinusTwo)
+            {
+                user.setBattle_speed_count(user.getBattle_speed_count() - 2);
+                user.setBattle_speed(((user.getBase_speed() + user.getIv_values().get(5)) * 2 * (user.getLevel() + user.getBattle_speed_count()) / 100 ) + 5);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s speed fell harshly!");
+                    }
+                });
+            }
+        }
+
+        if (move instanceof UserAccuracyPlusOne || move instanceof UserAccuracyPlusTwo || move instanceof UserAccuracyMinusOne || move instanceof UserAccuracyMinusTwo )
+        {
+            if (user.getBattle_accuracy_count() >= MAX_STAT_CHANGE)
+            {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s accuracy cannot go any higher!");
+                    }
+                });
+                return;
+            }
+            if (user.getBattle_accuracy_count() <= -MAX_STAT_CHANGE)
+            {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s attack cannot go any lower!");
+                    }
+                });
+                return;
+            }
+            if (move instanceof UserAccuracyPlusOne)
+            {
+                user.setBattle_accuracy_count(user.getBattle_accuracy_count() + 1);
+                user.setBattle_accuracy(user.getBattle_accuracy() + .1);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s speed rose!");
+                    }
+                });
+            }
+            if (move instanceof UserAccuracyPlusTwo)
+            {
+                user.setBattle_accuracy_count(user.getBattle_accuracy_count() + 2);
+                user.setBattle_accuracy(user.getBattle_accuracy() + .2);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s speed rose sharply!");
+                    }
+                });
+            }
+            if (move instanceof UserAccuracyMinusOne)
+            {
+                user.setBattle_accuracy_count(user.getBattle_accuracy_count() - 1);
+                user.setBattle_accuracy(user.getBattle_accuracy() - .1);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s speed fell!");
+                    }
+                });
+            }
+            if (move instanceof UserAccuracyMinusTwo)
+            {
+                user.setBattle_accuracy_count(user.getBattle_accuracy_count() - 2);
+                user.setBattle_accuracy(user.getBattle_accuracy() - .2);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s speed fell sharply!");
+                    }
+                });
+            }
+        }
+
+        if (move instanceof UserEvasionPlusOne || move instanceof UserEvasionPlusTwo || move instanceof UserEvasionMinusOne || move instanceof UserEvasionMinusTwo )
+        {
+            if (user.getBattle_evasion_count() >= MAX_STAT_CHANGE)
+            {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s evasion cannot go any higher!");
+                    }
+                });
+                return;
+            }
+            if (user.getBattle_evasion_count() <= -MAX_STAT_CHANGE)
+            {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s evasion cannot go any higher!");
+                    }
+                });
+                return;
+            }
+            if (move instanceof UserEvasionPlusOne)
+            {
+                user.setBattle_evasion_count(user.getBattle_evasion_count() + 1);
+                user.setBattle_evasion(user.getBattle_evasion() + .1);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s evasion rose!");
+                    }
+                });
+            }
+            if (move instanceof UserEvasionPlusTwo)
+            {
+                user.setBattle_evasion_count(user.getBattle_evasion_count() + 2);
+                user.setBattle_evasion(user.getBattle_evasion() + .2);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s evasion rose sharply!");
+                    }
+                });
+            }
+            if (move instanceof UserEvasionMinusOne)
+            {
+                user.setBattle_evasion_count(user.getBattle_evasion_count() - 1);
+                user.setBattle_evasion(user.getBattle_evasion() - .1);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s evasion fell!");
+                    }
+                });
+            }
+            if (move instanceof UserEvasionMinusTwo)
+            {
+                user.setBattle_evasion_count(user.getBattle_evasion_count() - 2);
+                user.setBattle_evasion(user.getBattle_evasion() - .2);
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + "'s evasion fell harshly!");
+                    }
+                });
+            }
+        }
+}
     private static double getTypeMultiplier(Move move, Pokemon target) {
         double type_bonus = 1.0;
         if (move instanceof Normal)

@@ -3,8 +3,9 @@ package battle.gamemodes;
 import move.Move;
 import pokemon.Pokemon;
 import trainer.Trainer;
-import battle.BattleMechanics;
-import battle.BattleUtilities;
+import battle.helpers.battleMechanics;
+//import battle.old.BattleMechanics;
+import battle.old.BattleUtilities;
 import battle.gui.utilities.pokemonPanel;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -113,15 +114,17 @@ public class SingleBattleController{
         
         // Right Going first
         if (leftPokemon.getBattle_speed() < rightPokemon.getBattle_speed()) {
-            if (rightMove != null) {   
-                BattleMechanics.useMove(rightPokemon, leftPokemon, rightMove, leftMove);
-                
-                addAttackEvent(rightPokemon, leftPokemon, rightMove, leftHpLabel, leftHpBar);
+            if (rightMove != null) {  
+                battleMechanics.addMoveEvent(eventTextList, textArea, rightPokemon, rightMove, leftPokemon, leftMove, leftHpLabel, leftHpBar);
+//                BattleMechanics.useMove(rightPokemon, leftPokemon, rightMove, leftMove);
+//                
+//                addAttackEvent(rightPokemon, leftPokemon, rightMove, leftHpLabel, leftHpBar);
             }
             if (leftMove != null) {
-                BattleMechanics.useMove(leftPokemon, rightPokemon, leftMove, rightMove);
-                
-                addAttackEvent(leftPokemon, rightPokemon, leftMove, rightHpLabel, rightHpBar);
+                battleMechanics.addMoveEvent(eventTextList, textArea, leftPokemon, leftMove, rightPokemon, rightMove, rightHpLabel, rightHpBar);
+//                BattleMechanics.useMove(leftPokemon, rightPokemon, leftMove, rightMove);
+//                
+//                addAttackEvent(leftPokemon, rightPokemon, leftMove, rightHpLabel, rightHpBar);
             }
         } 
         
@@ -129,14 +132,16 @@ public class SingleBattleController{
         if (leftPokemon.getBattle_speed() > rightPokemon.getBattle_speed()) {
             // Left turn
             if( leftMove != null) {
-                BattleMechanics.useMove(leftPokemon, rightPokemon, leftMove, rightMove);
-                
-                addAttackEvent(leftPokemon, rightPokemon, leftMove, rightHpLabel, rightHpBar);
+                battleMechanics.addMoveEvent(eventTextList, textArea, leftPokemon, leftMove, rightPokemon, rightMove, rightHpLabel, rightHpBar);
+//                BattleMechanics.useMove(leftPokemon, rightPokemon, leftMove, rightMove);
+//                
+//                addAttackEvent(leftPokemon, rightPokemon, leftMove, rightHpLabel, rightHpBar);
             }
             if (rightMove != null) { 
-                BattleMechanics.useMove(rightPokemon, leftPokemon, rightMove, leftMove);
-                
-                addAttackEvent(rightPokemon, leftPokemon, rightMove, leftHpLabel, leftHpBar);
+                battleMechanics.addMoveEvent(eventTextList, textArea, rightPokemon, rightMove, leftPokemon, leftMove, leftHpLabel, leftHpBar);
+//                BattleMechanics.useMove(rightPokemon, leftPokemon, rightMove, leftMove);
+//                
+//                addAttackEvent(rightPokemon, leftPokemon, rightMove, leftHpLabel, leftHpBar);
             }
         }
         
@@ -149,7 +154,7 @@ public class SingleBattleController{
         });
         
         for (int i = 0; i < eventTextList.size(); i++) {
-            timer.schedule(eventTextList.get(i), i * 1000);
+            timer.schedule(eventTextList.get(i), i * 2000);
         }
         
         if (!showConsole) {
@@ -186,33 +191,35 @@ public class SingleBattleController{
         eventTextList.add(new TimerTask() {
             @Override
             public void run() {
+                System.out.println("BM: Describing switch");
                 textArea.setText(previousName + ", switch out!" + "\nCome back!");
             }
         });
         eventTextList.add(new TimerTask() {
             @Override
             public void run() {
+                System.out.println("BM: Updating labels");
                 setPokemonLabels(pokemon, labelArray, hpBar);
                 textArea.setText("Go " + pokemon.getName() + "!");
             }
         });
     }
     
-    private void addAttackEvent(Pokemon atkPokemon, Pokemon defPokemon, Move move, JLabel hpLabel, JProgressBar hpBar) {
-        eventTextList.add(new TimerTask() {
-            @Override
-            public void run() {
-                textArea.setText(atkPokemon.getName() + " used " + move.getName() + "!");
-            }
-        });
-        eventTextList.add(new TimerTask() {
-            @Override
-            public void run() {
-                hpLabel.setText(Integer.toString(defPokemon.getCurrent_hp()));
-                updateHPBar(defPokemon, hpBar);
-            }
-        });
-    }
+//    private void addAttackEvent(Pokemon atkPokemon, Pokemon defPokemon, Move move, JLabel hpLabel, JProgressBar hpBar) {
+//        eventTextList.add(new TimerTask() {
+//            @Override
+//            public void run() {
+//                textArea.setText(atkPokemon.getName() + " used " + move.getName() + "!");
+//            }
+//        });
+//        eventTextList.add(new TimerTask() {
+//            @Override
+//            public void run() {
+//                hpLabel.setText(Integer.toString(defPokemon.getCurrent_hp()));
+//                updateHPBar(defPokemon, hpBar);
+//            }
+//        });
+//    }
     // Methods for window to call
     public void setMoveChoice(int pos){
         if (leftTrainerTurn) {
@@ -242,16 +249,16 @@ public class SingleBattleController{
         }
     }
    
-    // Methods to control GUI components
-    private void updateHPBar(Pokemon pokemon, JProgressBar hpBar) {
-        hpBar.setValue(pokemon.getCurrent_hp());
-        if (pokemon.getCurrent_hp() < (pokemon.getCurrent_max_hp() / 2)) {
-            hpBar.setForeground(Color.yellow);
-        }
-        if (pokemon.getCurrent_hp() < (pokemon.getCurrent_max_hp() / 4)) {
-            hpBar.setForeground(Color.red);
-        }
-    }
+//    // Methods to control GUI components
+//    private void updateHPBar(Pokemon pokemon, JProgressBar hpBar) {
+//        hpBar.setValue(pokemon.getCurrent_hp());
+//        if (pokemon.getCurrent_hp() < (pokemon.getCurrent_max_hp() / 2)) {
+//            hpBar.setForeground(Color.yellow);
+//        }
+//        if (pokemon.getCurrent_hp() < (pokemon.getCurrent_max_hp() / 4)) {
+//            hpBar.setForeground(Color.red);
+//        }
+//    }
     
     private void setPokemonLabels(Pokemon pokemon, JLabel [] labelArray, JProgressBar hpBar) {
         labelArray[0].setText(pokemon.getName());

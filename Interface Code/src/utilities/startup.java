@@ -60,6 +60,7 @@ public class startup {
         {
             pokemon.setLevel(20);
             pokemon.assignRandomMoves(movedex);
+            pokemon.resetBattleStats();
         }
         return ash;
     }
@@ -75,6 +76,7 @@ public class startup {
         {
             pokemon.setLevel(20);
             pokemon.assignRandomMoves(movedex);
+            pokemon.resetBattleStats();
         }
         return gary;
     }

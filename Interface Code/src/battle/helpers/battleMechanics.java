@@ -17,6 +17,17 @@ public class battleMechanics {
     
     final static int MAX_STAT_CHANGE = 2;
     
+    public static void displayBattleStatsToConsole(Pokemon pokemon)
+    {
+        System.out.println("Turn report for: " + pokemon.getName());
+        System.out.println("Attack: " + pokemon.getBattle_attack() + " (" + pokemon.getCurrent_attack()+ ")");
+        System.out.println("Defense: " + pokemon.getBattle_defense() + " (" + pokemon.getCurrent_defense()+ ")");
+        System.out.println("Special Attack: " + pokemon.getBattle_special_attack() + " (" + pokemon.getCurrent_special_attack()+ ")");
+        System.out.println("Special Defense: " + pokemon.getBattle_special_defense() + " (" + pokemon.getCurrent_special_defense()+ ")");
+        System.out.println("Speed: " + pokemon.getBattle_speed() + " (" + pokemon.getCurrent_speed()+ ")");
+        System.out.println("Current Accuracy Modifier: " + pokemon.getBattle_accuracy());
+        System.out.println("Curretn Evasion Modifier: " + pokemon.getBattle_evasion());
+    }
     public static int calcDamage(int level, int attack, int defense, int power, double type_bonus)
     {
         /* Calculate damage WIP

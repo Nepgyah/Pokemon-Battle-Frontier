@@ -38,6 +38,123 @@ public class battleMechanics {
         return damage;
     }
     
+    public static boolean canUseMove(Pokemon user, ArrayList<TimerTask> eventQueue, JTextArea textArea, JLabel userHpLabel, JLabel userStatusLabel, JProgressBar userHpBar)
+    {
+        if (user.isFlinched() == true)
+        {
+            eventQueue.add(new TimerTask() {
+                @Override
+                public void run() {
+                    textArea.setText(user.getName() + " flinched and couldn't move!");
+                    user.setFlinched(false);
+                }
+            });
+            return false;
+        }
+
+        if (user.isConfused() == true)
+        {
+            eventQueue.add(new TimerTask() {
+                @Override
+                public void run() {
+                    textArea.setText(user.getName() + " is confused!");
+                }
+            });
+            int chance_to_hurt = (int) (Math.random() * 2);
+            if (chance_to_hurt != 1) return true;
+            else
+            {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + " hurt itself in confusion");
+                        int damage = (int) (((((2 * user.getLevel() / 5 + 2) * user.getBattle_attack() * 40 / user.getBattle_defense()) / 50) + 2));
+                        user.takeDamage(damage);
+                        userHpLabel.setText(Integer.toString(user.getCurrent_hp()));
+                        userHpBar.setValue(user.getCurrent_hp());
+
+                        if (user.getCurrent_hp() < (user.getCurrent_max_hp() / 2)) {
+                            userHpBar.setForeground(Color.yellow);
+                        }
+                        if (user.getCurrent_hp() < (user.getCurrent_max_hp() / 4)) {
+                            userHpBar.setForeground(Color.red);
+                        }
+                    }
+                });     
+                return false;
+            }
+        }
+
+        if (user.getBattle_status() == "PAR")
+        {
+            int chance_to_be_paralyzed = (int) (Math.random() * 4);
+            if (chance_to_be_paralyzed != 1) return true;
+            else
+            {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + " is paralyzed! It can't move!");
+                    }
+                });
+                return false;
+            }
+        }
+
+        if (user.getBattle_status() == "FRZ")
+        {
+            int chance_to_thaw = (int) (Math.random() * 5);
+            if (chance_to_thaw == 1)
+            {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + " thawed out!");
+                        userStatusLabel.setText("");
+                    }
+                });
+                return true;
+            }
+            else {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + " is frozen! It can't move!");
+                    }
+                });
+                return false;
+            }
+        }
+
+        if (user.getBattle_status() == "SLP")
+        {
+            user.setSleep_turns(user.getSleep_turns() - 1);
+            if (user.getSleep_turns() != 0)
+            {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        System.out.println(user.getName() + " sleep turns left: " + user.getSleep_turns());
+                        textArea.setText(user.getName() + " is asleep!");
+                    }
+                });
+                return false;
+            }
+            else
+            {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        textArea.setText(user.getName() + " woke up!");
+                        userStatusLabel.setText("");
+                    }
+                });
+                return true;
+            }
+        }
+        return true;
+    }
+    
     public static void addMoveEvent(
             ArrayList<TimerTask> eventQueue,
             JTextArea textArea,
@@ -46,9 +163,13 @@ public class battleMechanics {
             Pokemon target, 
             Move targetMove, 
             JLabel targetHpLabel,
-            JLabel statusLabel,
-            JProgressBar targetHpBar) {
+            JLabel targetStatusLabel,
+            JProgressBar targetHpBar,
+            JLabel userHpLabel,
+            JLabel userStatusLabel,
+            JProgressBar userHpBar) {
         
+        if (canUseMove(user, eventQueue, textArea, userHpLabel, userStatusLabel, userHpBar) == false) return;
         double chance;
         double result;
         // Pre move check
@@ -63,6 +184,23 @@ public class battleMechanics {
         });
         
         // Accuracy Check
+        chance = (user.getBattle_accuracy() * userMove.getAccuracy() * target.getBattle_evasion() );
+        result = Math.random();
+        if (target.isInTwoTurn())
+        {
+            if (((TwoTurn)targetMove).getTargetable() == false) result = 5;
+        }
+
+        if (result > chance) 
+        {
+            eventQueue.add(new TimerTask() {
+                @Override
+                public void run() {
+                    textArea.setText("The move missed!");
+                }
+            });
+            return;
+        }
         
         // Calculate the damage
         double typeMultiplier = getTypeMultiplier(userMove, target);
@@ -90,7 +228,7 @@ public class battleMechanics {
             eventQueue.add(new TimerTask() {
                 @Override
                 public void run() {
-                     // IMPORTANT - TARGET RECIEVES THE DAMAGE HERE
+                    // IMPORTANT - TARGET RECIEVES THE DAMAGE HERE
                     target.takeDamage(damage);
 
                     System.out.println("BM: Updating hp display");
@@ -126,7 +264,6 @@ public class battleMechanics {
             }
         }
         
-        
         // Add statistic change event
         if (userMove instanceof ApplyStatChange) {
             double statModChange = ( (ApplyStatChange) userMove).getApplyChance();
@@ -143,14 +280,52 @@ public class battleMechanics {
                 userMove instanceof ApplyBurn || userMove instanceof ApplySleep || userMove instanceof ApplyFrozen) {
             if (!(target.getBattle_status() == null))
             {
-                    String status = "The target is already ";
-                    if (target.getBattle_status().equals("PAR")) status += "paralyzed!";
-                    if (target.getBattle_status().equals("PSN")) status += "poisoned!";
-                    if (target.getBattle_status().equals("BRN")) status += "burned!";
-                    if (target.getBattle_status().equals("SLP")) status += "asleep!";
-                    if (target.getBattle_status().equals("FRZ")) status += "frozen!";
-                    System.out.println(status);
-                    return;
+                if (target.getBattle_status().equals("PAR")) {
+                    eventQueue.add(new TimerTask() {
+                        @Override
+                        public void run() {
+                            System.out.println("BM: Status already on");
+                            textArea.setText("The target is already paralyzed");
+                        }
+                    });
+                }
+                if (target.getBattle_status().equals("PSN")) {
+                    eventQueue.add(new TimerTask() {
+                        @Override
+                        public void run() {
+                            System.out.println("BM: Status already on");
+                            textArea.setText("The target is already poisoned");
+                        }
+                    });
+                }
+                if (target.getBattle_status().equals("BRN")) {
+                        eventQueue.add(new TimerTask() {
+                        @Override
+                        public void run() {
+                            System.out.println("BM: Status already on");
+                            textArea.setText("The target is already burned");
+                        }
+                    });
+                }
+                if (target.getBattle_status().equals("SLP")) {
+                    eventQueue.add(new TimerTask() {
+                        @Override
+                        public void run() {
+                            System.out.println("BM: Status already on");
+                            textArea.setText("The target is already asleep");
+                        }
+                    });
+                }
+                if (target.getBattle_status().equals("FRZ")) {
+                    eventQueue.add(new TimerTask() {
+                        @Override
+                        public void run() {
+                            System.out.println("BM: Status already on");
+                            textArea.setText("The target is already frozen");
+                        }
+                    });
+                }
+                return;
             } else {
                 result = Math.random();
                 if (userMove instanceof ApplyParalyze)
@@ -158,12 +333,12 @@ public class battleMechanics {
                     chance = ((ApplyParalyze) userMove).getParalyzeChance();
                     if(result < chance)
                     {
+                        target.setBattle_status("PAR");
                         eventQueue.add(new TimerTask() {
                             @Override
                             public void run() {
-                                target.setBattle_status("PAR");
-                                statusLabel.setText(target.getBattle_status());
-                                statusLabel.setForeground(Color.yellow);
+                                targetStatusLabel.setText(target.getBattle_status());
+                                targetStatusLabel.setBackground(Color.yellow);
                                 textArea.setText("Enemy " + target.getName() + " was paralyzed! ");
                             }
                         });
@@ -174,13 +349,13 @@ public class battleMechanics {
                     chance = ((ApplyPoison) userMove).getPoisonChance();
                     if (result < chance)
                     {
+                        target.setBattle_status("PSN");
                         eventQueue.add(new TimerTask() {
                             @Override
                             public void run() {
-                                 target.setBattle_status("PSN");
-                                statusLabel.setText(target.getBattle_status());
-                                statusLabel.setForeground(Color.MAGENTA);
-                                System.out.println("Enemy " + target.getName() + " was poisoned! ");
+                                targetStatusLabel.setText(target.getBattle_status());
+                                targetStatusLabel.setBackground(Color.MAGENTA);
+                                textArea.setText("Enemy " + target.getName() + " was poisoned! ");
                             }
                         });
                     }
@@ -190,13 +365,13 @@ public class battleMechanics {
                     chance = ((ApplyBurn) userMove).getBurnChance();
                     if (result < chance)
                     {
+                        target.setBattle_status("BRN");
                         eventQueue.add(new TimerTask() {
                             @Override
                             public void run() {
-                                target.setBattle_status("BRN");
-                                statusLabel.setText(target.getBattle_status());
-                                statusLabel.setForeground(Color.MAGENTA);
-                                System.out.println("Enemy " + target.getName() + " was burned! ");
+                                targetStatusLabel.setText(target.getBattle_status());
+                                targetStatusLabel.setBackground(Color.RED);
+                                textArea.setText("Enemy " + target.getName() + " was burned! ");
                             }
                         });
                     }
@@ -206,13 +381,14 @@ public class battleMechanics {
                     chance = ((ApplySleep) userMove).getSleepChance();
                     if (result < chance)
                     {
+                        target.setBattle_status("SLP");
+                        target.setSleep_turns((int) (Math.random() * 5) + 1);
                         eventQueue.add(new TimerTask() {
                             @Override
                             public void run() {
-                                target.setBattle_status("SLP");
-                                statusLabel.setText(target.getBattle_status());
-                                statusLabel.setForeground(Color.MAGENTA);
-                                System.out.println("Enemy " + target.getName() + " was put to sleep! ");
+                                targetStatusLabel.setText(target.getBattle_status());
+                                targetStatusLabel.setBackground(Color.GRAY);
+                                textArea.setText("Enemy " + target.getName() + " was put to sleep! ");
                             }
                         });
                     }
@@ -222,13 +398,13 @@ public class battleMechanics {
                     chance = ((ApplyFrozen) userMove).getFrozenChance();
                     if (result < chance)
                     {
+                        target.setBattle_status("FRZ");
                         eventQueue.add(new TimerTask() {
                             @Override
                             public void run() {
-                                target.setBattle_status("FRZ");
-                                statusLabel.setText(target.getBattle_status());
-                                statusLabel.setForeground(Color.MAGENTA);
-                                System.out.println("Enemy " + target.getName() + " was frozen solid! ");
+                                targetStatusLabel.setText(target.getBattle_status());
+                                targetStatusLabel.setBackground(Color.CYAN);
+                                textArea.setText("Enemy " + target.getName() + " was frozen solid! ");
                             }
                         });
                     }

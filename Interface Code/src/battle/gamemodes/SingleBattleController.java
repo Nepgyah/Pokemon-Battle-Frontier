@@ -115,10 +115,21 @@ public class SingleBattleController{
         // Right Going first
         if (leftPokemon.getBattle_speed() < rightPokemon.getBattle_speed()) {
             if (rightMove != null) {  
-                battleMechanics.addMoveEvent(eventTextList, textArea, rightPokemon, rightMove, leftPokemon, leftMove, leftHpLabel, leftLabels[4], leftHpBar);
+                battleMechanics.addMoveEvent(
+                    eventTextList, 
+                    textArea, 
+                    rightPokemon, rightMove, 
+                    leftPokemon, leftMove, leftHpLabel, leftLabels[4], leftHpBar,
+                    rightHpLabel, rightLabels[4], rightHpBar
+                );
             }
             if (leftMove != null) {
-                battleMechanics.addMoveEvent(eventTextList, textArea, leftPokemon, leftMove, rightPokemon, rightMove, rightHpLabel, rightLabels[4], rightHpBar);
+                battleMechanics.addMoveEvent(
+                    eventTextList, textArea, 
+                    leftPokemon, leftMove, 
+                    rightPokemon, rightMove, rightHpLabel, rightLabels[4], rightHpBar,
+                    leftHpLabel, leftLabels[4], leftHpBar
+                );
             }
         } 
         
@@ -126,22 +137,40 @@ public class SingleBattleController{
         if (leftPokemon.getBattle_speed() > rightPokemon.getBattle_speed()) {
             // Left turn
             if( leftMove != null) {
-                battleMechanics.addMoveEvent(eventTextList, textArea, leftPokemon, leftMove, rightPokemon, rightMove, rightHpLabel, rightLabels[4], rightHpBar);
-            }
+                battleMechanics.addMoveEvent(
+                    eventTextList, textArea, 
+                    leftPokemon, leftMove, 
+                    rightPokemon, rightMove, rightHpLabel, rightLabels[4], rightHpBar,
+                    leftHpLabel, leftLabels[4], leftHpBar
+                );            }
             if (rightMove != null) { 
-                battleMechanics.addMoveEvent(eventTextList, textArea, rightPokemon, rightMove, leftPokemon, leftMove, leftHpLabel, leftLabels[4], leftHpBar);
+                battleMechanics.addMoveEvent(
+                    eventTextList, 
+                    textArea, 
+                    rightPokemon, rightMove, 
+                    leftPokemon, leftMove, leftHpLabel, leftLabels[4], leftHpBar,
+                    rightHpLabel, rightLabels[4], rightHpBar
+                );
             }
         }
         
         eventTextList.add(new TimerTask() {
             @Override
             public void run() {
-                textArea.setText("TURN DONE!");
+                textArea.setText("End of turn!");
+            }
+        });
+        
+        eventTextList.add(new TimerTask() {
+            @Override
+            public void run() {
+                textArea.setText("What will " + leftPokemon.getName() + " do?");
                 if (showConsole) {
                     System.out.println("Left Trainer");
                     battleMechanics.displayBattleStatsToConsole(leftPokemon);
                     System.out.println("\nRight Trainer");
                     battleMechanics.displayBattleStatsToConsole(rightPokemon);
+                    
                 }
                 enableControls();
             }
@@ -201,6 +230,7 @@ public class SingleBattleController{
             leftMove = leftPokemon.getMoveset()[pos];
             if (showConsole) System.out.println("CONTROL CONSOLE: Left Pokemon move selected -> " + leftMove.getName());
             leftTrainerTurn = false;
+            textArea.setText("What will " + rightPokemon.getName() + " do?");
         } else {
             rightMove = rightPokemon.getMoveset()[pos];
             if (showConsole) System.out.println("CONTROL CONSOLE: Right Pokemon move selected -> " + rightMove.getName());
@@ -213,6 +243,7 @@ public class SingleBattleController{
         if(leftTrainerTurn) {
             leftNextPokemon = pos;
             System.out.println("CONTROL CONSOLE: " + leftTrainer.getName() + " is swapping " + leftPokemon.getName() + " for " + leftTrainer.getParty().get(pos).getName());
+            textArea.setText("What will " + rightPokemon.getName() + " do?");
             leftSwap = true;
             leftTrainerTurn = false;
         } else {

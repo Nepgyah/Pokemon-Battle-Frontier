@@ -32,6 +32,8 @@ public class startup {
     {
         ArrayList<Move> movedex = new ArrayList<>();
 
+        movedex.add(new M_000_Test());
+        
         movedex.add(new M_001_Pound());
         
         movedex.add(new M_014_SwordsDance());

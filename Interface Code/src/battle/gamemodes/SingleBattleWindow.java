@@ -68,6 +68,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         detailPanel.add(leftMovePanel, "leftMovePanel");
         detailPanel.add(rightMovePanel, "rightMovePanel");
         
+        eventTextArea.setText("What will " + leftTrainer.getParty().get(0).getName() + " do?");
         System.out.println("WINDOW CONSOLE: Initializing battle between " + leftTrainer.getName() + " vs " + rightTrainer.getName());
     }
     
@@ -110,6 +111,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Pokemon Battle Window");
+        setBackground(new java.awt.Color(51, 51, 51));
 
         battlePanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -134,6 +136,9 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         rightSlash.setText("/");
 
         rightLevelValue.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+
+        rightStatus.setBackground(new java.awt.Color(0, 0, 0));
+        rightStatus.setForeground(new java.awt.Color(0, 0, 0));
 
         javax.swing.GroupLayout rightPokemonLabelsLayout = new javax.swing.GroupLayout(rightPokemonLabels);
         rightPokemonLabels.setLayout(rightPokemonLabelsLayout);
@@ -202,6 +207,9 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         leftSlash.setText("/");
 
         leftLevelValue.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+
+        leftStatus.setBackground(new java.awt.Color(0, 0, 0));
+        leftStatus.setForeground(new java.awt.Color(0, 0, 0));
 
         javax.swing.GroupLayout leftPokemonLabelsLayout = new javax.swing.GroupLayout(leftPokemonLabels);
         leftPokemonLabels.setLayout(leftPokemonLabelsLayout);
@@ -294,12 +302,13 @@ public class SingleBattleWindow extends javax.swing.JFrame {
 
         eventTextArea.setEditable(false);
         eventTextArea.setColumns(20);
-        eventTextArea.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        eventTextArea.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         eventTextArea.setLineWrap(true);
-        eventTextArea.setRows(5);
+        eventTextArea.setRows(3);
         eventTextArea.setFocusable(false);
         eventPanel.setViewportView(eventTextArea);
 
+        detailPanel.setBackground(new java.awt.Color(51, 51, 51));
         detailPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         detailPanel.setLayout(new java.awt.CardLayout());
 
@@ -366,10 +375,10 @@ public class SingleBattleWindow extends javax.swing.JFrame {
                     .addComponent(bagButton, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
                     .addComponent(fightButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pokemonButton, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
                     .addComponent(quitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -396,9 +405,9 @@ public class SingleBattleWindow extends javax.swing.JFrame {
                     .addComponent(detailPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(eventPanel)
-                    .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(98, Short.MAX_VALUE))
+                    .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(eventPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();

@@ -165,7 +165,7 @@ public class SingleBattleController{
             @Override
             public void run() {
                 textArea.setText("What will " + leftPokemon.getName() + " do?");
-                if (showConsole) {
+                if (!showConsole) {
                     System.out.println("Left Trainer");
                     battleMechanics.displayBattleStatsToConsole(leftPokemon);
                     System.out.println("\nRight Trainer");

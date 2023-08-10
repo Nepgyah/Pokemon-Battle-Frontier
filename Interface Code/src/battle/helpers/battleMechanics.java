@@ -215,6 +215,7 @@ public class battleMechanics {
         else if(userMove instanceof PhysicalAttack)
         {
             damage = calcDamage(user.getLevel(), user.getBattle_attack(), target.getBattle_defense(), userMove.getPower(), typeMultiplier);
+            
         } 
         else if(userMove instanceof SpecialAttack)
         {
@@ -225,26 +226,102 @@ public class battleMechanics {
             damage = 0;
         }
         
-        // Add damage dealing event
-        if (damage != 0) {
+        if (typeMultiplier == 0) {
+            eventQueue.add(new TimerTask() {
+                @Override
+                public void run() {
+                    System.out.println("BM: Describing damage multiplier");
+                    textArea.setText("The move had no effect");
+                }
+            });
+            return;
+        }
+        
+        if (userMove instanceof OneHitKO) {
             eventQueue.add(new TimerTask() {
                 @Override
                 public void run() {
                     // IMPORTANT - TARGET RECIEVES THE DAMAGE HERE
-                    target.takeDamage(damage);
+                    target.setCurrent_hp(0);
 
                     System.out.println("BM: Updating hp display");
                     targetHpLabel.setText(Integer.toString(target.getCurrent_hp()));
                     targetHpBar.setValue(target.getCurrent_hp());
-
-                    if (target.getCurrent_hp() < (target.getCurrent_max_hp() / 2)) {
-                        targetHpBar.setForeground(Color.yellow);
-                    }
-                    if (target.getCurrent_hp() < (target.getCurrent_max_hp() / 4)) {
-                        targetHpBar.setForeground(Color.red);
-                    }
                 }
             });
+            eventQueue.add(new TimerTask() {
+                @Override
+                public void run() {
+                    // IMPORTANT - TARGET RECIEVES THE DAMAGE HERE
+                    System.out.println("BM: Updating hp display");
+                    textArea.setText("Its a One Hit KO!");
+                }
+            });
+            return;
+        }
+        
+        // Add damage dealing event
+        if (damage != 0) {
+            
+            if (userMove instanceof MultiStrike) {
+                int timeHit = (int) ((Math.random() * 3) + 2);
+                for (int i = 0; i < timeHit; i++) {
+                    eventQueue.add(new TimerTask() {
+                        @Override
+                        public void run() {
+                            // IMPORTANT - TARGET RECIEVES THE DAMAGE HERE
+                            if (user.getBattle_status() == "BRN")
+                            {
+                                target.takeDamage(damage / 2);
+                            } else {
+                                target.takeDamage(damage);
+                            }
+
+                            System.out.println("BM: Updating hp display");
+                            targetHpLabel.setText(Integer.toString(target.getCurrent_hp()));
+                            targetHpBar.setValue(target.getCurrent_hp());
+
+                            if (target.getCurrent_hp() < (target.getCurrent_max_hp() / 2)) {
+                                targetHpBar.setForeground(Color.yellow);
+                            }
+                            if (target.getCurrent_hp() < (target.getCurrent_max_hp() / 4)) {
+                                targetHpBar.setForeground(Color.red);
+                            }
+                        }
+                    });
+                }
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        System.out.println("BM: Describing times hit");
+                        textArea.setText("It hit " + Integer.toString(timeHit) + " time(s)!");
+                    }
+                });
+            } else {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        // IMPORTANT - TARGET RECIEVES THE DAMAGE HERE
+                        if (user.getBattle_status() == "BRN")
+                        {
+                            target.takeDamage(damage / 2);
+                        } else {
+                            target.takeDamage(damage);
+                        }
+
+                        System.out.println("BM: Updating hp display");
+                        targetHpLabel.setText(Integer.toString(target.getCurrent_hp()));
+                        targetHpBar.setValue(target.getCurrent_hp());
+
+                        if (target.getCurrent_hp() < (target.getCurrent_max_hp() / 2)) {
+                            targetHpBar.setForeground(Color.yellow);
+                        }
+                        if (target.getCurrent_hp() < (target.getCurrent_max_hp() / 4)) {
+                            targetHpBar.setForeground(Color.red);
+                        }
+                    }
+                });
+            }
             // Add effect multiplier effect
             if (typeMultiplier < 1.0 && typeMultiplier > 0) {
                 eventQueue.add(new TimerTask() {
@@ -266,6 +343,103 @@ public class battleMechanics {
             }
         }
         
+        if (userMove instanceof ApplyFlinch)
+        {
+            int chance_to_be_flinch = (int) (Math.random() * 10);
+            if ( chance_to_be_flinch <= 10 )
+            {
+                target.setFlinched(true);
+            }
+        }
+        
+        if(userMove instanceof Lifesteal)
+        {
+            int netHP = (int) (((Lifesteal)userMove).getLifestealRatio() * damage);
+            eventQueue.add(new TimerTask() {
+                @Override
+                public void run() {
+                    user.healHP(netHP);
+
+                    System.out.println("BM: Updating hp display for pure heal");
+                    userHpLabel.setText(Integer.toString(user.getCurrent_hp()));
+                    userHpBar.setValue(user.getCurrent_hp());
+
+                    if (user.getCurrent_hp() > (user.getCurrent_max_hp() / 2)) {
+                        userHpBar.setForeground(Color.YELLOW);
+                    }
+                    if (user.getCurrent_hp() > (user.getCurrent_max_hp() / 2)) {
+                        userHpBar.setForeground(Color.GREEN);
+                    }
+                }
+            });
+            eventQueue.add(new TimerTask() {
+                @Override
+                public void run() {
+                    System.out.println("BM: Describing lifesteal event");
+                    textArea.setText(target.getName() + ((Lifesteal)userMove).getDescription());
+                }
+            });
+        }
+        
+        if(userMove instanceof HealsHP)
+        {
+            int healAmount = (int) (((HealsHP)userMove).getHealRatio() * user.getCurrent_max_hp());
+            System.out.println("Heal amount - " + Integer.toString(healAmount));
+            eventQueue.add(new TimerTask() {
+                @Override
+                public void run() {
+                    user.healHP(healAmount);
+
+                    System.out.println("BM: Updating hp display for pure heal");
+                    userHpLabel.setText(Integer.toString(user.getCurrent_hp()));
+                    userHpBar.setValue(user.getCurrent_hp());
+
+                    if (user.getCurrent_hp() > (user.getCurrent_max_hp() / 2)) {
+                        userHpBar.setForeground(Color.yellow);
+                    }
+                    if (user.getCurrent_hp() > (user.getCurrent_max_hp() / 2)) {
+                        userHpBar.setForeground(Color.green);
+                    }
+                }
+            });
+            eventQueue.add(new TimerTask() {
+                @Override
+                public void run() {
+                    System.out.println("BM: Describing healing event");
+                    textArea.setText(user.getName() + " healed some HP!");
+                }
+            });
+        }
+        
+        // Add recoil event
+        if (userMove instanceof HasRecoil) {
+            int recoilDamage = (int) (((HasRecoil)userMove).getRecoilRatio() * damage);
+            eventQueue.add(new TimerTask() {
+                @Override
+                public void run() {
+                    user.takeDamage(recoilDamage);
+
+                    System.out.println("BM: Updating hp display for recoil");
+                    userHpLabel.setText(Integer.toString(user.getCurrent_hp()));
+                    userHpBar.setValue(user.getCurrent_hp());
+
+                    if (user.getCurrent_hp() < (user.getCurrent_max_hp() / 2)) {
+                        userHpBar.setForeground(Color.yellow);
+                    }
+                    if (user.getCurrent_hp() < (user.getCurrent_max_hp() / 4)) {
+                        userHpBar.setForeground(Color.red);
+                    }
+                }
+            });
+            eventQueue.add(new TimerTask() {
+                @Override
+                public void run() {
+                    System.out.println("BM: Describing recoil");
+                    textArea.setText(user.getName() + " took damage in recoil!");
+                }
+            });
+        }
+        
         // Add statistic change event
         if (userMove instanceof ApplyStatChange) {
             double statModChange = ( (ApplyStatChange) userMove).getApplyChance();
@@ -277,6 +451,13 @@ public class battleMechanics {
                 applyStatEffectsToUser(user, userMove, eventQueue, textArea);
             }
         }
+        
+        if(target.getCurrent_hp() <= 0)
+        {
+            target.setFainted();
+            return;
+        }
+        
         // Add status change effect
         if (userMove instanceof ApplyParalyze || userMove instanceof ApplyPoison || 
                 userMove instanceof ApplyBurn || userMove instanceof ApplySleep || userMove instanceof ApplyFrozen) {

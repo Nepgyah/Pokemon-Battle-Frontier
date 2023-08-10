@@ -1,16 +1,16 @@
 package move.movedex;
 
 import move.Move;
-import move.modifiers.PhysicalAttack;
-import move.status_effect.ApplyFrozen;
-import types.Normal;
+import move.modifiers.*;
+import move.status_effect.*;
+import types.*;
 
-public class M_000_Test extends Move implements PhysicalAttack, Normal {
+public class M_000_Test extends Move implements PhysicalAttack, Normal, MultiStrike {
 
     private static final long serialVersionUID = 1L;
 
     public M_000_Test() {
-        super(0, "Test", 30, 35, 0);
+        super(0, "Test", 30, 10, 1);
     }
 
     @Override
@@ -18,5 +18,6 @@ public class M_000_Test extends Move implements PhysicalAttack, Normal {
     {
         return new M_000_Test();
     }
-	
+    
+
 }

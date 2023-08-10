@@ -43,6 +43,7 @@ public class startup {
         movedex.add(new M_055_WaterGun());
         
         movedex.add(new M_085_ThunderBolt());
+        movedex.add(new M_086_ThunderWave());
         
         return movedex;
     }

@@ -137,26 +137,27 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="rightCurrentHP" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="rightName" min="-2" pref="300" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="rightSlash" min="-2" max="-2" attributes="0"/>
+                              <Component id="rightLevelLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="rightMaxHP" min="-2" pref="90" max="-2" attributes="0"/>
+                              <Component id="rightLevelValue" min="-2" pref="93" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
+                              <Component id="rightStatus" min="-2" pref="60" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="rightHPBar" min="-2" pref="300" max="-2" attributes="0"/>
-                                  <Group type="102" attributes="0">
-                                      <Component id="rightName" min="-2" pref="300" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Component id="rightCurrentHP" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="rightLevelLabel" min="-2" max="-2" attributes="0"/>
+                                      <Component id="rightSlash" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="rightLevelValue" min="-2" pref="93" max="-2" attributes="0"/>
+                                      <Component id="rightMaxHP" min="-2" pref="90" max="-2" attributes="0"/>
                                   </Group>
+                                  <Component id="rightHPBar" alignment="1" min="-2" pref="300" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -174,7 +175,10 @@
                           <Component id="rightLevelValue" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="rightHPBar" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="rightHPBar" min="-2" pref="25" max="-2" attributes="0"/>
+                          <Component id="rightStatus" max="32767" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="rightCurrentHP" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
@@ -242,6 +246,8 @@
                 </Property>
               </Properties>
             </Component>
+            <Component class="javax.swing.JLabel" name="rightStatus">
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="leftPokemonLabels">
@@ -276,7 +282,11 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="leftMaxHP" min="-2" pref="90" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="leftHPBar" alignment="1" min="-2" pref="300" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Component id="leftStatus" min="-2" pref="60" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="leftHPBar" min="-2" pref="300" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                           </Group>
                       </Group>
@@ -294,7 +304,10 @@
                           <Component id="leftLevelValue" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="leftHPBar" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="leftStatus" max="32767" attributes="0"/>
+                          <Component id="leftHPBar" pref="25" max="32767" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="leftMaxHP" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
@@ -361,6 +374,8 @@
                   <Font name="Segoe UI" size="24" style="0"/>
                 </Property>
               </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="leftStatus">
             </Component>
           </SubComponents>
         </Container>

@@ -12,6 +12,7 @@ import pokemon.Pokemon;
 import types.*;
 import move.statistic_effects_enemy.*;
 import move.statistic_effects_user.*;
+import move.status_effect.*;
 
 public class battleMechanics {
     
@@ -44,9 +45,12 @@ public class battleMechanics {
             Move userMove, 
             Pokemon target, 
             Move targetMove, 
-            JLabel targetHpLabel, 
+            JLabel targetHpLabel,
+            JLabel statusLabel,
             JProgressBar targetHpBar) {
         
+        double chance;
+        double result;
         // Pre move check
         
         // Add event to describe the move
@@ -101,26 +105,27 @@ public class battleMechanics {
                     }
                 }
             });
+            // Add effect multiplier effect
+            if (typeMultiplier < 1.0 && typeMultiplier > 0) {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        System.out.println("BM: Describing damage multiplier");
+                        textArea.setText("Its not very effective...");
+                    }
+                });
+            }
+            if (typeMultiplier > 1.0) {
+                eventQueue.add(new TimerTask() {
+                    @Override
+                    public void run() {
+                        System.out.println("BM: Describing damage multiplier");
+                        textArea.setText("Its super effective!");
+                    }
+                });
+            }
         }
-        // Add effect multiplier effect
-        if (typeMultiplier < 1.0 && typeMultiplier > 0) {
-            eventQueue.add(new TimerTask() {
-                @Override
-                public void run() {
-                    System.out.println("BM: Describing damage multiplier");
-                    textArea.setText("Its not very effective...");
-                }
-            });
-        }
-        if (typeMultiplier > 1.0) {
-            eventQueue.add(new TimerTask() {
-                @Override
-                public void run() {
-                    System.out.println("BM: Describing damage multiplier");
-                    textArea.setText("Its super effective!");
-                }
-            });
-        }
+        
         
         // Add statistic change event
         if (userMove instanceof ApplyStatChange) {
@@ -134,8 +139,104 @@ public class battleMechanics {
             }
         }
         // Add status change effect
-        
+        if (userMove instanceof ApplyParalyze || userMove instanceof ApplyPoison || 
+                userMove instanceof ApplyBurn || userMove instanceof ApplySleep || userMove instanceof ApplyFrozen) {
+            if (!(target.getBattle_status() == null))
+            {
+                    String status = "The target is already ";
+                    if (target.getBattle_status().equals("PAR")) status += "paralyzed!";
+                    if (target.getBattle_status().equals("PSN")) status += "poisoned!";
+                    if (target.getBattle_status().equals("BRN")) status += "burned!";
+                    if (target.getBattle_status().equals("SLP")) status += "asleep!";
+                    if (target.getBattle_status().equals("FRZ")) status += "frozen!";
+                    System.out.println(status);
+                    return;
+            } else {
+                result = Math.random();
+                if (userMove instanceof ApplyParalyze)
+                {
+                    chance = ((ApplyParalyze) userMove).getParalyzeChance();
+                    if(result < chance)
+                    {
+                        eventQueue.add(new TimerTask() {
+                            @Override
+                            public void run() {
+                                target.setBattle_status("PAR");
+                                statusLabel.setText(target.getBattle_status());
+                                statusLabel.setForeground(Color.yellow);
+                                textArea.setText("Enemy " + target.getName() + " was paralyzed! ");
+                            }
+                        });
+                    }
+                }
+                if (userMove instanceof ApplyPoison)
+                {
+                    chance = ((ApplyPoison) userMove).getPoisonChance();
+                    if (result < chance)
+                    {
+                        eventQueue.add(new TimerTask() {
+                            @Override
+                            public void run() {
+                                 target.setBattle_status("PSN");
+                                statusLabel.setText(target.getBattle_status());
+                                statusLabel.setForeground(Color.MAGENTA);
+                                System.out.println("Enemy " + target.getName() + " was poisoned! ");
+                            }
+                        });
+                    }
+                }
+                if (userMove instanceof ApplyBurn)
+                {
+                    chance = ((ApplyBurn) userMove).getBurnChance();
+                    if (result < chance)
+                    {
+                        eventQueue.add(new TimerTask() {
+                            @Override
+                            public void run() {
+                                target.setBattle_status("BRN");
+                                statusLabel.setText(target.getBattle_status());
+                                statusLabel.setForeground(Color.MAGENTA);
+                                System.out.println("Enemy " + target.getName() + " was burned! ");
+                            }
+                        });
+                    }
+                }
+                if (userMove instanceof ApplySleep)
+                {
+                    chance = ((ApplySleep) userMove).getSleepChance();
+                    if (result < chance)
+                    {
+                        eventQueue.add(new TimerTask() {
+                            @Override
+                            public void run() {
+                                target.setBattle_status("SLP");
+                                statusLabel.setText(target.getBattle_status());
+                                statusLabel.setForeground(Color.MAGENTA);
+                                System.out.println("Enemy " + target.getName() + " was put to sleep! ");
+                            }
+                        });
+                    }
+                }
+                if (userMove instanceof ApplyFrozen)
+                {
+                    chance = ((ApplyFrozen) userMove).getFrozenChance();
+                    if (result < chance)
+                    {
+                        eventQueue.add(new TimerTask() {
+                            @Override
+                            public void run() {
+                                target.setBattle_status("FRZ");
+                                statusLabel.setText(target.getBattle_status());
+                                statusLabel.setForeground(Color.MAGENTA);
+                                System.out.println("Enemy " + target.getName() + " was frozen solid! ");
+                            }
+                        });
+                    }
+                }
+            }
+        }
     }
+    
     private static void applyStatEffectsToUser(Pokemon user, Move move, ArrayList<TimerTask> eventQueue, JTextArea textArea) {
 		
         if (move instanceof UserAttackPlusOne || move instanceof UserAttackPlusTwo || move instanceof UserAttackMinusOne || move instanceof UserAttackMinusTwo)

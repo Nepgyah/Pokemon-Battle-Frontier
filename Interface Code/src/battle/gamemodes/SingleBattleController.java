@@ -115,10 +115,10 @@ public class SingleBattleController{
         // Right Going first
         if (leftPokemon.getBattle_speed() < rightPokemon.getBattle_speed()) {
             if (rightMove != null) {  
-                battleMechanics.addMoveEvent(eventTextList, textArea, rightPokemon, rightMove, leftPokemon, leftMove, leftHpLabel, leftHpBar);
+                battleMechanics.addMoveEvent(eventTextList, textArea, rightPokemon, rightMove, leftPokemon, leftMove, leftHpLabel, leftLabels[4], leftHpBar);
             }
             if (leftMove != null) {
-                battleMechanics.addMoveEvent(eventTextList, textArea, leftPokemon, leftMove, rightPokemon, rightMove, rightHpLabel, rightHpBar);
+                battleMechanics.addMoveEvent(eventTextList, textArea, leftPokemon, leftMove, rightPokemon, rightMove, rightHpLabel, rightLabels[4], rightHpBar);
             }
         } 
         
@@ -126,10 +126,10 @@ public class SingleBattleController{
         if (leftPokemon.getBattle_speed() > rightPokemon.getBattle_speed()) {
             // Left turn
             if( leftMove != null) {
-                battleMechanics.addMoveEvent(eventTextList, textArea, leftPokemon, leftMove, rightPokemon, rightMove, rightHpLabel, rightHpBar);
+                battleMechanics.addMoveEvent(eventTextList, textArea, leftPokemon, leftMove, rightPokemon, rightMove, rightHpLabel, rightLabels[4], rightHpBar);
             }
             if (rightMove != null) { 
-                battleMechanics.addMoveEvent(eventTextList, textArea, rightPokemon, rightMove, leftPokemon, leftMove, leftHpLabel, leftHpBar);
+                battleMechanics.addMoveEvent(eventTextList, textArea, rightPokemon, rightMove, leftPokemon, leftMove, leftHpLabel, leftLabels[4], leftHpBar);
             }
         }
         
@@ -241,7 +241,8 @@ public class SingleBattleController{
         labelArray[1].setText(Integer.toString(pokemon.getLevel()));
         labelArray[2].setText(Integer.toString(pokemon.getCurrent_hp()));
         labelArray[3].setText(Integer.toString(pokemon.getCurrent_max_hp()));
-        labelArray[4].setIcon(pokemon.getIcon());
+        labelArray[4].setText(pokemon.getBattle_status());
+        labelArray[5].setIcon(pokemon.getIcon());
         hpBar.setMaximum(pokemon.getCurrent_max_hp());
         hpBar.setValue(pokemon.getCurrent_hp());
     }

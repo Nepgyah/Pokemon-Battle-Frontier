@@ -106,6 +106,7 @@ public class battleMechanics {
             int chance_to_thaw = (int) (Math.random() * 5);
             if (chance_to_thaw == 1)
             {
+                user.setBattle_status("");
                 eventQueue.add(new TimerTask() {
                     @Override
                     public void run() {
@@ -142,6 +143,7 @@ public class battleMechanics {
             }
             else
             {
+                user.setBattle_status("");
                 eventQueue.add(new TimerTask() {
                     @Override
                     public void run() {

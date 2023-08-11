@@ -5,7 +5,7 @@ import move.modifiers.*;
 import move.status_effect.*;
 import types.*;
 
-public class M_000_Test extends Move implements PhysicalAttack, Normal, OneHitKO {
+public class M_000_Test extends Move implements PhysicalAttack, Normal, TwoTurn{
 
     private static final long serialVersionUID = 1L;
 
@@ -18,6 +18,15 @@ public class M_000_Test extends Move implements PhysicalAttack, Normal, OneHitKO
     {
         return new M_000_Test();
     }
-    
+
+    @Override
+    public String getTurnDescription() {
+        return " used their zhonyas hourglass!";
+    }
+
+    @Override
+    public boolean getTargetable() {
+        return false;
+    }
 
 }

@@ -118,6 +118,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         setTitle("Pokemon Battle Window");
         setBackground(new java.awt.Color(51, 51, 51));
 
+        battlePanel.setBackground(new java.awt.Color(204, 204, 204));
         battlePanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         rightPokemonLabels.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));

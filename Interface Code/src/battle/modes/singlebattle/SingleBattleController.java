@@ -17,7 +17,7 @@ import move.modifiers.TwoTurn;
 public class SingleBattleController{
    
     private Timer timer;
-    private ArrayList<TimerTask> eventTextList = new ArrayList<>();
+    private ArrayList<TimerTask> eventQueue = new ArrayList<>();
     
     private Trainer leftTrainer, rightTrainer;
     private Pokemon leftPokemon, rightPokemon;
@@ -74,8 +74,8 @@ public class SingleBattleController{
         this.bagButton = controlButtons[2];
 
         
-        setPokemonLabels(leftPokemon, leftLabels, leftHPBar);
-        setPokemonLabels(rightPokemon, rightLabels, rightHPBar);
+        Swaps.setPokemonLabels(leftPokemon, leftLabels, leftHPBar);
+        Swaps.setPokemonLabels(rightPokemon, rightLabels, rightHPBar);
         
         System.out.println("CONTROL CONSOLE: Initialization complete");
     }
@@ -92,7 +92,7 @@ public class SingleBattleController{
             Swaps.swapPokemon(leftTrainer, leftNextPokemon);
             leftPokemon = leftTrainer.getParty().get(0);
         
-            addSwapEvent(leftPrevName, leftPokemon, leftLabels, leftHPBar);
+            Swaps.addSwapEvent(eventQueue, leftPrevName, leftPokemon, leftLabels, leftHPBar, textArea);
             
             leftPokemonPanel.setPokemonButtons();
             leftMovePanel.setMoveButtons(leftPokemon.getMoveset());
@@ -102,7 +102,7 @@ public class SingleBattleController{
             Swaps.swapPokemon(rightTrainer, rightNextPokemon);
             rightPokemon = rightTrainer.getParty().get(0);
             
-            addSwapEvent(rightPrevName, rightPokemon, rightLabels, rightHPBar);
+            Swaps.addSwapEvent(eventQueue, rightPrevName, rightPokemon, rightLabels, rightHPBar, textArea);
             
             rightPokemonPanel.setPokemonButtons();
             rightMovePanel.setMoveButtons(rightPokemon.getMoveset());
@@ -113,19 +113,14 @@ public class SingleBattleController{
             // Right Turn
             if (rightMove != null) {  
                 if(rightMove instanceof TwoTurn && rightPokemon.isInTwoTurn() == false) {
-                    eventTextList.add(new TimerTask() {
-                        @Override
-                        public void run() {
-                            System.out.println("BM: Describing two turn first half");
-                            textArea.setText(rightPokemon.getName() + ((TwoTurn)rightMove).getTurnDescription());
-                        }
-                    });
-                    eventTextList.add(new TimerTask() {
-                        @Override
-                        public void run() {
-                            rightLabels[5].setIcon(null);
-                        }
-                    });
+                    BattleEvents.addGenericEvent(eventQueue, textArea, rightPokemon.getName() + ((TwoTurn)rightMove).getTurnDescription());
+                    BattleEvents.addIconRemoveEvent(eventQueue, rightLabels[5] );
+//                    eventQueue.add(new TimerTask() {
+//                        @Override
+//                        public void run() {
+//                            rightLabels[5].setIcon(null);
+//                        }
+//                    });
                     rightPokemon.setInTwoTurn(true);
                 } else {
                     UseMove.useMove(
@@ -133,7 +128,7 @@ public class SingleBattleController{
                         rightMove, leftMove,
                         rightLabels, leftLabels,
                         rightHPBar, leftHPBar,
-                        eventTextList,
+                        eventQueue,
                         textArea    
                     );
                     rightMove = null;
@@ -144,14 +139,8 @@ public class SingleBattleController{
             if (leftMove != null) {
                 if(leftMove instanceof TwoTurn && leftPokemon.isInTwoTurn() == false)
                 {
-                    eventTextList.add(new TimerTask() {
-                        @Override
-                        public void run() {
-                            System.out.println("BM: Describing two turn first half");
-                            textArea.setText(leftPokemon.getName() + ((TwoTurn)leftMove).getTurnDescription());
-                        }
-                    });
-                    eventTextList.add(new TimerTask() {
+                    BattleEvents.addGenericEvent(eventQueue, textArea, leftPokemon.getName() + ((TwoTurn)leftMove).getTurnDescription());
+                    eventQueue.add(new TimerTask() {
                         @Override
                         public void run() {
                             leftLabels[5].setIcon(null);
@@ -164,7 +153,7 @@ public class SingleBattleController{
                         leftMove, rightMove,
                         leftLabels, rightLabels,
                         leftHPBar, rightHPBar,
-                        eventTextList,
+                        eventQueue,
                         textArea 
                     );
                     leftMove = null;
@@ -179,14 +168,8 @@ public class SingleBattleController{
             if( leftMove != null) {
                 if(leftMove instanceof TwoTurn && leftPokemon.isInTwoTurn() == false)
                 {
-                    eventTextList.add(new TimerTask() {
-                        @Override
-                        public void run() {
-                            System.out.println("BM: Describing two turn first half");
-                            textArea.setText(leftPokemon.getName() + ((TwoTurn)leftMove).getTurnDescription());
-                        }
-                    });
-                    eventTextList.add(new TimerTask() {
+                    BattleEvents.addGenericEvent(eventQueue, textArea, leftPokemon.getName() + ((TwoTurn)leftMove).getTurnDescription());
+                    eventQueue.add(new TimerTask() {
                         @Override
                         public void run() {
                             leftLabels[5].setIcon(null);
@@ -199,7 +182,7 @@ public class SingleBattleController{
                     leftMove, rightMove,
                             leftLabels, rightLabels,
                     leftHPBar, rightHPBar,
-                    eventTextList,
+                    eventQueue,
                         textArea 
                     );
                     leftMove = null;
@@ -208,14 +191,8 @@ public class SingleBattleController{
             }
             if (rightMove != null) { 
                 if(rightMove instanceof TwoTurn && rightPokemon.isInTwoTurn() == false) {
-                    eventTextList.add(new TimerTask() {
-                        @Override
-                        public void run() {
-                            System.out.println("BM: Describing two turn first half");
-                            textArea.setText(rightPokemon.getName() + ((TwoTurn)rightMove).getTurnDescription());
-                        }
-                    });
-                    eventTextList.add(new TimerTask() {
+                    BattleEvents.addGenericEvent(eventQueue, textArea, rightPokemon.getName() + ((TwoTurn)rightMove).getTurnDescription());
+                    eventQueue.add(new TimerTask() {
                         @Override
                         public void run() {
                             rightLabels[5].setIcon(null);
@@ -225,10 +202,10 @@ public class SingleBattleController{
                 } else {
                     UseMove.useMove(
                     rightPokemon, leftPokemon,
-                    rightMove, leftMove,
-                rightLabels, leftLabels,
+                 rightMove, leftMove,
+               rightLabels, leftLabels,
                 rightHPBar, leftHPBar,
-                eventTextList,
+                        eventQueue,
                         textArea    
                     );
                     rightMove = null;
@@ -237,14 +214,9 @@ public class SingleBattleController{
             }
         }
         
-        eventTextList.add(new TimerTask() {
-            @Override
-            public void run() {
-                textArea.setText("End of turn!");
-            }
-        });
+        BattleEvents.addGenericEvent(eventQueue, textArea, "End of Turn!");
         
-        eventTextList.add(new TimerTask() {
+        eventQueue.add(new TimerTask() {
             @Override
             public void run() {
                 if (leftPokemon.isInTwoTurn() == true) {
@@ -266,14 +238,12 @@ public class SingleBattleController{
             }
         });
         
-        for (int i = 0; i < eventTextList.size(); i++) {
-            timer.schedule(eventTextList.get(i), i * 2000);
+        for (int i = 0; i < eventQueue.size(); i++) {
+            timer.schedule(eventQueue.get(i), i * 2000);
         }
-        
-        
-        
+
         // RESET 
-        eventTextList.clear();
+        eventQueue.clear();
         leftSwap = rightSwap = false;
     }
     
@@ -293,24 +263,6 @@ public class SingleBattleController{
         if (rightSwap == true) {
             System.out.println("SWAPPING - " + rightPokemon.getName());
         }
-    }
-  
-    private void addSwapEvent(String previousName, Pokemon pokemon, JLabel [] labelArray, JProgressBar hpBar) {
-        eventTextList.add(new TimerTask() {
-            @Override
-            public void run() {
-                System.out.println("BM: Describing switch");
-                textArea.setText(previousName + ", switch out!" + "\nCome back!");
-            }
-        });
-        eventTextList.add(new TimerTask() {
-            @Override
-            public void run() {
-                System.out.println("BM: Updating labels");
-                setPokemonLabels(pokemon, labelArray, hpBar);
-                textArea.setText("Go " + pokemon.getName() + "!");
-            }
-        });
     }
     
     // Methods for window to call
@@ -351,18 +303,6 @@ public class SingleBattleController{
         }
     }
 
-    // Used for switch
-    private void setPokemonLabels(Pokemon pokemon, JLabel [] labelArray, JProgressBar hpBar) {
-        labelArray[0].setText(pokemon.getName());
-        labelArray[1].setText(Integer.toString(pokemon.getLevel()));
-        labelArray[2].setText(Integer.toString(pokemon.getCurrent_hp()));
-        labelArray[3].setText(Integer.toString(pokemon.getCurrent_max_hp()));
-        labelArray[4].setText(pokemon.getBattle_status());
-        labelArray[5].setIcon(pokemon.getIcon());
-        hpBar.setMaximum(pokemon.getCurrent_max_hp());
-        hpBar.setValue(pokemon.getCurrent_hp());
-    }
-    
     private void disableControls() {
         fightButton.setEnabled(false);
         bagButton.setEnabled(false);

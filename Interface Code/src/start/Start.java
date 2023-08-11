@@ -1,6 +1,6 @@
-package main;
+package start;
 
-import gameInterface.MainMenu;
+import gameInterface.redo.MainMenu;
 import java.util.ArrayList;
 import pokemon.pokedex.P_025_Pikachu;
 import pokemon.Pokemon;

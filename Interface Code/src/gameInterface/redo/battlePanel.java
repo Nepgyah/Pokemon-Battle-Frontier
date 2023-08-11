@@ -1,4 +1,4 @@
-package gameInterface;
+package gameInterface.redo;
 import pokemon.Pokemon;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license

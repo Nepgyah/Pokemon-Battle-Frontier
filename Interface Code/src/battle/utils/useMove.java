@@ -14,8 +14,7 @@ public class UseMove {
     
     final static int MAX_STAT_CHANGE = 2;
     
-    public static void displayBattleStatsToConsole(Pokemon pokemon)
-    {
+    public static void displayBattleStatsToConsole(Pokemon pokemon) {
         System.out.println("Turn report for: " + pokemon.getName());
         System.out.println("Attack: " + pokemon.getBattle_attack() + " (" + pokemon.getCurrent_attack()+ ")");
         System.out.println("Defense: " + pokemon.getBattle_defense() + " (" + pokemon.getCurrent_defense()+ ")");
@@ -26,8 +25,7 @@ public class UseMove {
         System.out.println("Curretn Evasion Modifier: " + pokemon.getBattle_evasion());
     }
     
-    public static int calcDamage(int level, int attack, int defense, int power, double type_bonus)
-    {
+    public static int calcDamage(int level, int attack, int defense, int power, double type_bonus) {
         /* Calculate damage WIP
          *  Formula ((((2 * Level / 5 + 2) * AttackStat * AttackPower / DefenseStat) / 50) + 2) * STAB * Weakness/Resistance * RandomNumber / 100 ) - From wiki
          */
@@ -36,8 +34,7 @@ public class UseMove {
     }
     
     public static boolean canUseMove(Pokemon user, JLabel [] userLabels, JProgressBar userHPBar, ArrayList<TimerTask> eventQueue, JTextArea textArea) {
-        if (user.isFlinched() == true)
-        {
+        if (user.isFlinched() == true) {
             eventQueue.add(new TimerTask() {
                 @Override
                 public void run() {
@@ -48,13 +45,11 @@ public class UseMove {
             return false;
         }
 
-        if (user.isConfused() == true)
-        {
+        if (user.isConfused() == true) {
             BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is confused!");
             int chance_to_hurt = (int) (Math.random() * 2);
             if (chance_to_hurt != 1) return true;
-            else
-            {
+            else {
                 eventQueue.add(new TimerTask() {
                     @Override
                     public void run() {
@@ -76,22 +71,18 @@ public class UseMove {
             }
         }
 
-        if (user.getBattle_status() == "PAR")
-        {
+        if (user.getBattle_status() == "PAR") {
             int chance_to_be_paralyzed = (int) (Math.random() * 4);
             if (chance_to_be_paralyzed != 1) return true;
-            else
-            {
+            else {
                 BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is paralyzed! It can't move!");
                 return false;
             }
         }
 
-        if (user.getBattle_status() == "FRZ")
-        {
+        if (user.getBattle_status() == "FRZ") {
             int chance_to_thaw = (int) (Math.random() * 5);
-            if (chance_to_thaw == 1)
-            {
+            if (chance_to_thaw == 1) {
                 user.setBattle_status("");
                 eventQueue.add(new TimerTask() {
                     @Override
@@ -108,16 +99,12 @@ public class UseMove {
             }
         }
 
-        if (user.getBattle_status() == "SLP")
-        {
+        if (user.getBattle_status() == "SLP") {
             user.setSleep_turns(user.getSleep_turns() - 1);
-            if (user.getSleep_turns() != 0)
-            {
+            if (user.getSleep_turns() != 0) {
                 BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is asleep!");
                 return false;
-            }
-            else
-            {
+            } else {
                 user.setBattle_status("");
                 eventQueue.add(new TimerTask() {
                     @Override
@@ -138,14 +125,11 @@ public class UseMove {
             JLabel [] userLabels, JLabel [] targetLabels,
             JProgressBar userHPBar, JProgressBar targetHPBar,
             ArrayList<TimerTask> eventQueue,
-            JTextArea textArea
-            )
-    {
+            JTextArea textArea) {
         if (canUseMove(user, userLabels, userHPBar,  eventQueue, textArea) == false) return;
         double chance;
         double result;
-        // Pre move check
-        
+        // TODO: Pre move check
         
        // Bring back icon on 2nd half two turn
         if (userMove instanceof TwoTurn) {
@@ -164,13 +148,10 @@ public class UseMove {
         // Accuracy Check
         chance = (user.getBattle_accuracy() * userMove.getAccuracy() * target.getBattle_evasion() );
         result = Math.random();
-        if (target.isInTwoTurn())
-        {
+        if (target.isInTwoTurn()) {
             if (((TwoTurn)targetMove).getTargetable() == false) result = 5;
         }
-
-        if (result > chance) 
-        {
+        if (result > chance) {
             BattleEvents.addGenericEvent(eventQueue, textArea, "The move missed!");
             return;
         }
@@ -179,21 +160,13 @@ public class UseMove {
         double typeMultiplier = TypeModifier.getMultiplier(userMove, target);
 
         int damage;
-        if (userMove instanceof SetDamage)
-        {
+        if (userMove instanceof SetDamage) {
             damage = ((SetDamage)userMove).getDamage();
-        }
-        else if(userMove instanceof PhysicalAttack)
-        {
-            damage = calcDamage(user.getLevel(), user.getBattle_attack(), target.getBattle_defense(), userMove.getPower(), typeMultiplier);
-            
-        } 
-        else if(userMove instanceof SpecialAttack)
-        {
+        } else if(userMove instanceof PhysicalAttack) {
+            damage = calcDamage(user.getLevel(), user.getBattle_attack(), target.getBattle_defense(), userMove.getPower(), typeMultiplier);   
+        } else if(userMove instanceof SpecialAttack){
             damage = calcDamage(user.getLevel(), user.getBattle_special_attack(), target.getBattle_special_defense(), userMove.getPower(), typeMultiplier);
-        }
-        else
-        {
+        } else {
             damage = 0;
         }
         
@@ -220,7 +193,6 @@ public class UseMove {
         
         // Add damage dealing event
         if (damage != 0) {
-            
             if (userMove instanceof MultiStrike) {
                 int timeHit = (int) ((Math.random() * 3) + 2);
                 for (int i = 0; i < timeHit; i++) {
@@ -254,8 +226,7 @@ public class UseMove {
                     @Override
                     public void run() {
                         // IMPORTANT - TARGET RECIEVES THE DAMAGE HERE
-                        if (user.getBattle_status() == "BRN")
-                        {
+                        if (user.getBattle_status() == "BRN") {
                             target.takeDamage(damage / 2);
                         } else {
                             target.takeDamage(damage);
@@ -283,8 +254,7 @@ public class UseMove {
             }
         }
         
-        if (userMove instanceof ApplyFlinch)
-        {
+        if (userMove instanceof ApplyFlinch) {
             int chance_to_be_flinch = (int) (Math.random() * 10);
             if ( chance_to_be_flinch <= 3 )
             {
@@ -292,8 +262,7 @@ public class UseMove {
             }
         }
         
-        if(userMove instanceof Lifesteal)
-        {
+        if(userMove instanceof Lifesteal) {
             int netHP = (int) (((Lifesteal)userMove).getLifestealRatio() * damage);
             eventQueue.add(new TimerTask() {
                 @Override
@@ -312,17 +281,10 @@ public class UseMove {
                     }
                 }
             });
-            eventQueue.add(new TimerTask() {
-                @Override
-                public void run() {
-                    System.out.println("BM: Describing lifesteal event");
-                    textArea.setText(target.getName() + ((Lifesteal)userMove).getDescription());
-                }
-            });
+            BattleEvents.addGenericEvent(eventQueue, textArea, target.getName() + ((Lifesteal)userMove).getDescription());
         }
         
-        if(userMove instanceof HealsHP)
-        {
+        if(userMove instanceof HealsHP) {
             int healAmount = (int) (((HealsHP)userMove).getHealRatio() * user.getCurrent_max_hp());
             System.out.println("Heal amount - " + Integer.toString(healAmount));
             eventQueue.add(new TimerTask() {
@@ -389,8 +351,7 @@ public class UseMove {
         // Add status change effect
         if (userMove instanceof ApplyParalyze || userMove instanceof ApplyPoison || 
                 userMove instanceof ApplyBurn || userMove instanceof ApplySleep || userMove instanceof ApplyFrozen) {
-            if (!(target.getBattle_status() == null))
-            {
+            if (!(target.getBattle_status() == null)) {
                 if (target.getBattle_status().equals("PAR")) {
                     BattleEvents.addGenericEvent(eventQueue, textArea, "The target is already paralyzed!");
                 }
@@ -426,8 +387,7 @@ public class UseMove {
 //                        });
                     }
                 }
-                if (userMove instanceof ApplyPoison)
-                {
+                if (userMove instanceof ApplyPoison) {
                     chance = ((ApplyPoison) userMove).getPoisonChance();
                     if (result < chance)
                     {
@@ -435,8 +395,7 @@ public class UseMove {
                         BattleEvents.addStatusEvent(eventQueue, textArea, "PSN", target.getName(), targetLabels);
                     }
                 }
-                if (userMove instanceof ApplyBurn)
-                {
+                if (userMove instanceof ApplyBurn) {
                     chance = ((ApplyBurn) userMove).getBurnChance();
                     if (result < chance)
                     {
@@ -444,8 +403,7 @@ public class UseMove {
                         BattleEvents.addStatusEvent(eventQueue, textArea, "BRN", target.getName(), targetLabels);
                     }
                 }
-                if (userMove instanceof ApplySleep)
-                {
+                if (userMove instanceof ApplySleep) {
                     chance = ((ApplySleep) userMove).getSleepChance();
                     if (result < chance)
                     {
@@ -454,8 +412,7 @@ public class UseMove {
                         BattleEvents.addStatusEvent(eventQueue, textArea, "SLP", target.getName(), targetLabels);
                     }
                 }
-                if (userMove instanceof ApplyFrozen)
-                {
+                if (userMove instanceof ApplyFrozen) {
                     chance = ((ApplyFrozen) userMove).getFrozenChance();
                     if (result < chance)
                     {

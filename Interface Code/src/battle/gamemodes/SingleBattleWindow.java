@@ -3,6 +3,7 @@ package battle.gamemodes;
 import battle.gui.utilities.bagPanel;
 import java.awt.CardLayout;
 import battle.gui.utilities.*;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import trainer.Trainer;
 
@@ -32,16 +33,18 @@ public class SingleBattleWindow extends javax.swing.JFrame {
             rightStatus,
             rightIcon
         };
-        
+        JButton [] controlButtons = new JButton[] {
+            fightButton,
+            pokemonButton,
+            bagButton
+        };
         battleController = new SingleBattleController(
-                leftTrainer, rightTrainer, 
-                true, 
+                leftTrainer, rightTrainer,
+                true,
                 eventTextArea,
                 leftLabels, rightLabels,
-                leftHPBar,rightHPBar,
-                fightButton,
-                bagButton,
-                pokemonButton
+                leftHPBar, rightHPBar,
+                controlButtons
         );
         
         leftPokemonPanel = new pokemonPanel(detailPanel, leftTrainer, battleController);

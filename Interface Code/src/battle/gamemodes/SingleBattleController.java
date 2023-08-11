@@ -3,7 +3,7 @@ package battle.gamemodes;
 import move.Move;
 import pokemon.Pokemon;
 import trainer.Trainer;
-import battle.helpers.battleMechanics;
+import battle.mechanics.battleMechanics;
 //import battle.old.BattleMechanics;
 import battle.old.BattleUtilities;
 import battle.gui.utilities.pokemonPanel;
@@ -20,7 +20,6 @@ import move.modifiers.TwoTurn;
 public class SingleBattleController{
    
     private Timer timer;
-    private TimerTask task;
     private ArrayList<TimerTask> eventTextList = new ArrayList<>();
     
     private Trainer leftTrainer, rightTrainer;
@@ -38,12 +37,9 @@ public class SingleBattleController{
             rightWins, 
             showConsole;
     
-    boolean leftMoveMade = false, rightMoveMade = false;
-    
-    JLabel leftHpLabel, rightHpLabel;
     JLabel [] leftLabels, rightLabels;
     JTextArea textArea;
-    JProgressBar leftHpBar, rightHpBar;
+    JProgressBar leftHPBar, rightHPBar;
     JButton fightButton, bagButton, pokemonButton;
     pokemonPanel leftPokemonPanel, rightPokemonPanel;
     movePanel leftMovePanel, rightMovePanel;
@@ -52,8 +48,8 @@ public class SingleBattleController{
             boolean showConsole, 
             JTextArea textArea, 
             JLabel [] leftLabels, JLabel [] rightLabels,
-            JProgressBar leftHpBar, JProgressBar rightHpBar,
-            JButton fightButton, JButton bagButton, JButton pokemonButton) {
+            JProgressBar leftHPBar, JProgressBar rightHPBar,
+            JButton [] controlButtons) {
         
         super();
         
@@ -71,16 +67,17 @@ public class SingleBattleController{
         this.textArea = textArea;
         this.leftLabels = leftLabels;
         this.rightLabels = rightLabels;
-        this.leftHpLabel = leftLabels[2];
-        this.rightHpLabel = rightLabels[2];
-        this.leftHpBar = leftHpBar;
-        this.rightHpBar = rightHpBar;
-        this.fightButton = fightButton;
-        this.bagButton = bagButton;
-        this.pokemonButton = pokemonButton;
+        this.leftHPBar = leftHPBar;
+        this.rightHPBar = rightHPBar;
         
-        setPokemonLabels(leftPokemon, leftLabels, leftHpBar);
-        setPokemonLabels(rightPokemon, rightLabels, rightHpBar);
+        // Control Buttons
+        this.fightButton = controlButtons[0];
+        this.pokemonButton = controlButtons[1];
+        this.bagButton = controlButtons[2];
+
+        
+        setPokemonLabels(leftPokemon, leftLabels, leftHPBar);
+        setPokemonLabels(rightPokemon, rightLabels, rightHPBar);
         
         System.out.println("CONTROL CONSOLE: Initialization complete");
     }
@@ -97,7 +94,7 @@ public class SingleBattleController{
             BattleUtilities.swapPokemon(leftTrainer, leftNextPokemon);
             leftPokemon = leftTrainer.getParty().get(0);
         
-            addSwapEvent(leftPrevName, leftPokemon, leftLabels, leftHpBar);
+            addSwapEvent(leftPrevName, leftPokemon, leftLabels, leftHPBar);
             
             leftPokemonPanel.setPokemonButtons();
             leftMovePanel.setMoveButtons(leftPokemon.getMoveset());
@@ -107,7 +104,7 @@ public class SingleBattleController{
             BattleUtilities.swapPokemon(rightTrainer, rightNextPokemon);
             rightPokemon = rightTrainer.getParty().get(0);
             
-            addSwapEvent(rightPrevName, rightPokemon, rightLabels, rightHpBar);
+            addSwapEvent(rightPrevName, rightPokemon, rightLabels, rightHPBar);
             
             rightPokemonPanel.setPokemonButtons();
             rightMovePanel.setMoveButtons(rightPokemon.getMoveset());
@@ -133,12 +130,13 @@ public class SingleBattleController{
                     });
                     rightPokemon.setInTwoTurn(true);
                 } else {
-                    battleMechanics.addMoveEvent(
-                    eventTextList, 
-                    textArea, 
-                    rightPokemon, rightMove, 
-                    leftPokemon, leftMove, leftHpLabel, leftLabels[4], leftHpBar,
-                    rightHpLabel, rightLabels[4], rightHpBar, rightLabels[5]
+                    battleMechanics.useMove(
+                    rightPokemon, leftPokemon,
+                        rightMove, leftMove,
+                        rightLabels, leftLabels,
+                        rightHPBar, leftHPBar,
+                        eventTextList,
+                        textArea    
                     );
                     rightMove = null;
                     if(rightPokemon.isInTwoTurn() == true) rightPokemon.setInTwoTurn(false);
@@ -163,12 +161,14 @@ public class SingleBattleController{
                     });
                     leftPokemon.setInTwoTurn(true);
                 } else {
-                    battleMechanics.addMoveEvent(
-                    eventTextList, textArea, 
-                    leftPokemon, leftMove, 
-                    rightPokemon, rightMove, rightHpLabel, rightLabels[4], rightHpBar,
-                    leftHpLabel, leftLabels[4], leftHpBar, leftLabels[5]
-                    ); 
+                    battleMechanics.useMove(
+                        leftPokemon, rightPokemon,
+                        leftMove, rightMove,
+                        leftLabels, rightLabels,
+                        leftHPBar, rightHPBar,
+                        eventTextList,
+                        textArea 
+                    );
                     leftMove = null;
                     if(leftPokemon.isInTwoTurn() == true) leftPokemon.setInTwoTurn(false);
                 } 
@@ -196,12 +196,14 @@ public class SingleBattleController{
                     });
                     leftPokemon.setInTwoTurn(true);
                 } else {
-                    battleMechanics.addMoveEvent(
-                    eventTextList, textArea, 
-                    leftPokemon, leftMove, 
-                    rightPokemon, rightMove, rightHpLabel, rightLabels[4], rightHpBar,
-                    leftHpLabel, leftLabels[4], leftHpBar, leftLabels[5]
-                    ); 
+                    battleMechanics.useMove(
+                        leftPokemon, rightPokemon,
+                    leftMove, rightMove,
+                            leftLabels, rightLabels,
+                    leftHPBar, rightHPBar,
+                    eventTextList,
+                        textArea 
+                    );
                     leftMove = null;
                     if(leftPokemon.isInTwoTurn() == true) leftPokemon.setInTwoTurn(false);
                 }            
@@ -223,12 +225,13 @@ public class SingleBattleController{
                     });
                     rightPokemon.setInTwoTurn(true);
                 } else {
-                    battleMechanics.addMoveEvent(
-                    eventTextList, 
-                    textArea, 
-                    rightPokemon, rightMove, 
-                    leftPokemon, leftMove, leftHpLabel, leftLabels[4], leftHpBar,
-                    rightHpLabel, rightLabels[4], rightHpBar,rightLabels[5]
+                    battleMechanics.useMove(
+                    rightPokemon, leftPokemon,
+                    rightMove, leftMove,
+                rightLabels, leftLabels,
+                rightHPBar, leftHPBar,
+                eventTextList,
+                        textArea    
                     );
                     rightMove = null;
                     if(rightPokemon.isInTwoTurn() == true) rightPokemon.setInTwoTurn(false);
@@ -329,7 +332,6 @@ public class SingleBattleController{
             if (showConsole) System.out.println("CONTROL CONSOLE: Right Pokemon move selected -> " + rightMove.getName());
             runTurn();
             if (leftPokemon.isInTwoTurn() == false) {
-                System.out.println("Left Pokemon in Two Turn (1/2)");
                 leftTrainerTurn = true;
             }
         }
@@ -350,18 +352,7 @@ public class SingleBattleController{
             runTurn();
         }
     }
-   
-//    // Methods to control GUI components
-//    private void updateHPBar(Pokemon pokemon, JProgressBar hpBar) {
-//        hpBar.setValue(pokemon.getCurrent_hp());
-//        if (pokemon.getCurrent_hp() < (pokemon.getCurrent_max_hp() / 2)) {
-//            hpBar.setForeground(Color.yellow);
-//        }
-//        if (pokemon.getCurrent_hp() < (pokemon.getCurrent_max_hp() / 4)) {
-//            hpBar.setForeground(Color.red);
-//        }
-//    }
-    
+
     // Used for switch
     private void setPokemonLabels(Pokemon pokemon, JLabel [] labelArray, JProgressBar hpBar) {
         labelArray[0].setText(pokemon.getName());

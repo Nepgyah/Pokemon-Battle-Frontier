@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.TimerTask;
 import javax.swing.JLabel;
+import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
+import pokemon.Pokemon;
 
 public class BattleEvents {
     
@@ -12,8 +14,47 @@ public class BattleEvents {
         eventQueue.add(new TimerTask() {
             @Override
             public void run() {
-                System.out.println("BM: Describing event");
                 textArea.setText(event);
+            }
+        });
+    }
+    
+    public static void addDamageEvent(ArrayList<TimerTask> eventQueue, JTextArea textArea, String userStatus, int damage, Pokemon target, JLabel targetHP, JProgressBar targetHPBar) {
+        eventQueue.add(new TimerTask() {
+            @Override
+            public void run() {
+                 if (userStatus == "BRN") {
+                    target.takeDamage(damage / 2);
+                } else {
+                    target.takeDamage(damage);
+                }
+                targetHP.setText(Integer.toString(target.getCurrent_hp()));
+                targetHPBar.setValue(target.getCurrent_hp());
+
+                if (target.getCurrent_hp() < (target.getCurrent_max_hp() / 2)) {
+                    targetHPBar.setForeground(Color.yellow);
+                }
+                if (target.getCurrent_hp() < (target.getCurrent_max_hp() / 4)) {
+                    targetHPBar.setForeground(Color.red);
+                }
+            }
+        });
+    }
+    
+    public static void addHealingEvent(ArrayList<TimerTask> eventQueue, JTextArea textArea, int healAmount, Pokemon user, JLabel userHP, JProgressBar userHPBar) {
+        eventQueue.add(new TimerTask() {
+            @Override
+            public void run() {
+                user.healHP(healAmount);
+                userHP.setText(Integer.toString(user.getCurrent_hp()));
+                userHPBar.setValue(user.getCurrent_hp());
+
+                if (user.getCurrent_hp() < (user.getCurrent_max_hp() / 2)) {
+                    userHPBar.setForeground(Color.yellow);
+                }
+                if (user.getCurrent_hp() < (user.getCurrent_max_hp() / 4)) {
+                    userHPBar.setForeground(Color.red);
+                }
             }
         });
     }
@@ -44,6 +85,24 @@ public class BattleEvents {
                     labels[4].setForeground(Color.CYAN);
                     textArea.setText("Enemy " + name + " was frozen solid!");
                 }
+            }
+        });
+    }
+    
+    public static void addIconReturnEvent(ArrayList<TimerTask> eventQueue, Pokemon pokemon, JLabel iconLabel) {
+        eventQueue.add(new TimerTask() {
+            @Override
+            public void run() {
+                iconLabel.setIcon(pokemon.getIcon());
+            }
+        });
+    }
+    
+    public static void addIconRemoveEvent(ArrayList<TimerTask> eventQueue, JLabel iconLabel) {
+        eventQueue.add(new TimerTask() {
+            @Override
+            public void run() {
+                iconLabel.setIcon(null);
             }
         });
     }

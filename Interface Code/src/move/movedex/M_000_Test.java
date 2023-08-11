@@ -5,7 +5,7 @@ import move.modifiers.*;
 import move.status_effect.*;
 import types.*;
 
-public class M_000_Test extends Move implements PhysicalAttack, Normal, ApplyFrozen{
+public class M_000_Test extends Move implements PhysicalAttack, Normal, TwoTurn{
 
     private static final long serialVersionUID = 1L;
 
@@ -20,9 +20,13 @@ public class M_000_Test extends Move implements PhysicalAttack, Normal, ApplyFro
     }
 
     @Override
-    public double getFrozenChance() {
-        return 1;
+    public String getTurnDescription() {
+        return " used their zhonyas hourglass!";
     }
-    
+
+    @Override
+    public boolean getTargetable() {
+        return false;
+    }
 
 }

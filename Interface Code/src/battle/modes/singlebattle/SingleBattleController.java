@@ -114,12 +114,13 @@ public class SingleBattleController{
             if (rightMove != null) {  
                 if(rightMove instanceof TwoTurn && rightPokemon.isInTwoTurn() == false) {
                     BattleEvents.addGenericEvent(eventQueue, textArea, rightPokemon.getName() + ((TwoTurn)rightMove).getTurnDescription());
-                    eventQueue.add(new TimerTask() {
-                        @Override
-                        public void run() {
-                            rightLabels[5].setIcon(null);
-                        }
-                    });
+                    BattleEvents.addIconRemoveEvent(eventQueue, rightLabels[5] );
+//                    eventQueue.add(new TimerTask() {
+//                        @Override
+//                        public void run() {
+//                            rightLabels[5].setIcon(null);
+//                        }
+//                    });
                     rightPokemon.setInTwoTurn(true);
                 } else {
                     UseMove.useMove(

@@ -133,13 +133,7 @@ public class UseMove {
         
        // Bring back icon on 2nd half two turn
         if (userMove instanceof TwoTurn) {
-            eventQueue.add(new TimerTask() {
-                @Override
-                public void run() {
-                    System.out.println("BM: Bringin back Icon");
-                    userLabels[5].setIcon(user.getIcon());
-                }
-            });
+            BattleEvents.addIconReturnEvent(eventQueue, user, userLabels[5]);
         }
         
         // "Pokemon used moved!"
@@ -196,54 +190,11 @@ public class UseMove {
             if (userMove instanceof MultiStrike) {
                 int timeHit = (int) ((Math.random() * 3) + 2);
                 for (int i = 0; i < timeHit; i++) {
-                    eventQueue.add(new TimerTask() {
-                        @Override
-                        public void run() {
-                            // IMPORTANT - TARGET RECIEVES THE DAMAGE HERE
-                            if (user.getBattle_status() == "BRN")
-                            {
-                                target.takeDamage(damage / 2);
-                            } else {
-                                target.takeDamage(damage);
-                            }
-
-                            System.out.println("BM: Updating hp display");
-                            targetLabels[2].setText(Integer.toString(target.getCurrent_hp()));
-                            targetHPBar.setValue(target.getCurrent_hp());
-
-                            if (target.getCurrent_hp() < (target.getCurrent_max_hp() / 2)) {
-                                targetHPBar.setForeground(Color.yellow);
-                            }
-                            if (target.getCurrent_hp() < (target.getCurrent_max_hp() / 4)) {
-                                targetHPBar.setForeground(Color.red);
-                            }
-                        }
-                    });
+                    BattleEvents.addDamageEvent(eventQueue, textArea, user.getBattle_status(), damage, target, targetLabels[2], targetHPBar);
                 }
                 BattleEvents.addGenericEvent(eventQueue, textArea, "It hit " + Integer.toString(timeHit) + " time(s)!");
             } else {
-                eventQueue.add(new TimerTask() {
-                    @Override
-                    public void run() {
-                        // IMPORTANT - TARGET RECIEVES THE DAMAGE HERE
-                        if (user.getBattle_status() == "BRN") {
-                            target.takeDamage(damage / 2);
-                        } else {
-                            target.takeDamage(damage);
-                        }
-
-                        System.out.println("BM: Updating hp display");
-                        targetLabels[2].setText(Integer.toString(target.getCurrent_hp()));
-                        targetHPBar.setValue(target.getCurrent_hp());
-
-                        if (target.getCurrent_hp() < (target.getCurrent_max_hp() / 2)) {
-                            targetHPBar.setForeground(Color.yellow);
-                        }
-                        if (target.getCurrent_hp() < (target.getCurrent_max_hp() / 4)) {
-                            targetHPBar.setForeground(Color.red);
-                        }
-                    }
-                });
+                BattleEvents.addDamageEvent(eventQueue, textArea, user.getBattle_status(), damage, target, targetLabels[2], targetHPBar);
             }
             // Add effect multiplier effect
             if (typeMultiplier < 1.0 && typeMultiplier > 0) {
@@ -256,31 +207,14 @@ public class UseMove {
         
         if (userMove instanceof ApplyFlinch) {
             int chance_to_be_flinch = (int) (Math.random() * 10);
-            if ( chance_to_be_flinch <= 3 )
-            {
+            if ( chance_to_be_flinch <= 3 ) {
                 target.setFlinched(true);
             }
         }
         
         if(userMove instanceof Lifesteal) {
             int netHP = (int) (((Lifesteal)userMove).getLifestealRatio() * damage);
-            eventQueue.add(new TimerTask() {
-                @Override
-                public void run() {
-                    user.healHP(netHP);
-
-                    System.out.println("BM: Updating hp display for pure heal");
-                    userLabels[2].setText(Integer.toString(user.getCurrent_hp()));
-                    userHPBar.setValue(user.getCurrent_hp());
-
-                    if (user.getCurrent_hp() > (user.getCurrent_max_hp() / 2)) {
-                        userHPBar.setForeground(Color.YELLOW);
-                    }
-                    if (user.getCurrent_hp() > (user.getCurrent_max_hp() / 2)) {
-                        userHPBar.setForeground(Color.GREEN);
-                    }
-                }
-            });
+            BattleEvents.addHealingEvent(eventQueue, textArea, netHP, user, userLabels[2], userHPBar);
             BattleEvents.addGenericEvent(eventQueue, textArea, target.getName() + ((Lifesteal)userMove).getDescription());
         }
         
@@ -310,23 +244,7 @@ public class UseMove {
         // Add recoil event
         if (userMove instanceof HasRecoil) {
             int recoilDamage = (int) (((HasRecoil)userMove).getRecoilRatio() * damage);
-            eventQueue.add(new TimerTask() {
-                @Override
-                public void run() {
-                    user.takeDamage(recoilDamage);
-
-                    System.out.println("BM: Updating hp display for recoil");
-                    userLabels[2].setText(Integer.toString(user.getCurrent_hp()));
-                    userHPBar.setValue(user.getCurrent_hp());
-
-                    if (user.getCurrent_hp() < (user.getCurrent_max_hp() / 2)) {
-                        userHPBar.setForeground(Color.yellow);
-                    }
-                    if (user.getCurrent_hp() < (user.getCurrent_max_hp() / 4)) {
-                        userHPBar.setForeground(Color.red);
-                    }
-                }
-            });
+            BattleEvents.addDamageEvent(eventQueue, textArea, user.getBattle_status(), recoilDamage, user, userLabels[2], userHPBar);
             BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " took damage in recoil!");
         }
         
@@ -370,43 +288,30 @@ public class UseMove {
                 return;
             } else {
                 result = Math.random();
-                if (userMove instanceof ApplyParalyze)
-                {
+                if (userMove instanceof ApplyParalyze) {
                     chance = ((ApplyParalyze) userMove).getParalyzeChance();
-                    if(result < chance)
-                    {
+                    if(result < chance) {
                         target.setBattle_status("PAR");
                         BattleEvents.addStatusEvent(eventQueue, textArea, "PAR", target.getName(), targetLabels);
-//                        eventQueue.add(new TimerTask() {
-//                            @Override
-//                            public void run() {
-//                                targetLabels[4].setText(target.getBattle_status());
-//                                targetLabels[4].setBackground(Color.yellow);
-//                                textArea.setText("Enemy " + target.getName() + " was paralyzed! ");
-//                            }
-//                        });
                     }
                 }
                 if (userMove instanceof ApplyPoison) {
                     chance = ((ApplyPoison) userMove).getPoisonChance();
-                    if (result < chance)
-                    {
+                    if (result < chance) {
                         target.setBattle_status("PSN");
                         BattleEvents.addStatusEvent(eventQueue, textArea, "PSN", target.getName(), targetLabels);
                     }
                 }
                 if (userMove instanceof ApplyBurn) {
                     chance = ((ApplyBurn) userMove).getBurnChance();
-                    if (result < chance)
-                    {
+                    if (result < chance) {
                         target.setBattle_status("BRN");
                         BattleEvents.addStatusEvent(eventQueue, textArea, "BRN", target.getName(), targetLabels);
                     }
                 }
                 if (userMove instanceof ApplySleep) {
                     chance = ((ApplySleep) userMove).getSleepChance();
-                    if (result < chance)
-                    {
+                    if (result < chance) {
                         target.setBattle_status("SLP");
                         target.setSleep_turns((int) (Math.random() * 5) + 1);
                         BattleEvents.addStatusEvent(eventQueue, textArea, "SLP", target.getName(), targetLabels);
@@ -414,8 +319,7 @@ public class UseMove {
                 }
                 if (userMove instanceof ApplyFrozen) {
                     chance = ((ApplyFrozen) userMove).getFrozenChance();
-                    if (result < chance)
-                    {
+                    if (result < chance) {
                         target.setBattle_status("FRZ");
                         BattleEvents.addStatusEvent(eventQueue, textArea, "FRZ", target.getName(), targetLabels);
                     }

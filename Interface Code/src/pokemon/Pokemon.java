@@ -336,6 +336,10 @@ public abstract class Pokemon implements Serializable{
     public void takeDamage(int amount)
     {
         this.setCurrent_hp(this.getCurrent_hp() - amount);
+        if (this.current_hp < 0) {
+            this.current_hp = 0;
+            this.fainted = true;
+        }
     }
 
     public void healHP(int amount)

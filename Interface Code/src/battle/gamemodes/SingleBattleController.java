@@ -15,6 +15,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JButton;
 import javax.swing.JProgressBar;
+import move.modifiers.TwoTurn;
 
 public class SingleBattleController{
    
@@ -114,22 +115,63 @@ public class SingleBattleController{
         
         // Right Going first
         if (leftPokemon.getBattle_speed() < rightPokemon.getBattle_speed()) {
+            // Right Turn
             if (rightMove != null) {  
-                battleMechanics.addMoveEvent(
+                if(rightMove instanceof TwoTurn && rightPokemon.isInTwoTurn() == false) {
+                    eventTextList.add(new TimerTask() {
+                        @Override
+                        public void run() {
+                            System.out.println("BM: Describing two turn first half");
+                            textArea.setText(rightPokemon.getName() + ((TwoTurn)rightMove).getTurnDescription());
+                        }
+                    });
+                    eventTextList.add(new TimerTask() {
+                        @Override
+                        public void run() {
+                            rightLabels[5].setIcon(null);
+                        }
+                    });
+                    rightPokemon.setInTwoTurn(true);
+                } else {
+                    battleMechanics.addMoveEvent(
                     eventTextList, 
                     textArea, 
                     rightPokemon, rightMove, 
                     leftPokemon, leftMove, leftHpLabel, leftLabels[4], leftHpBar,
-                    rightHpLabel, rightLabels[4], rightHpBar
-                );
+                    rightHpLabel, rightLabels[4], rightHpBar, rightLabels[5]
+                    );
+                    rightMove = null;
+                    if(rightPokemon.isInTwoTurn() == true) rightPokemon.setInTwoTurn(false);
+                }
             }
+            // Left Turn
             if (leftMove != null) {
-                battleMechanics.addMoveEvent(
+                if(leftMove instanceof TwoTurn && leftPokemon.isInTwoTurn() == false)
+                {
+                    eventTextList.add(new TimerTask() {
+                        @Override
+                        public void run() {
+                            System.out.println("BM: Describing two turn first half");
+                            textArea.setText(leftPokemon.getName() + ((TwoTurn)leftMove).getTurnDescription());
+                        }
+                    });
+                    eventTextList.add(new TimerTask() {
+                        @Override
+                        public void run() {
+                            leftLabels[5].setIcon(null);
+                        }
+                    });
+                    leftPokemon.setInTwoTurn(true);
+                } else {
+                    battleMechanics.addMoveEvent(
                     eventTextList, textArea, 
                     leftPokemon, leftMove, 
                     rightPokemon, rightMove, rightHpLabel, rightLabels[4], rightHpBar,
-                    leftHpLabel, leftLabels[4], leftHpBar
-                );
+                    leftHpLabel, leftLabels[4], leftHpBar, leftLabels[5]
+                    ); 
+                    leftMove = null;
+                    if(leftPokemon.isInTwoTurn() == true) leftPokemon.setInTwoTurn(false);
+                } 
             }
         } 
         
@@ -137,20 +179,60 @@ public class SingleBattleController{
         if (leftPokemon.getBattle_speed() > rightPokemon.getBattle_speed()) {
             // Left turn
             if( leftMove != null) {
-                battleMechanics.addMoveEvent(
+                if(leftMove instanceof TwoTurn && leftPokemon.isInTwoTurn() == false)
+                {
+                    eventTextList.add(new TimerTask() {
+                        @Override
+                        public void run() {
+                            System.out.println("BM: Describing two turn first half");
+                            textArea.setText(leftPokemon.getName() + ((TwoTurn)leftMove).getTurnDescription());
+                        }
+                    });
+                    eventTextList.add(new TimerTask() {
+                        @Override
+                        public void run() {
+                            leftLabels[5].setIcon(null);
+                        }
+                    });
+                    leftPokemon.setInTwoTurn(true);
+                } else {
+                    battleMechanics.addMoveEvent(
                     eventTextList, textArea, 
                     leftPokemon, leftMove, 
                     rightPokemon, rightMove, rightHpLabel, rightLabels[4], rightHpBar,
-                    leftHpLabel, leftLabels[4], leftHpBar
-                );            }
+                    leftHpLabel, leftLabels[4], leftHpBar, leftLabels[5]
+                    ); 
+                    leftMove = null;
+                    if(leftPokemon.isInTwoTurn() == true) leftPokemon.setInTwoTurn(false);
+                }            
+            }
             if (rightMove != null) { 
-                battleMechanics.addMoveEvent(
+                if(rightMove instanceof TwoTurn && rightPokemon.isInTwoTurn() == false) {
+                    eventTextList.add(new TimerTask() {
+                        @Override
+                        public void run() {
+                            System.out.println("BM: Describing two turn first half");
+                            textArea.setText(rightPokemon.getName() + ((TwoTurn)rightMove).getTurnDescription());
+                        }
+                    });
+                    eventTextList.add(new TimerTask() {
+                        @Override
+                        public void run() {
+                            rightLabels[5].setIcon(null);
+                        }
+                    });
+                    rightPokemon.setInTwoTurn(true);
+                } else {
+                    battleMechanics.addMoveEvent(
                     eventTextList, 
                     textArea, 
                     rightPokemon, rightMove, 
                     leftPokemon, leftMove, leftHpLabel, leftLabels[4], leftHpBar,
-                    rightHpLabel, rightLabels[4], rightHpBar
-                );
+                    rightHpLabel, rightLabels[4], rightHpBar,rightLabels[5]
+                    );
+                    rightMove = null;
+                    if(rightPokemon.isInTwoTurn() == true) rightPokemon.setInTwoTurn(false);
+                }
             }
         }
         
@@ -164,15 +246,22 @@ public class SingleBattleController{
         eventTextList.add(new TimerTask() {
             @Override
             public void run() {
-                textArea.setText("What will " + leftPokemon.getName() + " do?");
-                if (!showConsole) {
-                    System.out.println("Left Trainer");
-                    battleMechanics.displayBattleStatsToConsole(leftPokemon);
-                    System.out.println("\nRight Trainer");
-                    battleMechanics.displayBattleStatsToConsole(rightPokemon);
-                    
+                if (leftPokemon.isInTwoTurn() == true) {
+                    textArea.setText("What will " + rightPokemon.getName() + " do?");
+                    enableControls();
                 }
-                enableControls();
+                if (leftPokemon.isInTwoTurn() == true && rightPokemon.isInTwoTurn() == true) {
+                    runTurn();
+                }
+                else {
+                    if (!showConsole) {
+                        System.out.println("Left Trainer");
+                        battleMechanics.displayBattleStatsToConsole(leftPokemon);
+                        System.out.println("\nRight Trainer");
+                        battleMechanics.displayBattleStatsToConsole(rightPokemon);
+                    }
+                    enableControls();
+                }
             }
         });
         
@@ -184,7 +273,6 @@ public class SingleBattleController{
         
         // RESET 
         eventTextList.clear();
-        leftMove = rightMove = null;
         leftSwap = rightSwap = false;
     }
     
@@ -229,13 +317,21 @@ public class SingleBattleController{
         if (leftTrainerTurn) {
             leftMove = leftPokemon.getMoveset()[pos];
             if (showConsole) System.out.println("CONTROL CONSOLE: Left Pokemon move selected -> " + leftMove.getName());
-            leftTrainerTurn = false;
-            textArea.setText("What will " + rightPokemon.getName() + " do?");
+            if (rightPokemon.isInTwoTurn() == true) {
+                System.out.println("Right Pokemon in Two Turn (1/2)");
+                runTurn();
+            } else {
+                leftTrainerTurn = false;
+                textArea.setText("What will " + rightPokemon.getName() + " do?");
+            }
         } else {
             rightMove = rightPokemon.getMoveset()[pos];
             if (showConsole) System.out.println("CONTROL CONSOLE: Right Pokemon move selected -> " + rightMove.getName());
-            leftTrainerTurn = true;
             runTurn();
+            if (leftPokemon.isInTwoTurn() == false) {
+                System.out.println("Left Pokemon in Two Turn (1/2)");
+                leftTrainerTurn = true;
+            }
         }
     }
     

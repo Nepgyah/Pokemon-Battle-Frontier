@@ -169,12 +169,25 @@ public class battleMechanics {
             JProgressBar targetHpBar,
             JLabel userHpLabel,
             JLabel userStatusLabel,
-            JProgressBar userHpBar) {
+            JProgressBar userHpBar,
+            JLabel userIcon) {
         
         if (canUseMove(user, eventQueue, textArea, userHpLabel, userStatusLabel, userHpBar) == false) return;
         double chance;
         double result;
         // Pre move check
+        
+        
+       // Bring back icon on 2nd half two turn
+        if (userMove instanceof TwoTurn) {
+            eventQueue.add(new TimerTask() {
+                @Override
+                public void run() {
+                    System.out.println("BM: Bringin back Icon");
+                    userIcon.setIcon(user.getIcon());
+                }
+            });
+        }
         
         // Add event to describe the move
         eventQueue.add(new TimerTask() {
@@ -346,7 +359,7 @@ public class battleMechanics {
         if (userMove instanceof ApplyFlinch)
         {
             int chance_to_be_flinch = (int) (Math.random() * 10);
-            if ( chance_to_be_flinch <= 10 )
+            if ( chance_to_be_flinch <= 3 )
             {
                 target.setFlinched(true);
             }
@@ -452,11 +465,11 @@ public class battleMechanics {
             }
         }
         
-        if(target.getCurrent_hp() <= 0)
-        {
-            target.setFainted();
-            return;
-        }
+//        if(target.getCurrent_hp() <= 0)
+//        {
+//            target.setFainted();
+//            return;
+//        }
         
         // Add status change effect
         if (userMove instanceof ApplyParalyze || userMove instanceof ApplyPoison || 

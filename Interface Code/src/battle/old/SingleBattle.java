@@ -1,4 +1,4 @@
-package battle;
+package battle.old;
 
 import java.util.Collections;
 import java.util.Scanner;

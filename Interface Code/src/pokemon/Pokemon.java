@@ -313,7 +313,9 @@ public abstract class Pokemon implements Serializable{
 
         this.confused = false;
         this.flinched = false;
-
+        this.recharging = false;
+        this.inTwoTurn = false;
+	
         this.battle_attack_count = 0;
         this.battle_defense_count = 0;
         this.battle_special_attack_count = 0;

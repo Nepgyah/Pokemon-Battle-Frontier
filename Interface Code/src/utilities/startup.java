@@ -32,7 +32,21 @@ public class startup {
     {
         ArrayList<Move> movedex = new ArrayList<>();
 
+        movedex.add(new M_000_Test());
+        
+        movedex.add(new M_001_Pound());
+        
+        movedex.add(new M_014_SwordsDance());
+        
         movedex.add(new M_033_Tackle());
+        
+        movedex.add(new M_039_TailWhip());
+        
+        movedex.add(new M_055_WaterGun());
+        
+        movedex.add(new M_085_ThunderBolt());
+        movedex.add(new M_086_ThunderWave());
+        
         return movedex;
     }
     
@@ -49,6 +63,7 @@ public class startup {
         {
             pokemon.setLevel(20);
             pokemon.assignRandomMoves(movedex);
+            pokemon.resetBattleStats();
         }
         return ash;
     }
@@ -64,6 +79,7 @@ public class startup {
         {
             pokemon.setLevel(20);
             pokemon.assignRandomMoves(movedex);
+            pokemon.resetBattleStats();
         }
         return gary;
     }

@@ -1,4 +1,4 @@
-package battle;
+package battle.old;
 
 
 import move.Move;
@@ -124,7 +124,7 @@ public class BattleMechanics {
              */
 
             if (canUseMove(user) == false) return;
-            System.out.println(user.getNickname() + " used " + userMove.getName() + "!");
+
 
             userMove.setCurrent_pp(userMove.getCurrent_pp() - 1);
 

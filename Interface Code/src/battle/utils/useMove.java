@@ -10,7 +10,6 @@ import move.Move;
 import move.modifiers.*;
 import pokemon.Pokemon;
 import move.status_effect.*;
-
 public class UseMove {
     
     final static int MAX_STAT_CHANGE = 2;
@@ -51,12 +50,7 @@ public class UseMove {
 
         if (user.isConfused() == true)
         {
-            eventQueue.add(new TimerTask() {
-                @Override
-                public void run() {
-                    textArea.setText(user.getName() + " is confused!");
-                }
-            });
+            BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is confused!");
             int chance_to_hurt = (int) (Math.random() * 2);
             if (chance_to_hurt != 1) return true;
             else
@@ -88,12 +82,7 @@ public class UseMove {
             if (chance_to_be_paralyzed != 1) return true;
             else
             {
-                eventQueue.add(new TimerTask() {
-                    @Override
-                    public void run() {
-                        textArea.setText(user.getName() + " is paralyzed! It can't move!");
-                    }
-                });
+                BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is paralyzed! It can't move!");
                 return false;
             }
         }
@@ -114,12 +103,7 @@ public class UseMove {
                 return true;
             }
             else {
-                eventQueue.add(new TimerTask() {
-                    @Override
-                    public void run() {
-                        textArea.setText(user.getName() + " is frozen! It can't move!");
-                    }
-                });
+                BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is frozen! It can't move!");
                 return false;
             }
         }
@@ -129,13 +113,7 @@ public class UseMove {
             user.setSleep_turns(user.getSleep_turns() - 1);
             if (user.getSleep_turns() != 0)
             {
-                eventQueue.add(new TimerTask() {
-                    @Override
-                    public void run() {
-                        System.out.println(user.getName() + " sleep turns left: " + user.getSleep_turns());
-                        textArea.setText(user.getName() + " is asleep!");
-                    }
-                });
+                BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is asleep!");
                 return false;
             }
             else
@@ -180,14 +158,8 @@ public class UseMove {
             });
         }
         
-        // Add event to describe the move
-        eventQueue.add(new TimerTask() {
-            @Override
-            public void run() {
-                System.out.println("BM: Describing move");
-                textArea.setText(user.getName() + " used " + userMove.getName() + "!");
-            }
-        });
+        // "Pokemon used moved!"
+        BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " used " + userMove.getName() + "!");
         
         // Accuracy Check
         chance = (user.getBattle_accuracy() * userMove.getAccuracy() * target.getBattle_evasion() );
@@ -199,12 +171,7 @@ public class UseMove {
 
         if (result > chance) 
         {
-            eventQueue.add(new TimerTask() {
-                @Override
-                public void run() {
-                    textArea.setText("The move missed!");
-                }
-            });
+            BattleEvents.addGenericEvent(eventQueue, textArea, "The move missed!");
             return;
         }
         
@@ -231,13 +198,7 @@ public class UseMove {
         }
         
         if (typeMultiplier == 0) {
-            eventQueue.add(new TimerTask() {
-                @Override
-                public void run() {
-                    System.out.println("BM: Describing damage multiplier");
-                    textArea.setText("The move had no effect");
-                }
-            });
+            BattleEvents.addGenericEvent(eventQueue, textArea, "The move had no effect");
             return;
         }
         
@@ -253,14 +214,7 @@ public class UseMove {
                     targetHPBar.setValue(target.getCurrent_hp());
                 }
             });
-            eventQueue.add(new TimerTask() {
-                @Override
-                public void run() {
-                    // IMPORTANT - TARGET RECIEVES THE DAMAGE HERE
-                    System.out.println("BM: Updating hp display");
-                    textArea.setText("Its a One Hit KO!");
-                }
-            });
+            BattleEvents.addGenericEvent(eventQueue, textArea, "Its a One Hit KO!");
             return;
         }
         
@@ -294,13 +248,7 @@ public class UseMove {
                         }
                     });
                 }
-                eventQueue.add(new TimerTask() {
-                    @Override
-                    public void run() {
-                        System.out.println("BM: Describing times hit");
-                        textArea.setText("It hit " + Integer.toString(timeHit) + " time(s)!");
-                    }
-                });
+                BattleEvents.addGenericEvent(eventQueue, textArea, "It hit " + Integer.toString(timeHit) + " time(s)!");
             } else {
                 eventQueue.add(new TimerTask() {
                     @Override
@@ -328,22 +276,10 @@ public class UseMove {
             }
             // Add effect multiplier effect
             if (typeMultiplier < 1.0 && typeMultiplier > 0) {
-                eventQueue.add(new TimerTask() {
-                    @Override
-                    public void run() {
-                        System.out.println("BM: Describing damage multiplier");
-                        textArea.setText("Its not very effective...");
-                    }
-                });
+                BattleEvents.addGenericEvent(eventQueue, textArea, "Its not very effective...");
             }
             if (typeMultiplier > 1.0) {
-                eventQueue.add(new TimerTask() {
-                    @Override
-                    public void run() {
-                        System.out.println("BM: Describing damage multiplier");
-                        textArea.setText("Its super effective!");
-                    }
-                });
+                BattleEvents.addGenericEvent(eventQueue, textArea, "Its super effective!");
             }
         }
         
@@ -406,13 +342,7 @@ public class UseMove {
                     }
                 }
             });
-            eventQueue.add(new TimerTask() {
-                @Override
-                public void run() {
-                    System.out.println("BM: Describing healing event");
-                    textArea.setText(user.getName() + " healed some HP!");
-                }
-            });
+            BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " healed some HP!");
         }
         
         // Add recoil event
@@ -435,13 +365,7 @@ public class UseMove {
                     }
                 }
             });
-            eventQueue.add(new TimerTask() {
-                @Override
-                public void run() {
-                    System.out.println("BM: Describing recoil");
-                    textArea.setText(user.getName() + " took damage in recoil!");
-                }
-            });
+            BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " took damage in recoil!");
         }
         
         // Add statistic change event
@@ -468,49 +392,19 @@ public class UseMove {
             if (!(target.getBattle_status() == null))
             {
                 if (target.getBattle_status().equals("PAR")) {
-                    eventQueue.add(new TimerTask() {
-                        @Override
-                        public void run() {
-                            System.out.println("BM: Status already on");
-                            textArea.setText("The target is already paralyzed");
-                        }
-                    });
+                    BattleEvents.addGenericEvent(eventQueue, textArea, "The target is already paralyzed!");
                 }
                 if (target.getBattle_status().equals("PSN")) {
-                    eventQueue.add(new TimerTask() {
-                        @Override
-                        public void run() {
-                            System.out.println("BM: Status already on");
-                            textArea.setText("The target is already poisoned");
-                        }
-                    });
+                    BattleEvents.addGenericEvent(eventQueue, textArea, "The target is already poisoned!");
                 }
                 if (target.getBattle_status().equals("BRN")) {
-                        eventQueue.add(new TimerTask() {
-                        @Override
-                        public void run() {
-                            System.out.println("BM: Status already on");
-                            textArea.setText("The target is already burned");
-                        }
-                    });
+                    BattleEvents.addGenericEvent(eventQueue, textArea, "The target is already burned!");
                 }
                 if (target.getBattle_status().equals("SLP")) {
-                    eventQueue.add(new TimerTask() {
-                        @Override
-                        public void run() {
-                            System.out.println("BM: Status already on");
-                            textArea.setText("The target is already asleep");
-                        }
-                    });
+                    BattleEvents.addGenericEvent(eventQueue, textArea, "The target is already asleep!");
                 }
                 if (target.getBattle_status().equals("FRZ")) {
-                    eventQueue.add(new TimerTask() {
-                        @Override
-                        public void run() {
-                            System.out.println("BM: Status already on");
-                            textArea.setText("The target is already frozen");
-                        }
-                    });
+                    BattleEvents.addGenericEvent(eventQueue, textArea, "The target is already frozen!");
                 }
                 return;
             } else {
@@ -521,14 +415,15 @@ public class UseMove {
                     if(result < chance)
                     {
                         target.setBattle_status("PAR");
-                        eventQueue.add(new TimerTask() {
-                            @Override
-                            public void run() {
-                                targetLabels[4].setText(target.getBattle_status());
-                                targetLabels[4].setBackground(Color.yellow);
-                                textArea.setText("Enemy " + target.getName() + " was paralyzed! ");
-                            }
-                        });
+                        BattleEvents.addStatusEvent(eventQueue, textArea, "PAR", target.getName(), targetLabels);
+//                        eventQueue.add(new TimerTask() {
+//                            @Override
+//                            public void run() {
+//                                targetLabels[4].setText(target.getBattle_status());
+//                                targetLabels[4].setBackground(Color.yellow);
+//                                textArea.setText("Enemy " + target.getName() + " was paralyzed! ");
+//                            }
+//                        });
                     }
                 }
                 if (userMove instanceof ApplyPoison)
@@ -537,14 +432,7 @@ public class UseMove {
                     if (result < chance)
                     {
                         target.setBattle_status("PSN");
-                        eventQueue.add(new TimerTask() {
-                            @Override
-                            public void run() {
-                                targetLabels[4].setText(target.getBattle_status());
-                                targetLabels[4].setBackground(Color.MAGENTA);
-                                textArea.setText("Enemy " + target.getName() + " was poisoned! ");
-                            }
-                        });
+                        BattleEvents.addStatusEvent(eventQueue, textArea, "PSN", target.getName(), targetLabels);
                     }
                 }
                 if (userMove instanceof ApplyBurn)
@@ -553,14 +441,7 @@ public class UseMove {
                     if (result < chance)
                     {
                         target.setBattle_status("BRN");
-                        eventQueue.add(new TimerTask() {
-                            @Override
-                            public void run() {
-                                targetLabels[4].setText(target.getBattle_status());
-                                targetLabels[4].setBackground(Color.RED);
-                                textArea.setText("Enemy " + target.getName() + " was burned! ");
-                            }
-                        });
+                        BattleEvents.addStatusEvent(eventQueue, textArea, "BRN", target.getName(), targetLabels);
                     }
                 }
                 if (userMove instanceof ApplySleep)
@@ -570,14 +451,7 @@ public class UseMove {
                     {
                         target.setBattle_status("SLP");
                         target.setSleep_turns((int) (Math.random() * 5) + 1);
-                        eventQueue.add(new TimerTask() {
-                            @Override
-                            public void run() {
-                                targetLabels[4].setText(target.getBattle_status());
-                                targetLabels[4].setBackground(Color.GRAY);
-                                textArea.setText("Enemy " + target.getName() + " was put to sleep! ");
-                            }
-                        });
+                        BattleEvents.addStatusEvent(eventQueue, textArea, "SLP", target.getName(), targetLabels);
                     }
                 }
                 if (userMove instanceof ApplyFrozen)
@@ -586,14 +460,7 @@ public class UseMove {
                     if (result < chance)
                     {
                         target.setBattle_status("FRZ");
-                        eventQueue.add(new TimerTask() {
-                            @Override
-                            public void run() {
-                                targetLabels[4].setText(target.getBattle_status());
-                                targetLabels[4].setBackground(Color.CYAN);
-                                textArea.setText("Enemy " + target.getName() + " was frozen solid! ");
-                            }
-                        });
+                        BattleEvents.addStatusEvent(eventQueue, textArea, "FRZ", target.getName(), targetLabels);
                     }
                 }
             }

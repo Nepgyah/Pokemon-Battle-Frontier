@@ -5,7 +5,7 @@ import move.modifiers.*;
 import move.status_effect.*;
 import types.*;
 
-public class M_000_Test extends Move implements PhysicalAttack, Normal, OneHitKO {
+public class M_000_Test extends Move implements PhysicalAttack, Normal, ApplyFrozen{
 
     private static final long serialVersionUID = 1L;
 
@@ -17,6 +17,11 @@ public class M_000_Test extends Move implements PhysicalAttack, Normal, OneHitKO
     public M_000_Test copy()
     {
         return new M_000_Test();
+    }
+
+    @Override
+    public double getFrozenChance() {
+        return 1;
     }
     
 

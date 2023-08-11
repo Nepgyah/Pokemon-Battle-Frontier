@@ -1,11 +1,11 @@
 package client;
 
+import battle.modes.singlebattle.SingleBattleWindow;
 import java.awt.CardLayout;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import java.awt.*;
 import pokemon.Pokemon;
-import battle.gamemodes.*;
 import trainer.Trainer;
 
 public class Client extends javax.swing.JFrame {

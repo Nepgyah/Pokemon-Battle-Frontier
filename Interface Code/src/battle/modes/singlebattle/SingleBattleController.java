@@ -74,8 +74,8 @@ public class SingleBattleController{
         this.bagButton = controlButtons[2];
 
         
-        Swaps.setPokemonLabels(leftPokemon, leftLabels, leftHPBar);
-        Swaps.setPokemonLabels(rightPokemon, rightLabels, rightHPBar);
+        Swaps.setPokemonLabels(leftPokemon, true, leftLabels, leftHPBar);
+        Swaps.setPokemonLabels(rightPokemon, false, rightLabels, rightHPBar);
         
         System.out.println("CONTROL CONSOLE: Initialization complete");
     }
@@ -92,7 +92,7 @@ public class SingleBattleController{
             Swaps.swapPokemon(leftTrainer, leftNextPokemon);
             leftPokemon = leftTrainer.getParty().get(0);
         
-            Swaps.addSwapEvent(eventQueue, leftPrevName, leftPokemon, leftLabels, leftHPBar, textArea);
+            Swaps.addSwapEvent(eventQueue, leftPrevName, leftPokemon, true, leftLabels, leftHPBar, textArea);
             
             leftPokemonPanel.setPokemonButtons();
             leftMovePanel.setMoveButtons(leftPokemon.getMoveset());
@@ -102,7 +102,7 @@ public class SingleBattleController{
             Swaps.swapPokemon(rightTrainer, rightNextPokemon);
             rightPokemon = rightTrainer.getParty().get(0);
             
-            Swaps.addSwapEvent(eventQueue, rightPrevName, rightPokemon, rightLabels, rightHPBar, textArea);
+            Swaps.addSwapEvent(eventQueue, rightPrevName, rightPokemon, false,rightLabels, rightHPBar, textArea);
             
             rightPokemonPanel.setPokemonButtons();
             rightMovePanel.setMoveButtons(rightPokemon.getMoveset());

@@ -109,9 +109,20 @@ public abstract class Pokemon implements Serializable{
         }
     }
 
-    public String getIconPath() {
-        String path = "pokedexPhotos/" + Integer.toString(this.pokedex_number) + ".png";
-        return path;
+    // Icons
+//    public String getIconPath() {
+//        String path = "resources/pokedexPhotos/" + Integer.toString(this.pokedex_number) + "_front.png";
+//        return path;
+//    }
+    
+    public ImageIcon getFrontIcon() {
+        ImageIcon icon = new ImageIcon(new ImageIcon("resources/pokedexPhotos/front/" + Integer.toString(this.pokedex_number) + ".png").getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
+        return icon;
+    }
+    
+    public ImageIcon getBackIcon() {
+        ImageIcon icon = new ImageIcon(new ImageIcon("resources/pokedexPhotos/back/" + Integer.toString(this.pokedex_number) + ".png").getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
+        return icon;
     }
     /* =============================
      * MOVE RELATED MEMBER FUNCTIONS
@@ -275,10 +286,6 @@ public abstract class Pokemon implements Serializable{
      * =====================
      */
 
-    public ImageIcon getIcon() {
-        ImageIcon icon = new ImageIcon(new ImageIcon(this.getIconPath()).getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
-        return icon;
-    }
     public void setLevel(int level)
     {
         this.level = level;

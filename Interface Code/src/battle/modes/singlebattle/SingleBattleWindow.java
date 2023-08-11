@@ -4,6 +4,8 @@ import battle.gui.utils.waitingPanel;
 import battle.gui.utils.pokemonPanel;
 import battle.gui.utils.bagPanel;
 import java.awt.CardLayout;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import trainer.Trainer;
@@ -48,6 +50,9 @@ public class SingleBattleWindow extends javax.swing.JFrame {
                 leftHPBar, rightHPBar,
                 controlButtons
         );
+        
+       
+        backgroundLabel.setIcon(new ImageIcon(new ImageIcon("resources/battleScenes/grassfield.png").getImage().getScaledInstance(930, 394, Image.SCALE_DEFAULT)));
         
         leftPokemonPanel = new pokemonPanel(detailPanel, leftTrainer, battleController);
         rightPokemonPanel = new pokemonPanel(detailPanel, rightTrainer, battleController);
@@ -103,6 +108,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         leftStatus = new javax.swing.JLabel();
         leftIcon = new javax.swing.JLabel();
         rightIcon = new javax.swing.JLabel();
+        backgroundLabel = new javax.swing.JLabel();
         eventPanel = new javax.swing.JScrollPane();
         eventTextArea = new javax.swing.JTextArea();
         detailPanel = new javax.swing.JPanel();
@@ -265,6 +271,8 @@ public class SingleBattleWindow extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        backgroundLabel.setText("\"\"");
+
         javax.swing.GroupLayout battlePanelLayout = new javax.swing.GroupLayout(battlePanel);
         battlePanel.setLayout(battlePanelLayout);
         battlePanelLayout.setHorizontalGroup(
@@ -276,7 +284,8 @@ public class SingleBattleWindow extends javax.swing.JFrame {
                         .addComponent(rightPokemonLabels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, battlePanelLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(backgroundLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(leftIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(133, 133, 133)))
                 .addGroup(battlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -289,18 +298,21 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         battlePanelLayout.setVerticalGroup(
             battlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(battlePanelLayout.createSequentialGroup()
-                .addGroup(battlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(18, 18, 18)
+                .addComponent(rightIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(leftPokemonLabels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(battlePanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(rightPokemonLabels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(battlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(battlePanelLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(rightPokemonLabels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(63, 63, 63)
                         .addComponent(leftIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(battlePanelLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(rightIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(leftPokemonLabels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, battlePanelLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(backgroundLabel))))
         );
 
         eventPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 14), new java.awt.Color(0, 0, 0))); // NOI18N
@@ -445,6 +457,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel backgroundLabel;
     private javax.swing.JButton bagButton;
     private javax.swing.JPanel battlePanel;
     private javax.swing.JPanel buttonPanel;

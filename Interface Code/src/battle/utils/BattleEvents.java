@@ -93,7 +93,7 @@ public class BattleEvents {
         eventQueue.add(new TimerTask() {
             @Override
             public void run() {
-                iconLabel.setIcon(pokemon.getIcon());
+                iconLabel.setIcon(pokemon.getFrontIcon());
             }
         });
     }

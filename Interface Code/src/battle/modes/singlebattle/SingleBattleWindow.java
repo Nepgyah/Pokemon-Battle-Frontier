@@ -4,12 +4,12 @@ import battle.gui.utils.waitingPanel;
 import battle.gui.utils.pokemonPanel;
 import battle.gui.utils.bagPanel;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import trainer.Trainer;
+import utilities.PokeColors;
 
 public class SingleBattleWindow extends javax.swing.JFrame {
 

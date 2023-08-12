@@ -3,7 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/battle/helpers/battleMechanics.java</file>
+            <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/battle/modes/singlebattle/SingleBattleWindow.java</file>
+            <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/battle/utils/BattleEvents.java</file>
+            <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/pokemon/Pokemon.java</file>
+            <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/battle/utils/Swaps.java</file>
+            <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/battle/modes/singlebattle/SingleBattleController.java</file>
         </group>
     </open-files>
 </project-private>

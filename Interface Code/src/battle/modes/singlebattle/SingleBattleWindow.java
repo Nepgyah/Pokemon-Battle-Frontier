@@ -49,7 +49,8 @@ public class SingleBattleWindow extends javax.swing.JFrame {
                 eventTextArea,
                 leftLabels, rightLabels,
                 leftHPBar, rightHPBar,
-                controlButtons
+                controlButtons,
+                detailPanel
         );
         
         JLabel backgroundLabel = new JLabel();

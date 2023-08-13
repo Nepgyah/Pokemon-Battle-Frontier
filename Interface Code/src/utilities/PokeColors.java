@@ -30,4 +30,10 @@ public class PokeColors {
     public static Color pokeLabelBG = new Color(106,109,88);
     public static Color greenHP = new Color(50,203,60);
     public static Color yellowHP = new Color(255,219,74);
+    public static Color redHP = new Color(205,48,47);
+    
+    // Battle control colors
+    public static Color fightButton = new Color(205,48,47);
+    public static Color pokemonButton  = new Color(81,157,45);
+    public static Color bagButton = new Color(201,147,51);
 }

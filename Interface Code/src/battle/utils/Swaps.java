@@ -8,6 +8,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import pokemon.Pokemon;
 import trainer.Trainer;
+import utilities.PokeColors;
 
 public class Swaps {
     
@@ -34,6 +35,21 @@ public class Swaps {
         });
     }
     
+    public static void addPokemonReplaceEvent(ArrayList<TimerTask> eventQueue, String trainerName, Pokemon pokemon, Boolean isLeftSide, JLabel [] labelArray, JProgressBar hpBar, JTextArea textArea) {
+        eventQueue.add(new TimerTask() {
+            @Override
+            public void run() {
+                textArea.setText(trainerName + " sent out " + pokemon.getName() + "!");
+            }
+        });
+        eventQueue.add(new TimerTask() {
+            @Override
+            public void run() {
+                setPokemonLabels(pokemon,isLeftSide, labelArray, hpBar);
+            }
+        });
+    }
+    
     public static void setPokemonLabels(Pokemon pokemon, Boolean isLeftSide, JLabel [] labelArray, JProgressBar hpBar) {
         labelArray[0].setText(pokemon.getName());
         labelArray[1].setText(Integer.toString(pokemon.getLevel()));
@@ -47,5 +63,13 @@ public class Swaps {
         }
         hpBar.setMaximum(pokemon.getCurrent_max_hp());
         hpBar.setValue(pokemon.getCurrent_hp());
+        if (pokemon.getCurrent_hp() > pokemon.getCurrent_max_hp() / 2) {
+            hpBar.setForeground(PokeColors.greenHP);
+        } else if (pokemon.getCurrent_hp() > pokemon.getCurrent_max_hp() / 4) {
+            hpBar.setForeground(PokeColors.yellowHP);
+        } else {
+            hpBar.setForeground(PokeColors.redHP);
+        }
+        
     }
 }

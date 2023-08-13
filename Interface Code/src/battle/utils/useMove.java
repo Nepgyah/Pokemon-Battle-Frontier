@@ -15,7 +15,7 @@ public class UseMove {
     final static int MAX_STAT_CHANGE = 2;
     
     public static void displayBattleStatsToConsole(Pokemon pokemon) {
-        System.out.println("Turn report for: " + pokemon.getName());
+        System.out.println("Turn report for: " + pokemon.getName() + " Recharging? -> " + pokemon.isRecharging());
         System.out.println("Attack: " + pokemon.getBattle_attack() + " (" + pokemon.getCurrent_attack()+ ")");
         System.out.println("Defense: " + pokemon.getBattle_defense() + " (" + pokemon.getCurrent_defense()+ ")");
         System.out.println("Special Attack: " + pokemon.getBattle_special_attack() + " (" + pokemon.getCurrent_special_attack()+ ")");
@@ -126,18 +126,19 @@ public class UseMove {
             JProgressBar userHPBar, JProgressBar targetHPBar,
             ArrayList<TimerTask> eventQueue,
             JTextArea textArea) {
+        // Pre move check
+         
         if (canUseMove(user, userLabels, userHPBar,  eventQueue, textArea) == false) return;
         double chance;
         double result;
-        // TODO: Pre move check
-        
-       // Bring back icon on 2nd half two turn
-        if (userMove instanceof TwoTurn) {
-            BattleEvents.addIconReturnEvent(eventQueue, user, userLabels[5]);
-        }
         
         // "Pokemon used moved!"
         BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " used " + userMove.getName() + "!");
+        
+        // Bring back icon on 2nd half two turn
+        if (userMove instanceof TwoTurn) {
+            BattleEvents.addIconReturnEvent(eventQueue, user, userLabels[5]);
+        }
         
         // Accuracy Check
         chance = (user.getBattle_accuracy() * userMove.getAccuracy() * target.getBattle_evasion() );
@@ -181,6 +182,7 @@ public class UseMove {
                     targetHPBar.setValue(target.getCurrent_hp());
                 }
             });
+            target.setFainted(true);
             BattleEvents.addGenericEvent(eventQueue, textArea, "Its a One Hit KO!");
             return;
         }
@@ -202,13 +204,6 @@ public class UseMove {
             }
             if (typeMultiplier > 1.0) {
                 BattleEvents.addGenericEvent(eventQueue, textArea, "Its super effective!");
-            }
-        }
-        
-        if (userMove instanceof ApplyFlinch) {
-            int chance_to_be_flinch = (int) (Math.random() * 10);
-            if ( chance_to_be_flinch <= 3 ) {
-                target.setFlinched(true);
             }
         }
         
@@ -259,12 +254,24 @@ public class UseMove {
                 StatisticChanges.applyToUser(user, userMove, eventQueue, textArea);
             }
         }
+
+        if(target.getCurrent_hp() - damage <= 0)
+        {
+            System.out.println("BM: Target fainted mid turn!");
+            target.setFainted(true);
+            return;
+        }
         
-//        if(target.getCurrent_hp() <= 0)
-//        {
-//            target.setFainted();
-//            return;
-//        }
+        if (userMove instanceof ApplyFlinch) {
+            int chance_to_be_flinch = (int) (Math.random() * 10);
+            if ( chance_to_be_flinch <= 3 ) {
+                target.setFlinched(true);
+            }
+        }
+        
+        if (userMove instanceof Recharge) {
+            user.setRecharging(true);
+        }
         
         // Add status change effect
         if (userMove instanceof ApplyParalyze || userMove instanceof ApplyPoison || 

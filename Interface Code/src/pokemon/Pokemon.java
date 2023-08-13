@@ -78,7 +78,7 @@ public abstract class Pokemon implements Serializable{
     protected boolean recharging;					
     protected boolean inTwoTurn;					
     protected int sleep_turns = 0;		
-    protected boolean isLeeched;
+    protected boolean leeched;
     protected String battle_status = null;			// Used to display status in battle 
 
     /**
@@ -343,7 +343,7 @@ public abstract class Pokemon implements Serializable{
     public void takeDamage(int amount)
     {
         this.setCurrent_hp(this.getCurrent_hp() - amount);
-        if (this.current_hp < 0) {
+        if (this.getCurrent_hp() <= 0) {
             this.current_hp = 0;
             this.fainted = true;
         }
@@ -359,12 +359,6 @@ public abstract class Pokemon implements Serializable{
         {
             this.setCurrent_hp(this.getCurrent_hp() + amount);
         }
-    }
-
-    public void setFainted()
-    {
-        this.fainted = true;
-        this.current_hp = 0;
     }
 
     // Setters and Getters
@@ -661,7 +655,7 @@ public abstract class Pokemon implements Serializable{
     }
 
     public boolean isFainted() {
-        return fainted;
+        return this.fainted;
     }
 
     public void setFainted(boolean fainted) {
@@ -701,11 +695,11 @@ public abstract class Pokemon implements Serializable{
     }
 
     public boolean isLeeched() {
-        return isLeeched;
+        return leeched;
     }
 
     public void setLeeched(boolean isLeeched) {
-        this.isLeeched = isLeeched;
+        this.leeched = isLeeched;
     }
     
     

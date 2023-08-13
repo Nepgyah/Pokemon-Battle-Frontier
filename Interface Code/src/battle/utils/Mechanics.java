@@ -10,7 +10,8 @@ import move.Move;
 import move.modifiers.*;
 import pokemon.Pokemon;
 import move.status_effect.*;
-public class UseMove {
+import trainer.Trainer;
+public class Mechanics {
     
     final static int MAX_STAT_CHANGE = 2;
     
@@ -25,6 +26,24 @@ public class UseMove {
         System.out.println("Curretn Evasion Modifier: " + pokemon.getBattle_evasion());
     }
     
+    public static void postMoveEffects() {
+        System.out.println("Checking effects");
+    }
+    
+    public static boolean didLose(Trainer trainer) {
+        int count = 0;
+        for (Pokemon pokemon : trainer.getParty()) {
+            if (pokemon.isFainted()) {
+                count++;
+            }
+        }
+        System.out.println("Mechanics.java checking for loss. Fainted Pokemon: " + count + " / " + trainer.getParty().size());
+        if (count == trainer.getParty().size()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     public static int calcDamage(int level, int attack, int defense, int power, double type_bonus) {
         /* Calculate damage WIP
          *  Formula ((((2 * Level / 5 + 2) * AttackStat * AttackPower / DefenseStat) / 50) + 2) * STAB * Weakness/Resistance * RandomNumber / 100 ) - From wiki

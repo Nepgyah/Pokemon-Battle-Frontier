@@ -1,6 +1,6 @@
 package battle.utils;
 
-import static battle.utils.UseMove.MAX_STAT_CHANGE;
+import static battle.utils.Mechanics.MAX_STAT_CHANGE;
 import java.util.ArrayList;
 import java.util.TimerTask;
 import javax.swing.JTextArea;

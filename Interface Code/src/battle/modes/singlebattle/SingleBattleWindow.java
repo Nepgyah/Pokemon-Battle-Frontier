@@ -7,21 +7,26 @@ import java.awt.CardLayout;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import trainer.Trainer;
 import utilities.PokeColors;
 
 public class SingleBattleWindow extends javax.swing.JFrame {
 
+    JFrame clientFrame;
+    JPanel navPanel;
     CardLayout controlCard;
     SingleBattleController battleController;
     pokemonPanel leftPokemonPanel, rightPokemonPanel;
     SingleBattleMovePanel leftMovePanel;
     SingleBattleMovePanel rightMovePanel;
     
-    public SingleBattleWindow(Trainer leftTrainer, Trainer rightTrainer) {
+    public SingleBattleWindow(JFrame clientFrame, JPanel navPanel, Trainer leftTrainer, Trainer rightTrainer) {
         initComponents();
-        
+        this.clientFrame = clientFrame;
+        this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
         JLabel [] leftLabels = new JLabel[]{
             leftName, 
             leftLevelValue,
@@ -44,6 +49,9 @@ public class SingleBattleWindow extends javax.swing.JFrame {
             bagButton
         };
         battleController = new SingleBattleController(
+                this,
+                clientFrame,
+                navPanel,
                 leftTrainer, rightTrainer,
                 true,
                 eventTextArea,

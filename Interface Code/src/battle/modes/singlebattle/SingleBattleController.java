@@ -15,6 +15,7 @@ import javax.swing.JProgressBar;
 import move.modifiers.TwoTurn;
 import java.awt.CardLayout;
 import java.awt.Color;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class SingleBattleController{
@@ -33,10 +34,11 @@ public class SingleBattleController{
             rightSwap = false,
             leftPlayerForfeit, 
             rightPlayerForfeit, 
-            leftWins, 
-            rightWins, 
+            leftWins = false, 
+            rightWins = false, 
             showConsole;
     
+    JFrame battleFrame, clientFrame;
     JLabel [] leftLabels, rightLabels;
     JTextArea textArea;
     JProgressBar leftHPBar, rightHPBar;
@@ -45,10 +47,11 @@ public class SingleBattleController{
     SingleBattleMovePanel leftMovePanel;
     SingleBattleMovePanel rightMovePanel;
     
-    JPanel detailPanel;
-    CardLayout card;
+    JPanel detailPanel, navPanel;
+    CardLayout battleCard, navCard;
     
-    public SingleBattleController(Trainer leftTrainer, Trainer rightTrainer, 
+    public SingleBattleController(JFrame battleFrame, JFrame clientFrame, JPanel navPanel,
+            Trainer leftTrainer, Trainer rightTrainer, 
             boolean showConsole, 
             JTextArea textArea, 
             JLabel [] leftLabels, JLabel [] rightLabels,
@@ -60,6 +63,8 @@ public class SingleBattleController{
         System.out.println("CONTROL CONSOLE: Initializing battle controller");
         this.timer = new Timer();
         
+        this.battleFrame = battleFrame;
+        this.clientFrame = clientFrame;
         this.leftTrainer = leftTrainer;
         this.rightTrainer = rightTrainer;
         
@@ -69,8 +74,10 @@ public class SingleBattleController{
         
         // GUI Window variables
         this.detailPanel = panel;
-        this.card = (CardLayout) detailPanel.getLayout();
+        this.navPanel = navPanel;
         
+        this.battleCard = (CardLayout) detailPanel.getLayout();
+        this.navCard = (CardLayout) navPanel.getLayout();
         this.textArea = textArea;
         this.leftLabels = leftLabels;
         this.rightLabels = rightLabels;
@@ -92,7 +99,7 @@ public class SingleBattleController{
     public void runTurn() {
         
         disableControls();
-        card.show(detailPanel, "waitingPanel");
+        battleCard.show(detailPanel, "waitingPanel");
         if (showConsole) {
             System.out.println("CONTROL CONSOLE: Running turn");
 //            consoleFlags();
@@ -130,7 +137,7 @@ public class SingleBattleController{
                     BattleEvents.addIconRemoveEvent(eventQueue, rightLabels[5] );
                     rightPokemon.setInTwoTurn(true);
                 } else {
-                    UseMove.useMove(
+                    Mechanics.useMove(
                     rightPokemon, leftPokemon,
                         rightMove, leftMove,
                         rightLabels, leftLabels,
@@ -144,10 +151,23 @@ public class SingleBattleController{
             }
             // Left Turn + Check Fainted
             if (leftPokemon.isFainted() == true) {
-                // TODO: Mid turn swap mechanic here
-                leftMove = null;
                 BattleEvents.addGenericEvent(eventQueue, textArea, leftPokemon.getName() + " fainted!");
                 BattleEvents.addIconRemoveEvent(eventQueue, leftLabels[5]);
+                // Check loss condition
+                if (Mechanics.didLose(leftTrainer)) {
+                    rightWins = true;
+                    eventQueue.add(new TimerTask() {
+                        @Override
+                        public void run() {
+                            textArea.setText("...");
+                            disableControls();
+                        }
+                    });
+                    BattleEvents.addGenericEvent(eventQueue, textArea, leftTrainer.getName() + " is out of usable pokemon...");
+                    BattleEvents.addGenericEvent(eventQueue, textArea, rightTrainer.getName() + " Wins!");
+                } else {
+                    leftMove = null;
+                }
             } else if (leftPokemon.isRecharging()) {
                 BattleEvents.addGenericEvent(eventQueue, textArea, leftPokemon.getName() + " is recharging. It can't move!");
                 leftPokemon.setRecharging(false);
@@ -163,7 +183,7 @@ public class SingleBattleController{
                     });
                     leftPokemon.setInTwoTurn(true);
                 } else {
-                    UseMove.useMove(
+                    Mechanics.useMove(
                         leftPokemon, rightPokemon,
                         leftMove, rightMove,
                         leftLabels, rightLabels,
@@ -195,7 +215,7 @@ public class SingleBattleController{
                     });
                     leftPokemon.setInTwoTurn(true);
                 } else {
-                    UseMove.useMove(
+                    Mechanics.useMove(
                         leftPokemon, rightPokemon,
                     leftMove, rightMove,
                             leftLabels, rightLabels,
@@ -208,10 +228,22 @@ public class SingleBattleController{
                 }            
             }
             if (rightPokemon.isFainted() == true) {
-                // TODO: Mid turn swap mechanic here
-                rightMove = null;
                 BattleEvents.addGenericEvent(eventQueue, textArea, rightPokemon.getName() + " fainted!");
                 BattleEvents.addIconRemoveEvent(eventQueue, rightLabels[5]);
+                if (Mechanics.didLose(rightTrainer)) {
+                    leftWins = true;
+                    eventQueue.add(new TimerTask() {
+                        @Override
+                        public void run() {
+                            textArea.setText("...");
+                            disableControls();
+                        }
+                    });
+                    BattleEvents.addGenericEvent(eventQueue, textArea, rightTrainer.getName() + " is out of usable pokemon...");
+                    BattleEvents.addGenericEvent(eventQueue, textArea, leftTrainer.getName() + " Wins!");
+                } else {
+                    rightMove = null;
+                }
             } else if (rightPokemon.isRecharging()) {
                 BattleEvents.addGenericEvent(eventQueue, textArea, rightPokemon.getName() + " is recharging. It can't move!");
                 rightPokemon.setRecharging(false);
@@ -226,7 +258,7 @@ public class SingleBattleController{
                     });
                     rightPokemon.setInTwoTurn(true);
                 } else {
-                    UseMove.useMove(
+                    Mechanics.useMove(
                     rightPokemon, leftPokemon,
                  rightMove, leftMove,
                rightLabels, leftLabels,
@@ -240,10 +272,8 @@ public class SingleBattleController{
             }
         }
         
-        BattleEvents.addGenericEvent(eventQueue, textArea, "End of Turn!");
         
-        // TODO: Add swap here
-        if (leftPokemon.isFainted()) {
+        if (leftPokemon.isFainted() && rightWins == false) {
             eventQueue.add(new TimerTask() {
                 @Override
                 public void run() {
@@ -251,10 +281,10 @@ public class SingleBattleController{
                     leftTrainerTurn = true;
                     System.out.println("LEFT TURN? " + leftTrainerTurn);
                     textArea.setText("Swap out " + leftPokemon.getName());
-                    card.show(detailPanel, "leftPokemonPanel");
+                    battleCard.show(detailPanel, "leftPokemonPanel");
                 }
             });
-        } else if (rightPokemon.isFainted()) {
+        } else if (rightPokemon.isFainted() && leftWins == false) {
             eventQueue.add(new TimerTask() {
                 @Override
                 public void run() {
@@ -262,19 +292,37 @@ public class SingleBattleController{
                     leftTrainerTurn = false;
                     System.out.println("LEFT TURN? " + leftTrainerTurn);
                     textArea.setText("Swap out " + rightPokemon.getName());
-                    card.show(detailPanel, "rightPokemonPanel");
+                    battleCard.show(detailPanel, "rightPokemonPanel");
                 }
             });
-            
+            // WIN CONDITION
+        } else if (leftWins || rightWins) {
+            System.out.println("GAME DONE!");
+            // Process for exiting game
+            BattleEvents.addGenericEvent(eventQueue, textArea, "Game Closing!");
+            eventQueue.add(new TimerTask() {
+                @Override
+                public void run() {
+                    battleFrame.dispose();
+                }
+            });
+            eventQueue.add(new TimerTask() {
+                @Override
+                public void run() {
+                    clientFrame.setState(JFrame.NORMAL);
+                    navCard.show(navPanel, "navCard");
+                }
+            });
         } else {
+            BattleEvents.addGenericEvent(eventQueue, textArea, "End of Turn!");
             eventQueue.add(new TimerTask() {
                 @Override
                 public void run() {
                     if (showConsole) {
                         System.out.println("Left Trainer");
-                        UseMove.displayBattleStatsToConsole(leftPokemon);
+                        Mechanics.displayBattleStatsToConsole(leftPokemon);
                         System.out.println("\nRight Trainer");
-                        UseMove.displayBattleStatsToConsole(rightPokemon);
+                        Mechanics.displayBattleStatsToConsole(rightPokemon);
                     }
                     // Both are either recharging or in two turn (Right doesent need a check since left make their turn first)
                     if ( (leftPokemon.isInTwoTurn() || leftPokemon.isRecharging() ) && ( rightPokemon.isInTwoTurn() || rightPokemon.isRecharging() ) ) {
@@ -327,7 +375,7 @@ public class SingleBattleController{
                 runTurn();
             } else {
                 leftTrainerTurn = false;
-                card.show(detailPanel, "waitingPanel");
+                battleCard.show(detailPanel, "waitingPanel");
                 textArea.setText("What will " + rightPokemon.getName() + " do?");
             }
         } else {
@@ -349,7 +397,7 @@ public class SingleBattleController{
             }
             // Swapping mid turn
             if (leftPokemon.isFainted()) {
-                card.show(detailPanel, "waitingPanel");
+                battleCard.show(detailPanel, "waitingPanel");
                 System.out.println("LEFT MAKING SWAP FOR FAINTED POKEMON!");
                 Swaps.swapPokemon(leftTrainer, pos);
                 leftPokemon = leftTrainer.getParty().get(0);
@@ -378,7 +426,7 @@ public class SingleBattleController{
                 textArea.setText("What will " + rightPokemon.getName() + " do?");
                 leftSwap = true;
                 leftTrainerTurn = false;
-                card.show(detailPanel, "waitingPanel");
+                battleCard.show(detailPanel, "waitingPanel");
             }
         } else {
             // Swapping mid turn
@@ -403,7 +451,7 @@ public class SingleBattleController{
                 }
                 eventQueue.clear();
             } else {
-            card.show(detailPanel, "waitingPanel");
+            battleCard.show(detailPanel, "waitingPanel");
             rightNextPokemon = pos;
             System.out.println("CONTROL CONSOLE: " + rightTrainer.getName() + " is swapping " + rightPokemon.getName() + " for " + rightTrainer.getParty().get(pos).getName());
             rightSwap = true;

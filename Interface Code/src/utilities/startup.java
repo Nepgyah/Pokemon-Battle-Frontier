@@ -78,7 +78,7 @@ public class startup {
         Trainer gary = new Trainer("Gary");
         
         gary.addToParty(pokedex.get(4).copy());
-        gary.addToParty(pokedex.get(5).copy());
+//        gary.addToParty(pokedex.get(5).copy());
         
         for(Pokemon pokemon : gary.getParty())
         {

@@ -78,7 +78,7 @@ public abstract class Pokemon implements Serializable{
     protected boolean recharging;					
     protected boolean inTwoTurn;					
     protected int sleep_turns = 0;		
-    protected boolean isLeeched;
+    protected boolean leeched;
     protected String battle_status = null;			// Used to display status in battle 
 
     /**
@@ -109,9 +109,20 @@ public abstract class Pokemon implements Serializable{
         }
     }
 
-    public String getIconPath() {
-        String path = "pokedexPhotos/" + Integer.toString(this.pokedex_number) + ".png";
-        return path;
+    // Icons
+//    public String getIconPath() {
+//        String path = "resources/pokedexPhotos/" + Integer.toString(this.pokedex_number) + "_front.png";
+//        return path;
+//    }
+    
+    public ImageIcon getFrontIcon() {
+        ImageIcon icon = new ImageIcon(new ImageIcon("resources/pokedexPhotos/front/" + Integer.toString(this.pokedex_number) + ".png").getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
+        return icon;
+    }
+    
+    public ImageIcon getBackIcon() {
+        ImageIcon icon = new ImageIcon(new ImageIcon("resources/pokedexPhotos/back/" + Integer.toString(this.pokedex_number) + ".png").getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
+        return icon;
     }
     /* =============================
      * MOVE RELATED MEMBER FUNCTIONS
@@ -275,10 +286,6 @@ public abstract class Pokemon implements Serializable{
      * =====================
      */
 
-    public ImageIcon getIcon() {
-        ImageIcon icon = new ImageIcon(new ImageIcon(this.getIconPath()).getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
-        return icon;
-    }
     public void setLevel(int level)
     {
         this.level = level;
@@ -336,7 +343,7 @@ public abstract class Pokemon implements Serializable{
     public void takeDamage(int amount)
     {
         this.setCurrent_hp(this.getCurrent_hp() - amount);
-        if (this.current_hp < 0) {
+        if (this.getCurrent_hp() <= 0) {
             this.current_hp = 0;
             this.fainted = true;
         }
@@ -352,12 +359,6 @@ public abstract class Pokemon implements Serializable{
         {
             this.setCurrent_hp(this.getCurrent_hp() + amount);
         }
-    }
-
-    public void setFainted()
-    {
-        this.fainted = true;
-        this.current_hp = 0;
     }
 
     // Setters and Getters
@@ -654,7 +655,7 @@ public abstract class Pokemon implements Serializable{
     }
 
     public boolean isFainted() {
-        return fainted;
+        return this.fainted;
     }
 
     public void setFainted(boolean fainted) {
@@ -694,11 +695,11 @@ public abstract class Pokemon implements Serializable{
     }
 
     public boolean isLeeched() {
-        return isLeeched;
+        return leeched;
     }
 
     public void setLeeched(boolean isLeeched) {
-        this.isLeeched = isLeeched;
+        this.leeched = isLeeched;
     }
     
     

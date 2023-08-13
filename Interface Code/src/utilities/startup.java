@@ -19,12 +19,15 @@ public class startup {
         
         pokedex.add(new P_007_Squirtle());
         
+        pokedex.add(new P_012_Butterfree());
+        
         pokedex.add(new P_016_Pidgey());
         
         pokedex.add(new P_019_Rattata());
         
         pokedex.add(new P_025_Pikachu());
         
+        pokedex.add(new P_143_Snorlax());
         return pokedex;
     }
     
@@ -54,10 +57,12 @@ public class startup {
     {
         Trainer ash = new Trainer("Ash");
 
-        ash.addToParty(pokedex.get(5).copy());
+        ash.addToParty(pokedex.get(6).copy());
         ash.addToParty(pokedex.get(0).copy());
         ash.addToParty(pokedex.get(1).copy());
         ash.addToParty(pokedex.get(2).copy());
+        ash.addToParty(pokedex.get(3).copy());
+        ash.addToParty(pokedex.get(7).copy());
         
         for(Pokemon pokemon : ash.getParty())
         {
@@ -72,8 +77,8 @@ public class startup {
     {
         Trainer gary = new Trainer("Gary");
         
-        gary.addToParty(pokedex.get(3).copy());
         gary.addToParty(pokedex.get(4).copy());
+//        gary.addToParty(pokedex.get(5).copy());
         
         for(Pokemon pokemon : gary.getParty())
         {

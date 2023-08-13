@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import pokemon.Pokemon;
+import utilities.PokeColors;
 
 public class BattleEvents {
     
@@ -32,7 +33,7 @@ public class BattleEvents {
                 targetHPBar.setValue(target.getCurrent_hp());
 
                 if (target.getCurrent_hp() < (target.getCurrent_max_hp() / 2)) {
-                    targetHPBar.setForeground(Color.yellow);
+                    targetHPBar.setForeground(PokeColors.yellowHP);
                 }
                 if (target.getCurrent_hp() < (target.getCurrent_max_hp() / 4)) {
                     targetHPBar.setForeground(Color.red);
@@ -49,11 +50,11 @@ public class BattleEvents {
                 userHP.setText(Integer.toString(user.getCurrent_hp()));
                 userHPBar.setValue(user.getCurrent_hp());
 
-                if (user.getCurrent_hp() < (user.getCurrent_max_hp() / 2)) {
-                    userHPBar.setForeground(Color.yellow);
+                if (user.getCurrent_hp() > (user.getCurrent_max_hp() / 2)) {
+                    userHPBar.setForeground(PokeColors.greenHP);
                 }
-                if (user.getCurrent_hp() < (user.getCurrent_max_hp() / 4)) {
-                    userHPBar.setForeground(Color.red);
+                if (user.getCurrent_hp() < (user.getCurrent_max_hp() / 2)) {
+                    userHPBar.setForeground(PokeColors.yellowHP);
                 }
             }
         });
@@ -93,7 +94,7 @@ public class BattleEvents {
         eventQueue.add(new TimerTask() {
             @Override
             public void run() {
-                iconLabel.setIcon(pokemon.getIcon());
+                iconLabel.setIcon(pokemon.getFrontIcon());
             }
         });
     }

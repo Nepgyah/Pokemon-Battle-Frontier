@@ -4,21 +4,29 @@ import battle.gui.utils.waitingPanel;
 import battle.gui.utils.pokemonPanel;
 import battle.gui.utils.bagPanel;
 import java.awt.CardLayout;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import trainer.Trainer;
+import utilities.PokeColors;
 
 public class SingleBattleWindow extends javax.swing.JFrame {
 
+    JFrame clientFrame;
+    JPanel navPanel;
     CardLayout controlCard;
     SingleBattleController battleController;
     pokemonPanel leftPokemonPanel, rightPokemonPanel;
     SingleBattleMovePanel leftMovePanel;
     SingleBattleMovePanel rightMovePanel;
     
-    public SingleBattleWindow(Trainer leftTrainer, Trainer rightTrainer) {
+    public SingleBattleWindow(JFrame clientFrame, JPanel navPanel, Trainer leftTrainer, Trainer rightTrainer) {
         initComponents();
-        
+        this.clientFrame = clientFrame;
+        this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
         JLabel [] leftLabels = new JLabel[]{
             leftName, 
             leftLevelValue,
@@ -41,13 +49,23 @@ public class SingleBattleWindow extends javax.swing.JFrame {
             bagButton
         };
         battleController = new SingleBattleController(
+                this,
+                clientFrame,
+                navPanel,
                 leftTrainer, rightTrainer,
                 true,
                 eventTextArea,
                 leftLabels, rightLabels,
                 leftHPBar, rightHPBar,
-                controlButtons
+                controlButtons,
+                detailPanel
         );
+        
+        JLabel backgroundLabel = new JLabel();
+        backgroundLabel.setBounds(1,1, 928,392);
+        backgroundLabel.setOpaque(true);
+        backgroundLabel.setIcon(new ImageIcon(new ImageIcon("resources/battleScenes/grassfield.png").getImage().getScaledInstance(928, 392, Image.SCALE_DEFAULT)));
+        layeredPane.add(backgroundLabel);
         
         leftPokemonPanel = new pokemonPanel(detailPanel, leftTrainer, battleController);
         rightPokemonPanel = new pokemonPanel(detailPanel, rightTrainer, battleController);
@@ -82,16 +100,15 @@ public class SingleBattleWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
-        battlePanel = new javax.swing.JPanel();
-        rightPokemonLabels = new javax.swing.JPanel();
-        rightLevelLabel = new javax.swing.JLabel();
-        rightName = new javax.swing.JLabel();
-        rightHPBar = new javax.swing.JProgressBar();
-        rightCurrentHP = new javax.swing.JLabel();
-        rightMaxHP = new javax.swing.JLabel();
-        rightSlash = new javax.swing.JLabel();
-        rightLevelValue = new javax.swing.JLabel();
-        rightStatus = new javax.swing.JLabel();
+        eventPanel = new javax.swing.JScrollPane();
+        eventTextArea = new javax.swing.JTextArea();
+        detailPanel = new javax.swing.JPanel();
+        buttonPanel = new javax.swing.JPanel();
+        bagButton = new javax.swing.JButton();
+        fightButton = new javax.swing.JButton();
+        pokemonButton = new javax.swing.JButton();
+        quitButton = new javax.swing.JButton();
+        layeredPane = new javax.swing.JLayeredPane();
         leftPokemonLabels = new javax.swing.JPanel();
         leftLevelLabel = new javax.swing.JLabel();
         leftName = new javax.swing.JLabel();
@@ -103,205 +120,21 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         leftStatus = new javax.swing.JLabel();
         leftIcon = new javax.swing.JLabel();
         rightIcon = new javax.swing.JLabel();
-        eventPanel = new javax.swing.JScrollPane();
-        eventTextArea = new javax.swing.JTextArea();
-        detailPanel = new javax.swing.JPanel();
-        buttonPanel = new javax.swing.JPanel();
-        bagButton = new javax.swing.JButton();
-        fightButton = new javax.swing.JButton();
-        pokemonButton = new javax.swing.JButton();
-        quitButton = new javax.swing.JButton();
+        rightPokemonLabels = new javax.swing.JPanel();
+        rightLevelLabel = new javax.swing.JLabel();
+        rightName = new javax.swing.JLabel();
+        rightHPBar = new javax.swing.JProgressBar();
+        rightCurrentHP = new javax.swing.JLabel();
+        rightMaxHP = new javax.swing.JLabel();
+        rightSlash = new javax.swing.JLabel();
+        rightLevelValue = new javax.swing.JLabel();
+        rightStatus = new javax.swing.JLabel();
 
         jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Pokemon Battle Window");
         setBackground(new java.awt.Color(51, 51, 51));
-
-        battlePanel.setBackground(new java.awt.Color(204, 204, 204));
-        battlePanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        rightPokemonLabels.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
-
-        rightLevelLabel.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        rightLevelLabel.setText("Lv.");
-
-        rightName.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        rightName.setText("Pokemon Name");
-
-        rightHPBar.setForeground(new java.awt.Color(51, 204, 0));
-        rightHPBar.setValue(100);
-
-        rightCurrentHP.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        rightCurrentHP.setText("Current");
-
-        rightMaxHP.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        rightMaxHP.setText("Max");
-
-        rightSlash.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        rightSlash.setText("/");
-
-        rightLevelValue.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-
-        rightStatus.setBackground(new java.awt.Color(0, 0, 0));
-        rightStatus.setForeground(new java.awt.Color(0, 0, 0));
-
-        javax.swing.GroupLayout rightPokemonLabelsLayout = new javax.swing.GroupLayout(rightPokemonLabels);
-        rightPokemonLabels.setLayout(rightPokemonLabelsLayout);
-        rightPokemonLabelsLayout.setHorizontalGroup(
-            rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(rightPokemonLabelsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(rightPokemonLabelsLayout.createSequentialGroup()
-                        .addComponent(rightName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rightLevelLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rightLevelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(rightPokemonLabelsLayout.createSequentialGroup()
-                        .addComponent(rightStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rightPokemonLabelsLayout.createSequentialGroup()
-                                .addComponent(rightCurrentHP)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(rightSlash)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(rightMaxHP, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(rightHPBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(6, 6, 6))
-        );
-        rightPokemonLabelsLayout.setVerticalGroup(
-            rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(rightPokemonLabelsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rightName, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rightLevelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rightLevelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(rightHPBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rightStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rightCurrentHP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rightMaxHP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rightSlash, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        leftPokemonLabels.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
-
-        leftLevelLabel.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        leftLevelLabel.setText("Lv.");
-
-        leftName.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        leftName.setText("Pokemon Name");
-
-        leftHPBar.setForeground(new java.awt.Color(51, 204, 0));
-        leftHPBar.setValue(100);
-
-        leftCurrentHP.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        leftCurrentHP.setText("Current");
-
-        leftMaxHP.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        leftMaxHP.setText("Max");
-
-        leftSlash.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        leftSlash.setText("/");
-
-        leftLevelValue.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-
-        leftStatus.setBackground(new java.awt.Color(0, 0, 0));
-        leftStatus.setForeground(new java.awt.Color(0, 0, 0));
-
-        javax.swing.GroupLayout leftPokemonLabelsLayout = new javax.swing.GroupLayout(leftPokemonLabels);
-        leftPokemonLabels.setLayout(leftPokemonLabelsLayout);
-        leftPokemonLabelsLayout.setHorizontalGroup(
-            leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(leftPokemonLabelsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPokemonLabelsLayout.createSequentialGroup()
-                        .addComponent(leftName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(leftLevelLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(leftLevelValue, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPokemonLabelsLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPokemonLabelsLayout.createSequentialGroup()
-                                .addComponent(leftCurrentHP)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(leftSlash)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(leftMaxHP, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPokemonLabelsLayout.createSequentialGroup()
-                                .addComponent(leftStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(leftHPBar, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(6, 6, 6))
-        );
-        leftPokemonLabelsLayout.setVerticalGroup(
-            leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(leftPokemonLabelsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(leftName, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(leftLevelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(leftLevelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(leftStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(leftHPBar, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(leftMaxHP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(leftSlash, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(leftCurrentHP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout battlePanelLayout = new javax.swing.GroupLayout(battlePanel);
-        battlePanel.setLayout(battlePanelLayout);
-        battlePanelLayout.setHorizontalGroup(
-            battlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(battlePanelLayout.createSequentialGroup()
-                .addGroup(battlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(battlePanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(rightPokemonLabels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, battlePanelLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(leftIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(133, 133, 133)))
-                .addGroup(battlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(leftPokemonLabels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, battlePanelLayout.createSequentialGroup()
-                        .addComponent(rightIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(119, 119, 119)))
-                .addContainerGap())
-        );
-        battlePanelLayout.setVerticalGroup(
-            battlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(battlePanelLayout.createSequentialGroup()
-                .addGroup(battlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(battlePanelLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(rightPokemonLabels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(63, 63, 63)
-                        .addComponent(leftIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(battlePanelLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(rightIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(leftPokemonLabels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
 
         eventPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 14), new java.awt.Color(0, 0, 0))); // NOI18N
         eventPanel.setToolTipText("");
@@ -316,9 +149,12 @@ public class SingleBattleWindow extends javax.swing.JFrame {
 
         detailPanel.setBackground(new java.awt.Color(51, 51, 51));
         detailPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        detailPanel.setEnabled(false);
+        detailPanel.setFocusable(false);
         detailPanel.setLayout(new java.awt.CardLayout());
 
         buttonPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        buttonPanel.setMaximumSize(new java.awt.Dimension(344, 140));
 
         bagButton.setBackground(new java.awt.Color(255, 102, 0));
         bagButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -387,33 +223,236 @@ public class SingleBattleWindow extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        layeredPane.setBackground(new java.awt.Color(102, 102, 0));
+        layeredPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        layeredPane.setForeground(new java.awt.Color(153, 102, 0));
+        layeredPane.setEnabled(false);
+        layeredPane.setFocusable(false);
+        layeredPane.setMaximumSize(new java.awt.Dimension(930, 394));
+        layeredPane.setMinimumSize(new java.awt.Dimension(930, 394));
+        layeredPane.setRequestFocusEnabled(false);
+        layeredPane.setVerifyInputWhenFocusTarget(false);
+
+        leftPokemonLabels.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        leftPokemonLabels.setPreferredSize(new java.awt.Dimension(280, 100));
+
+        leftLevelLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        leftLevelLabel.setText("Lv.");
+
+        leftName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        leftName.setText("Pokemon Name");
+
+        leftHPBar.setForeground(new java.awt.Color(51, 204, 0));
+        leftHPBar.setValue(100);
+
+        leftCurrentHP.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        leftCurrentHP.setText("Current");
+
+        leftMaxHP.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        leftMaxHP.setText("Max");
+
+        leftSlash.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        leftSlash.setText("/");
+
+        leftLevelValue.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        leftLevelValue.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        leftLevelValue.setText("100");
+
+        leftStatus.setBackground(new java.awt.Color(0, 0, 0));
+        leftStatus.setForeground(new java.awt.Color(0, 0, 0));
+
+        javax.swing.GroupLayout leftPokemonLabelsLayout = new javax.swing.GroupLayout(leftPokemonLabels);
+        leftPokemonLabels.setLayout(leftPokemonLabelsLayout);
+        leftPokemonLabelsLayout.setHorizontalGroup(
+            leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(leftPokemonLabelsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(leftPokemonLabelsLayout.createSequentialGroup()
+                        .addComponent(leftName, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                        .addComponent(leftLevelLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(leftLevelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(leftPokemonLabelsLayout.createSequentialGroup()
+                        .addComponent(leftStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addGroup(leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(leftHPBar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPokemonLabelsLayout.createSequentialGroup()
+                                .addComponent(leftCurrentHP)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(leftSlash)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(leftMaxHP)
+                                .addGap(25, 25, 25)))))
+                .addGap(6, 6, 6))
+        );
+        leftPokemonLabelsLayout.setVerticalGroup(
+            leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(leftPokemonLabelsLayout.createSequentialGroup()
+                .addGroup(leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(leftPokemonLabelsLayout.createSequentialGroup()
+                        .addGroup(leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(leftName, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(leftLevelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(leftLevelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(leftHPBar, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(leftStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(2, 2, 2)
+                .addGroup(leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(leftMaxHP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(leftSlash, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(leftCurrentHP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
+        leftIcon.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        rightIcon.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+
+        rightPokemonLabels.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        rightPokemonLabels.setPreferredSize(new java.awt.Dimension(280, 100));
+
+        rightLevelLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        rightLevelLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        rightLevelLabel.setText("Lv.");
+
+        rightName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        rightName.setText("Pokemon Name");
+
+        rightHPBar.setForeground(new java.awt.Color(51, 204, 0));
+        rightHPBar.setValue(100);
+
+        rightCurrentHP.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        rightCurrentHP.setText("Current");
+
+        rightMaxHP.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        rightMaxHP.setText("Max");
+
+        rightSlash.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        rightSlash.setText("/");
+
+        rightLevelValue.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        rightLevelValue.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        rightStatus.setBackground(new java.awt.Color(0, 0, 0));
+        rightStatus.setForeground(new java.awt.Color(0, 0, 0));
+
+        javax.swing.GroupLayout rightPokemonLabelsLayout = new javax.swing.GroupLayout(rightPokemonLabels);
+        rightPokemonLabels.setLayout(rightPokemonLabelsLayout);
+        rightPokemonLabelsLayout.setHorizontalGroup(
+            rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(rightPokemonLabelsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(rightPokemonLabelsLayout.createSequentialGroup()
+                        .addComponent(rightStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                        .addGroup(rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rightPokemonLabelsLayout.createSequentialGroup()
+                                .addComponent(rightCurrentHP)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(rightSlash, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(rightMaxHP)
+                                .addGap(25, 25, 25))
+                            .addComponent(rightHPBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(rightPokemonLabelsLayout.createSequentialGroup()
+                        .addComponent(rightName, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(rightLevelLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rightLevelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        rightPokemonLabelsLayout.setVerticalGroup(
+            rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(rightPokemonLabelsLayout.createSequentialGroup()
+                .addGroup(rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(rightPokemonLabelsLayout.createSequentialGroup()
+                        .addGroup(rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(rightName, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(rightLevelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(rightLevelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rightHPBar, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(rightStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(2, 2, 2)
+                .addGroup(rightPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rightMaxHP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rightSlash, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rightCurrentHP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
+        layeredPane.setLayer(leftPokemonLabels, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        layeredPane.setLayer(leftIcon, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        layeredPane.setLayer(rightIcon, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        layeredPane.setLayer(rightPokemonLabels, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        javax.swing.GroupLayout layeredPaneLayout = new javax.swing.GroupLayout(layeredPane);
+        layeredPane.setLayout(layeredPaneLayout);
+        layeredPaneLayout.setHorizontalGroup(
+            layeredPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layeredPaneLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(layeredPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(rightPokemonLabels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(leftIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 280, Short.MAX_VALUE)
+                .addGroup(layeredPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layeredPaneLayout.createSequentialGroup()
+                        .addComponent(leftPokemonLabels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layeredPaneLayout.createSequentialGroup()
+                        .addComponent(rightIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(136, 136, 136))))
+        );
+        layeredPaneLayout.setVerticalGroup(
+            layeredPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layeredPaneLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(rightIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(leftPokemonLabels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12))
+            .addGroup(layeredPaneLayout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(rightPokemonLabels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(leftIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(eventPanel)
-                    .addComponent(battlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(eventPanel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(layeredPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(detailPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(detailPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(battlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(detailPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(detailPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(layeredPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(eventPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(eventPanel)
+                    .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pack();
@@ -446,13 +485,13 @@ public class SingleBattleWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bagButton;
-    private javax.swing.JPanel battlePanel;
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JPanel detailPanel;
     private javax.swing.JScrollPane eventPanel;
     public javax.swing.JTextArea eventTextArea;
     private javax.swing.JButton fightButton;
     private javax.swing.JButton jButton1;
+    private javax.swing.JLayeredPane layeredPane;
     private javax.swing.JLabel leftCurrentHP;
     private javax.swing.JProgressBar leftHPBar;
     private javax.swing.JLabel leftIcon;

@@ -187,8 +187,8 @@ public class Client extends javax.swing.JFrame {
         navCard.show(navPanel, "altCard");
         System.out.println("CLIENT CONSOLE: Initializing Single Battle Window");
         SingleBattleWindow battleWindow = new SingleBattleWindow(this, navPanel,trainers.get(0), trainers.get(1));
-        battleWindow.setVisible(true);
         System.out.println("CLIENT CONSOLE: Battle Window initialization complete. Battle Start");
+        battleWindow.setVisible(true);
         this.setState(Frame.ICONIFIED);
     }//GEN-LAST:event_battleButtonActionPerformed
 

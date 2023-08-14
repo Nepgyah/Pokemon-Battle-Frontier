@@ -37,7 +37,6 @@ public class Mechanics {
                 count++;
             }
         }
-        System.out.println("Mechanics.java checking for loss. Fainted Pokemon: " + count + " / " + trainer.getParty().size());
         if (count == trainer.getParty().size()) {
             return true;
         } else {

@@ -4,12 +4,8 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/client/Client.java</file>
-            <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/pokemon/pokedex/P_016_Pidgey.java</file>
-            <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/battle/utils/BattleEvents.java</file>
-            <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/utilities/startup.java</file>
+            <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/battle/modes/singlebattle/SingleBattleWindow.java</file>
             <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/battle/modes/singlebattle/SingleBattleController.java</file>
-            <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/pokemon/pokedex/P_007_Squirtle.java</file>
-            <file>file:/C:/Users/Auston/Desktop/Pokemon-Battle-Frontier/Interface%20Code/src/battle/utils/UseMove.java</file>
         </group>
     </open-files>
 </project-private>

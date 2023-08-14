@@ -1,12 +1,16 @@
 package battle.utils;
 
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.TimerTask;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import pokemon.Pokemon;
+import trainer.Trainer;
 import utilities.PokeColors;
 
 public class BattleEvents {
@@ -104,6 +108,50 @@ public class BattleEvents {
             @Override
             public void run() {
                 iconLabel.setIcon(null);
+            }
+        });
+    }
+    
+    public static void addWinnerEvent(ArrayList<TimerTask> eventQueue, JTextArea textArea, Trainer winner, Trainer loser) {
+         eventQueue.add(new TimerTask() {
+            @Override
+            public void run() {
+                textArea.setText("...");
+            }
+        });
+        eventQueue.add(new TimerTask() {
+            @Override
+            public void run() {
+                textArea.setText(loser.getName() + " is out of usable pokemon...");
+            }
+        });
+        eventQueue.add(new TimerTask() {
+            @Override
+            public void run() {
+                textArea.setText(winner.getName() + " wins!");
+            }
+        });
+    }
+    
+    public static void addWindowCloseEvent(ArrayList<TimerTask> eventQueue, JTextArea textArea, 
+            JFrame battleFrame, JFrame clientFrame, CardLayout navCard, JPanel clientNavPanel) {
+        eventQueue.add(new TimerTask() {
+            @Override
+            public void run() {
+                textArea.setText("Match done!");
+            }
+        });
+        eventQueue.add(new TimerTask() {
+            @Override
+            public void run() {
+                battleFrame.dispose();
+            }
+        });
+        eventQueue.add(new TimerTask() {
+            @Override
+            public void run() {
+                clientFrame.setState(JFrame.NORMAL);
+                navCard.show(clientNavPanel, "navCard");
             }
         });
     }

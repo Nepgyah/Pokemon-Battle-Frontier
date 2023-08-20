@@ -167,26 +167,32 @@ public class pokemonPanel extends javax.swing.JPanel {
 
     private void pokemonOneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonOneActionPerformed
         controller.setPokemonSwap(0);
+        card.show(contentPanel, "waitingPanel");
     }//GEN-LAST:event_pokemonOneActionPerformed
 
     private void pokemonTwoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonTwoActionPerformed
         controller.setPokemonSwap(1);
+        card.show(contentPanel, "waitingPanel");
     }//GEN-LAST:event_pokemonTwoActionPerformed
 
     private void pokemonThreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonThreeActionPerformed
         controller.setPokemonSwap(2);
+        card.show(contentPanel, "waitingPanel");
     }//GEN-LAST:event_pokemonThreeActionPerformed
 
     private void pokemonFourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonFourActionPerformed
         controller.setPokemonSwap(3);
+        card.show(contentPanel, "waitingPanel");
     }//GEN-LAST:event_pokemonFourActionPerformed
 
     private void pokemonFiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonFiveActionPerformed
         controller.setPokemonSwap(4);
+        card.show(contentPanel, "waitingPanel");
     }//GEN-LAST:event_pokemonFiveActionPerformed
 
     private void pokemonSixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonSixActionPerformed
         controller.setPokemonSwap(5);
+        card.show(contentPanel, "waitingPanel");
     }//GEN-LAST:event_pokemonSixActionPerformed
 
 

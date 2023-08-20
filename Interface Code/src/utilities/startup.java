@@ -12,6 +12,7 @@ public class startup {
     public static ArrayList<Pokemon> initializePokedex()
     {
         ArrayList<Pokemon> pokedex = new ArrayList<>();
+        pokedex.add(new P_000_Test());
         
         pokedex.add(new P_001_Bulbasaur());
         
@@ -57,12 +58,12 @@ public class startup {
     {
         Trainer ash = new Trainer("Ash");
 
-        ash.addToParty(pokedex.get(6).copy());
-        ash.addToParty(pokedex.get(0).copy());
+        ash.addToParty(pokedex.get(7).copy());
         ash.addToParty(pokedex.get(1).copy());
         ash.addToParty(pokedex.get(2).copy());
         ash.addToParty(pokedex.get(3).copy());
-        ash.addToParty(pokedex.get(7).copy());
+        ash.addToParty(pokedex.get(4).copy());
+        ash.addToParty(pokedex.get(8).copy());
         
         for(Pokemon pokemon : ash.getParty())
         {
@@ -77,8 +78,8 @@ public class startup {
     {
         Trainer gary = new Trainer("Gary");
         
-        gary.addToParty(pokedex.get(4).copy());
-//        gary.addToParty(pokedex.get(5).copy());
+        gary.addToParty(pokedex.get(5).copy());
+        gary.addToParty(pokedex.get(0).copy());
         
         for(Pokemon pokemon : gary.getParty())
         {

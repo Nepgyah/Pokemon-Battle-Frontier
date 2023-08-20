@@ -79,7 +79,8 @@ public abstract class Pokemon implements Serializable{
     protected boolean inTwoTurn;					
     protected int sleep_turns = 0;		
     protected boolean leeched;
-    protected String battle_status = null;			// Used to display status in battle 
+    protected boolean bound;
+    protected String battle_status = null;	// Used to display status in battle 
 
     /**
      * Default constructor for the pokemon class
@@ -344,6 +345,7 @@ public abstract class Pokemon implements Serializable{
     {
         this.setCurrent_hp(this.getCurrent_hp() - amount);
         if (this.getCurrent_hp() <= 0) {
+            System.out.println("FAINTED");
             this.current_hp = 0;
             this.fainted = true;
         }

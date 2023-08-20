@@ -5,12 +5,12 @@ import move.modifiers.*;
 import move.status_effect.*;
 import types.*;
 
-public class M_000_Test extends Move implements PhysicalAttack, Normal, Recharge{
+public class M_000_Test extends Move implements StatusMove, Poison, ApplyLeech{
 
     private static final long serialVersionUID = 1L;
 
     public M_000_Test() {
-        super(0, "Recharge", 30, 10, 1);
+        super(0, "Test", 30, 0, 1);
     }
 
     @Override

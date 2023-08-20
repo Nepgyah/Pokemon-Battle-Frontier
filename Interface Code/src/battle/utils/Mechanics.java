@@ -26,8 +26,30 @@ public class Mechanics {
         System.out.println("Curretn Evasion Modifier: " + pokemon.getBattle_evasion());
     }
     
-    public static void postMoveEffects() {
-        System.out.println("Checking effects");
+    public static void postMoveEffects(ArrayList<TimerTask> eventQueue, JTextArea textArea, 
+            Pokemon user, Pokemon target, 
+            JLabel userHP, JLabel targetHP,
+            JProgressBar userHPBar, JProgressBar targetHPBar) {
+        BattleEvents.addGenericEvent(eventQueue, textArea, "Checking Post move effects for " + user.getName());
+        // Status effects
+        if (!(user.getBattle_status() == null)) {
+            // Note: Gen 1 calculation (1/16)
+            if (user.getBattle_status().equals("PSN")) {
+                
+                BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is hurt by its poison!");
+                BattleEvents.addSelfDamageEffect(eventQueue, textArea, user.getCurrent_max_hp() * 1/1, user, userHP, userHPBar);
+            }
+            if (user.getBattle_status().equals("BRN")) {
+                BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is hurt by its burn!");
+                BattleEvents.addSelfDamageEffect(eventQueue, textArea, user.getCurrent_max_hp() * 1/1, user, userHP, userHPBar);
+            }
+        }
+        
+        if (user.isLeeched()) {
+            BattleEvents.addSelfDamageEffect(eventQueue, textArea, user.getCurrent_max_hp() * 1/1, user, userHP, userHPBar);
+            BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " had its HP sapped!");
+            BattleEvents.addHealingEvent(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, target, targetHP, targetHPBar);
+        }
     }
     
     public static boolean didLose(Trainer trainer) {
@@ -166,6 +188,12 @@ public class Mechanics {
         }
         if (result > chance) {
             BattleEvents.addGenericEvent(eventQueue, textArea, "The move missed!");
+            return;
+        }
+        
+        if (userMove instanceof ApplyLeech) {
+            target.setLeeched(true);
+            BattleEvents.addGenericEvent(eventQueue, textArea, target.getName() + " was seeded!");
             return;
         }
         

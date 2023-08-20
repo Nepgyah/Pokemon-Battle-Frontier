@@ -254,6 +254,24 @@ public class SingleBattleController{
         }
         
         // Post move checks here
+        Mechanics.postMoveEffects(eventQueue, textArea, leftPokemon, rightPokemon, leftLabels[2], rightLabels[2], leftHPBar, rightHPBar);
+        if (leftPokemon.isFainted() == true) {
+            BattleEvents.addGenericEvent(eventQueue, textArea, leftPokemon.getName() + " fainted!");
+            BattleEvents.addIconRemoveEvent(eventQueue, leftLabels[5]);
+            if (Mechanics.didLose(leftTrainer)) {
+                rightWins = true;
+                BattleEvents.addWinnerEvent(eventQueue, textArea, rightTrainer, leftTrainer);
+            }
+        }
+        Mechanics.postMoveEffects(eventQueue, textArea, rightPokemon, leftPokemon, rightLabels[2], leftLabels[2], rightHPBar, leftHPBar);
+        if (rightPokemon.isFainted() == true) {
+            BattleEvents.addGenericEvent(eventQueue, textArea, rightPokemon.getName() + " fainted!");
+            BattleEvents.addIconRemoveEvent(eventQueue, rightLabels[5]);
+            if (Mechanics.didLose(rightTrainer)) {
+                leftWins = true;
+                BattleEvents.addWinnerEvent(eventQueue, textArea, leftTrainer, rightTrainer);
+            }
+        }
         
         if (leftPokemon.isFainted() && rightWins == false) {
             eventQueue.add(new TimerTask() {

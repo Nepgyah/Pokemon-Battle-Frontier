@@ -24,6 +24,25 @@ public class BattleEvents {
         });
     }
     
+    // Used for status effects and recoil
+    public static void addSelfDamageEffect(ArrayList<TimerTask> eventQueue, JTextArea textArea, int damage, Pokemon user, JLabel userHP, JProgressBar userHPBar) {
+        user.takeDamage(damage);
+        eventQueue.add(new TimerTask() {
+            @Override
+            public void run() {
+                userHP.setText(Integer.toString(user.getCurrent_hp()));
+                userHPBar.setValue(user.getCurrent_hp());
+
+                if (user.getCurrent_hp() < (user.getCurrent_max_hp() / 2)) {
+                    userHPBar.setForeground(PokeColors.yellowHP);
+                }
+                if (user.getCurrent_hp() < (user.getCurrent_max_hp() / 4)) {
+                    userHPBar.setForeground(Color.red);
+                }
+            }
+        });
+    }
+ 
     public static void addDamageEvent(ArrayList<TimerTask> eventQueue, JTextArea textArea, String userStatus, int damage, Pokemon target, JLabel targetHP, JProgressBar targetHPBar) {
         eventQueue.add(new TimerTask() {
             @Override

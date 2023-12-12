@@ -80,6 +80,7 @@ public abstract class Pokemon implements Serializable{
     protected int sleep_turns = 0;		
     protected boolean leeched;
     protected boolean bound;
+    protected boolean healingOverTime;
     protected String battle_status = null;	// Used to display status in battle 
 
     /**
@@ -704,5 +705,12 @@ public abstract class Pokemon implements Serializable{
         this.leeched = isLeeched;
     }
     
+    public boolean isHealingOverTime() {
+        return healingOverTime;
+    }
+    
+    public void setHealingOverTime(boolean healingOverTime) {
+        this.healingOverTime = healingOverTime;
+    }
     
 }

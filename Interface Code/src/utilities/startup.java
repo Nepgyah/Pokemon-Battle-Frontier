@@ -51,6 +51,8 @@ public class startup {
         movedex.add(new M_085_ThunderBolt());
         movedex.add(new M_086_ThunderWave());
         
+        movedex.add(new M_392_AquaRing());
+        
         return movedex;
     }
     

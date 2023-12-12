@@ -5,12 +5,12 @@ import move.modifiers.*;
 import move.status_effect.*;
 import types.*;
 
-public class M_000_Test extends Move implements StatusMove, Poison, ApplyLeech{
+public class M_000_Test extends Move implements StatusMove, Grass, ApplyLeech{
 
     private static final long serialVersionUID = 1L;
 
     public M_000_Test() {
-        super(0, "Test", 30, 0, 1);
+        super(0, "TEST: Leech Seed", 30, 0, 1);
     }
 
     @Override

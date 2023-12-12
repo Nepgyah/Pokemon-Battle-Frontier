@@ -25,7 +25,7 @@ public class P_025_Pikachu extends Pokemon implements Electric, Normal{
 		this.base_special_defense = 40;
 		this.base_speed = 90;
 		
-		this.learnable_moves = new ArrayList<Integer>(Arrays.asList(0, 39, 85, 86));
+		this.learnable_moves = new ArrayList<Integer>(Arrays.asList(0, 39, 85, 392));
 
 	}
 	

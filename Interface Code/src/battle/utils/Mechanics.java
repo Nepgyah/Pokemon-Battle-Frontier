@@ -37,19 +37,25 @@ public class Mechanics {
             if (user.getBattle_status().equals("PSN")) {
                 
                 BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is hurt by its poison!");
-                BattleEvents.addSelfDamageEffect(eventQueue, textArea, user.getCurrent_max_hp() * 1/1, user, userHP, userHPBar);
+                BattleEvents.addSelfDamageEffect(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userHP, userHPBar);
             }
             if (user.getBattle_status().equals("BRN")) {
                 BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is hurt by its burn!");
-                BattleEvents.addSelfDamageEffect(eventQueue, textArea, user.getCurrent_max_hp() * 1/1, user, userHP, userHPBar);
+                BattleEvents.addSelfDamageEffect(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userHP, userHPBar);
             }
         }
         
         if (user.isLeeched()) {
-            BattleEvents.addSelfDamageEffect(eventQueue, textArea, user.getCurrent_max_hp() * 1/1, user, userHP, userHPBar);
+            BattleEvents.addSelfDamageEffect(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userHP, userHPBar);
             BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " had its HP sapped!");
             BattleEvents.addHealingEvent(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, target, targetHP, targetHPBar);
         }
+        
+        if (user.isHealingOverTime()) {
+            BattleEvents.addHealingEvent(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userHP, userHPBar);
+            BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " healed some of its HP!");
+        }
+        
     }
     
     public static boolean didLose(Trainer trainer) {
@@ -175,6 +181,10 @@ public class Mechanics {
         // "Pokemon used moved!"
         BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " used " + userMove.getName() + "!");
         
+        if (userMove instanceof HealOverTime) {
+            BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + ((HealOverTime) ((HealOverTime)userMove)).getTurnDescription());
+            user.setHealingOverTime(true);
+        }
         // Bring back icon on 2nd half two turn
         if (userMove instanceof TwoTurn) {
             BattleEvents.addIconReturnEvent(eventQueue, user, userLabels[5]);

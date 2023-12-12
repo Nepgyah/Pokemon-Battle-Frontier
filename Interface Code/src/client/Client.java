@@ -1,11 +1,11 @@
 package client;
 
+import battle.modes.singlebattle.SingleBattleWindow;
 import java.awt.CardLayout;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import java.awt.*;
 import pokemon.Pokemon;
-import battle.gamemodes.*;
 import trainer.Trainer;
 
 public class Client extends javax.swing.JFrame {
@@ -42,9 +42,9 @@ public class Client extends javax.swing.JFrame {
         // panel settings for navCard
         navCard = (CardLayout) navPanel.getLayout();
         
-        navPanel.add(new SideNavPanel(contentPanel), "testCard");
+        navPanel.add(new SideNavPanel(contentPanel), "navCard");
         navPanel.add(new InBattlePanel(navPanel), "altCard");
-        navCard.show(navPanel, "testCard");
+        navCard.show(navPanel, "navCard");
     }   
 
     @SuppressWarnings("unchecked")
@@ -183,18 +183,18 @@ public class Client extends javax.swing.JFrame {
     private void battleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_battleButtonActionPerformed
         // TODO add your handling code here:
 //        menuCard.show(contentPanel, "selectMode");
+        battleButton.setEnabled(false);
         navCard.show(navPanel, "altCard");
         System.out.println("CLIENT CONSOLE: Initializing Single Battle Window");
-        SingleBattleWindow battleWindow = new SingleBattleWindow(trainers.get(0), trainers.get(1));
-        battleWindow.setVisible(true);
+        SingleBattleWindow battleWindow = new SingleBattleWindow(this, navPanel,trainers.get(0), trainers.get(1));
         System.out.println("CLIENT CONSOLE: Battle Window initialization complete. Battle Start");
-//        this.setState(Frame.ICONIFIED);
+        battleWindow.setVisible(true);
+        this.setState(Frame.ICONIFIED);
     }//GEN-LAST:event_battleButtonActionPerformed
 
     private void homeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeButtonActionPerformed
         // TODO add your handling code here:
         menuCard.show(contentPanel, "newsCard");
-        navCard.show(navPanel, "testCard");
     }//GEN-LAST:event_homeButtonActionPerformed
 
 

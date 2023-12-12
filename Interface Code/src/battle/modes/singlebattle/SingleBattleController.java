@@ -283,6 +283,7 @@ public class SingleBattleController{
                 }
             });
         } else if (rightPokemon.isFainted() && leftWins == false) {
+            System.out.println("We get here?");
             eventQueue.add(new TimerTask() {
                 @Override
                 public void run() {

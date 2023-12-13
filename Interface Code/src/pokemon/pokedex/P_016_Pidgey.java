@@ -24,7 +24,7 @@ public class P_016_Pidgey extends Pokemon implements Normal, Flying{
         this.base_special_defense = 35;
         this.base_speed = 56;
 
-        this.learnable_moves = new ArrayList<Integer>(Arrays.asList(1, 19, 33,39));
+        this.learnable_moves = new ArrayList<Integer>(Arrays.asList(0,1, 19, 33));
     }
     
     @Override

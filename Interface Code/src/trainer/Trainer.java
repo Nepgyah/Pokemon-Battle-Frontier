@@ -1,4 +1,5 @@
 package trainer;
+import item.Item;
 import pokemon.Pokemon;
 
 import java.io.Serializable;
@@ -16,6 +17,7 @@ public class Trainer implements Serializable{
     String title;
     String hometown;
     ArrayList<Pokemon> party = new ArrayList<>();
+    ArrayList<Item> bag = new ArrayList<>();
     protected Pokemon[] moveset = new Pokemon[6];
     
     public Trainer(String name) {
@@ -53,6 +55,11 @@ public class Trainer implements Serializable{
         System.out.println();
     }
 
+    
+    public void addToBag(Item item) {
+        bag.add(item);
+    }
+    
     public String getName() {
         return name;
     }

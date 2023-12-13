@@ -1,5 +1,7 @@
 package utilities;
 
+import item.Item;
+import item.itemdex.*;
 import java.util.ArrayList;
 import pokemon.Pokemon;
 import pokemon.pokedex.*;
@@ -12,6 +14,7 @@ public class startup {
     public static ArrayList<Pokemon> initializePokedex()
     {
         ArrayList<Pokemon> pokedex = new ArrayList<>();
+        pokedex.add(new P_000_Test());
         
         pokedex.add(new P_001_Bulbasaur());
         
@@ -19,36 +22,71 @@ public class startup {
         
         pokedex.add(new P_007_Squirtle());
         
+        pokedex.add(new P_012_Butterfree());
+        
         pokedex.add(new P_016_Pidgey());
         
         pokedex.add(new P_019_Rattata());
         
+        pokedex.add(new P_023_Ekans());
+        
         pokedex.add(new P_025_Pikachu());
         
+        pokedex.add(new P_143_Snorlax());
         return pokedex;
     }
     
-    public static ArrayList<Move> initializeMovedex()
-    {
+    public static ArrayList<Move> initializeMovedex() {
         ArrayList<Move> movedex = new ArrayList<>();
 
+        movedex.add(new M_000_Test());
+        
+        movedex.add(new M_001_Pound());
+        
+        movedex.add(new M_014_SwordsDance());
+        
         movedex.add(new M_033_Tackle());
+        
+        movedex.add(new M_039_TailWhip());
+        
+        movedex.add(new M_055_WaterGun());
+        
+        movedex.add(new M_085_ThunderBolt());
+        movedex.add(new M_086_ThunderWave());
+        
+        movedex.add(new M_392_AquaRing());
+        
         return movedex;
+    }
+    
+    public static ArrayList<Item> initializeItemdex() {
+        ArrayList<Item> itemdex = new ArrayList<>();
+        
+        itemdex.add(new ParalyzeHeal());
+        
+        itemdex.add(new SitrusBerry());
+        
+        itemdex.add(new SuperPotion());
+        
+        return itemdex;
     }
     
     public static Trainer createAsh(ArrayList<Pokemon> pokedex, ArrayList<Move> movedex)
     {
         Trainer ash = new Trainer("Ash");
 
-        ash.addToParty(pokedex.get(5).copy());
-        ash.addToParty(pokedex.get(0).copy());
+        ash.addToParty(pokedex.get(7).copy());
         ash.addToParty(pokedex.get(1).copy());
         ash.addToParty(pokedex.get(2).copy());
+        ash.addToParty(pokedex.get(3).copy());
+        ash.addToParty(pokedex.get(4).copy());
+        ash.addToParty(pokedex.get(8).copy());
         
         for(Pokemon pokemon : ash.getParty())
         {
             pokemon.setLevel(20);
             pokemon.assignRandomMoves(movedex);
+            pokemon.resetBattleStats();
         }
         return ash;
     }
@@ -57,13 +95,14 @@ public class startup {
     {
         Trainer gary = new Trainer("Gary");
         
-        gary.addToParty(pokedex.get(3).copy());
-        gary.addToParty(pokedex.get(4).copy());
+        gary.addToParty(pokedex.get(5).copy());
+        gary.addToParty(pokedex.get(0).copy());
         
         for(Pokemon pokemon : gary.getParty())
         {
             pokemon.setLevel(20);
             pokemon.assignRandomMoves(movedex);
+            pokemon.resetBattleStats();
         }
         return gary;
     }

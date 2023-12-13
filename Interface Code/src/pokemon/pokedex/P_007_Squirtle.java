@@ -23,7 +23,7 @@ public class P_007_Squirtle extends Pokemon implements Water{
         this.base_special_defense = 54;
         this.base_speed = 43;
 
-        this.learnable_moves = new ArrayList<Integer>(Arrays.asList(1, 33, 39, 55, 61));
+        this.learnable_moves = new ArrayList<Integer>(Arrays.asList(1, 33,39, 55));
     }
     @Override
     public P_007_Squirtle copy() {

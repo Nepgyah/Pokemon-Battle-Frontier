@@ -157,7 +157,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
 
         bagButton.setBackground(new java.awt.Color(255, 102, 0));
         bagButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        bagButton.setForeground(new java.awt.Color(255, 255, 255));
+        bagButton.setForeground(new java.awt.Color(0, 0, 0));
         bagButton.setText("Bag");
         bagButton.setFocusable(false);
         bagButton.addActionListener(new java.awt.event.ActionListener() {
@@ -168,7 +168,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
 
         fightButton.setBackground(new java.awt.Color(204, 0, 51));
         fightButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        fightButton.setForeground(new java.awt.Color(255, 255, 255));
+        fightButton.setForeground(new java.awt.Color(0, 0, 0));
         fightButton.setText("Fight");
         fightButton.setFocusable(false);
         fightButton.addActionListener(new java.awt.event.ActionListener() {
@@ -179,7 +179,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
 
         pokemonButton.setBackground(new java.awt.Color(51, 153, 0));
         pokemonButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        pokemonButton.setForeground(new java.awt.Color(255, 255, 255));
+        pokemonButton.setForeground(new java.awt.Color(0, 0, 0));
         pokemonButton.setText("Pokemon");
         pokemonButton.setFocusable(false);
         pokemonButton.addActionListener(new java.awt.event.ActionListener() {
@@ -276,7 +276,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
                 .addGroup(leftPokemonLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(leftPokemonLabelsLayout.createSequentialGroup()
                         .addComponent(leftName, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                         .addComponent(leftLevelLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(leftLevelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -360,8 +360,8 @@ public class SingleBattleWindow extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rightPokemonLabelsLayout.createSequentialGroup()
                                 .addComponent(rightCurrentHP)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(rightSlash, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(rightSlash)
+                                .addGap(4, 4, 4)
                                 .addComponent(rightMaxHP)
                                 .addGap(25, 25, 25))
                             .addComponent(rightHPBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))

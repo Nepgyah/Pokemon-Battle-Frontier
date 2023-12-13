@@ -1,5 +1,7 @@
 package utilities;
 
+import item.Item;
+import item.itemdex.*;
 import java.util.ArrayList;
 import pokemon.Pokemon;
 import pokemon.pokedex.*;
@@ -32,8 +34,7 @@ public class startup {
         return pokedex;
     }
     
-    public static ArrayList<Move> initializeMovedex()
-    {
+    public static ArrayList<Move> initializeMovedex() {
         ArrayList<Move> movedex = new ArrayList<>();
 
         movedex.add(new M_000_Test());
@@ -54,6 +55,18 @@ public class startup {
         movedex.add(new M_392_AquaRing());
         
         return movedex;
+    }
+    
+    public static ArrayList<Item> initializeItemdex() {
+        ArrayList<Item> itemdex = new ArrayList<>();
+        
+        itemdex.add(new ParalyzeHeal());
+        
+        itemdex.add(new SitrusBerry());
+        
+        itemdex.add(new SuperPotion());
+        
+        return itemdex;
     }
     
     public static Trainer createAsh(ArrayList<Pokemon> pokedex, ArrayList<Move> movedex)

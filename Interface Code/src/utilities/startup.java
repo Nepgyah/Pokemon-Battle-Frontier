@@ -28,6 +28,8 @@ public class startup {
         
         pokedex.add(new P_019_Rattata());
         
+        pokedex.add(new P_023_Ekans());
+        
         pokedex.add(new P_025_Pikachu());
         
         pokedex.add(new P_143_Snorlax());

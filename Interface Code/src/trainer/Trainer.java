@@ -60,6 +60,11 @@ public class Trainer implements Serializable{
         bag.add(item);
     }
     
+    public void removeFromBag(Item item) {
+        int index = bag.indexOf(item);
+        bag.remove(index);
+    }
+    
     public String getName() {
         return name;
     }

@@ -15,9 +15,14 @@ public class Start {
         
         // Initialize base data (Pokemon / Moves / Items)
         System.out.println("Loading Pokemon");
-        ArrayList<Pokemon> pokedex = startup.initializePokedex();
-        ArrayList<Move> movedex = startup.initializeMovedex();
         ArrayList<Item> itemdex = startup.initializeItemdex();
+        
+        System.out.println("Items in the game");
+        for (Item item : itemdex) {
+            System.out.println(item.getName());
+        }
+        ArrayList<Pokemon> pokedex = startup.initializePokedex();
+        ArrayList<Move> movedex = startup.initializeMovedex();     
         
         // Load custom data (Save Trainers / Settings )
         System.out.println("Loading Saved Data");
@@ -29,13 +34,28 @@ public class Start {
         
         // Objects for basic testin
 
-        System.out.println("Program begin");
         ArrayList<Trainer> trainers = new ArrayList<>();
-        Trainer ash = startup.createAsh(pokedex, movedex);
+        Trainer ash = startup.createAsh(pokedex, movedex, itemdex);
         Trainer gary = startup.createGary(pokedex, movedex);
         trainers.add(ash);
         trainers.add(gary);
 
+        System.out.println("Testing for held items");
+        for (Pokemon pokemon : ash.getParty()) {
+            pokemon.displayHeldItem();
+        }
+        
+        System.out.println("Attempting to remove items");
+        for (Pokemon pokemon : ash.getParty()) {
+            pokemon.takeItem();
+        }
+        
+        System.out.println("Post testing for held items");
+        for (Pokemon pokemon : ash.getParty()) {
+            pokemon.displayHeldItem();
+        }
+        
+        System.out.println("Executing runnable");
         java.awt.EventQueue.invokeLater(new Runnable() {
             
             @Override

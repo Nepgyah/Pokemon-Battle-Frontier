@@ -9,14 +9,16 @@ import move.Move;
 import item.Item;
 import types.*;
 
-public abstract class Pokemon implements Serializable{
-    /**
-     *  Public abstract class that represents all aspects about a pokemon
-     *  This class will serve as the template for introducing new Pokemon (child relationship)
-     *  and their specific stats and move set that makes them original even among the same species
-     *  
-     */
+/**
+*  Public abstract class that represents all aspects about a pokemon
+*  This class will serve as the template for introducing new Pokemon (child relationship)
+*  and their specific stats and move set that makes them original even among the same species
+*/
+
+public abstract class Pokemon implements Serializable {
+    
     private static final long serialVersionUID = 1L;
+    
     // General Information
     protected int pokedex_number;
     protected String name;
@@ -36,7 +38,7 @@ public abstract class Pokemon implements Serializable{
     protected int base_special_defense;
     protected int base_speed;
 
-    // IV Values -- randomized at pokemon creation
+    // IV Values - randomized values that differ between pokemon of the same species
 
     protected ArrayList<Integer> iv_values = new ArrayList<>();
 
@@ -49,9 +51,8 @@ public abstract class Pokemon implements Serializable{
     protected int current_special_defense;
     protected int current_speed;
 
-    /* Battle based statistics
-     * Since stats are changed during battle these stats will be copied from the current values before a battle
-     */
+    // Battle based statistics - copied from current stats before every battle
+    
     protected int battle_attack;
     protected int battle_defense;
     protected int battle_special_attack;
@@ -83,47 +84,46 @@ public abstract class Pokemon implements Serializable{
     protected boolean leeched;
     protected boolean bound;
     protected boolean healingOverTime;
-    protected String battle_status = null;	// Used to display status in battle 
+    protected String battle_status = null; 
 
-    /**
-     * Default constructor for the pokemon class
-     */
-    public Pokemon()
-    {
+    // Default constructor
+    public Pokemon() {
         super();
     }
 
-    /**
-     * Copies a pokemon for the original trainer
-     * @return		Returns a original copied version of the pokemon
+    /** 
+     * Creates a original copy of a pokemon
+     * @return a original copied version of the pokemon
      */
     public abstract Pokemon copy();
 
-    /**
-     * Creates custom values when copying pokemon,
-     * it is this function that differentiates pokemon from
-     * the same species
-     */
-    public void setIV_Values()
-    {
-        // Randomize the IV values (Between 0 and 31)
-        for (int i = 0; i < 6; i++)
-        {
+    // Creates custom values for a pokemon, used in conjuction with copy
+    
+    public void setIV_Values() {
+        // Values between 0 and 31 determined from wiki
+        for (int i = 0; i < 6; i++) {
             this.iv_values.add((int) (Math.random() * 31));
         }
     }
-
-    // Icons
-//    public String getIconPath() {
-//        String path = "resources/pokedexPhotos/" + Integer.toString(this.pokedex_number) + "_front.png";
-//        return path;
-//    }
     
+    /* =============================
+     * MOVE RELATED MEMBER FUNCTIONS
+     * =============================
+     */
+    
+    /**
+     * Retrieves the front icon of a pokemon
+     * @return a ImageIcon of the front of a pokemon
+     */
     public ImageIcon getFrontIcon() {
         ImageIcon icon = new ImageIcon(new ImageIcon("resources/pokedexPhotos/front/" + Integer.toString(this.pokedex_number) + ".png").getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
         return icon;
     }
     
+    /**
+     * Retrieves the back icon of a pokemon
+     * @return a ImageIcon of the back of a pokemon
+     */
     public ImageIcon getBackIcon() {
         ImageIcon icon = new ImageIcon(new ImageIcon("resources/pokedexPhotos/back/" + Integer.toString(this.pokedex_number) + ".png").getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
         return icon;
@@ -134,22 +134,14 @@ public abstract class Pokemon implements Serializable{
      */
 
     /**
-     * Assigns the pokemon 4 random moves from its learnable move list
-     * 
-     * @param movedex		List of all moves in the game
+     * Assigns 4 random moves a pokemon is able to learn
+     * @param movedex list of all moves available in the game
      */
-    public void assignRandomMoves(ArrayList<Move> movedex)
-    {
+    public void assignRandomMoves(ArrayList<Move> movedex) {
         int num;
 
-        /* Pick 4 random ints positions in the pokemons's learnable_movs list
-         * The integer positions map to the corresponding tm_no when using the movedex
-         * to grab the moves
-         */
         ArrayList<Integer> random_moves = new ArrayList<>();
-        for (int i = 0; i < 4; i++)
-        {
-            // Random a number NOT already selected
+        for (int i = 0; i < 4; i++) {
             num = (int)(Math.random() * learnable_moves.size());
             while(random_moves.contains(learnable_moves.get(num)))
             {
@@ -158,23 +150,20 @@ public abstract class Pokemon implements Serializable{
             random_moves.add(learnable_moves.get(num));
         }
 
-        for(int i = 0; i < 4; i++)
-        {
-            for(Move move : movedex)
-            {
-                if(move.getTm_no() == random_moves.get(i))
-                {
+        for(int i = 0; i < 4; i++) {
+            for(Move move : movedex) {
+                if(move.getTm_no() == random_moves.get(i)) {
                     learnMove(move.copy(), i);
                 }
             }
         }
     }
 
-    /*
-     * Fills in / Replaces slot with desired move
+    /**
+     * Replaces a current slot with a new move
      * 
-     * @param move		The move the pokemon will learn
-     * @param pos		The moveslot position it will be in
+     * @param move new move to be learned
+     * @param pos position where the move will be placed / replaced
      */
     public void learnMove(Move move, int pos) {
         moveset[pos] = move;
@@ -185,6 +174,10 @@ public abstract class Pokemon implements Serializable{
      * =============================
      */
     
+    /**
+     * Gives a pokemon a item to hold
+     * @param item the item the pokemon will hold
+     */
     public void giveItem(Item item) {
         if (this.heldItem == null) {
             this.heldItem = item;
@@ -194,6 +187,10 @@ public abstract class Pokemon implements Serializable{
         }
     }
     
+    /**
+     * If holding an item, takes the pokemon's item
+     * @return the item the pokemon was holding
+     */
     public Item takeItem() {
         if (heldItem != null) {
             System.out.println(name + " is no longer holding a " + heldItem.getName());
@@ -205,6 +202,9 @@ public abstract class Pokemon implements Serializable{
         }
     }
     
+    /**
+     * Console prints if a pokemon is holding an item
+     */
     public void displayHeldItem() {
         if (this.heldItem == null) {
             System.out.println(name + " isn't holding a item");
@@ -217,32 +217,30 @@ public abstract class Pokemon implements Serializable{
      * =============================
      */
 
-    public void displayCurrentMoves()
-    {
+    /**
+     * Console prints the current set of moves
+     */
+    public void displayCurrentMoves() {
         System.out.println();
-        for (int i = 0; i < 4; i++)
-        {
-            if (this.moveset[i] == null)
-            {
+        for (int i = 0; i < 4; i++) {
+            if (this.moveset[i] == null) {
                 System.out.println((i+1) + ". -- ");
-            }
-            else
-            {
+            } else {
                 System.out.println((i + 1) + ". " + this.moveset[i].getCurrent_pp() + " / " + this.moveset[i].getMax_pp() + "\t" + this.moveset[i].getName());
             }
         }
     }
 
-    public void displayLearnableMoves(ArrayList<Move> movedex)
-    {
+    /** 
+     * Console prints all moves that can be learned
+     * @param movedex list of all available in the game
+     */
+    public void displayLearnableMoves(ArrayList<Move> movedex) {
         int i = 0;
         System.out.println("Moves " + this.nickname + " can learn");
-        for(int move_tm_no : learnable_moves)
-        {
-            for(Move move : movedex)
-            {
-                if(move.getTm_no() == move_tm_no)
-                {
+        for(int move_tm_no : learnable_moves) {
+            for(Move move : movedex) {
+                if(move.getTm_no() == move_tm_no) {
                     i++;
                     System.out.print(i + ". ");
                     System.out.println(move.getName());
@@ -251,14 +249,20 @@ public abstract class Pokemon implements Serializable{
         }
     }
     
+    /**
+     * Returns a string representation of a pokemon's health
+     * @return health points in String form
+     */
     public String displayButtonInfo() {
         String text = "";
         text = this.name + " (" + this.current_hp + " / " + this.current_max_hp + ") ";
         return text;
     }
     
-    private void displayTypes()
-    {
+    /**
+     * Console prints the type a pokemon is
+     */
+    private void displayTypes() {
         if(this instanceof Bug) System.out.print("Bug ");
         if(this instanceof Dark) System.out.print("Dark ");
         if(this instanceof Dragon) System.out.print("Dragon ");
@@ -278,15 +282,15 @@ public abstract class Pokemon implements Serializable{
         if(this instanceof Water) System.out.print("Water ");
     }
 
-    public void displayInformation()
-    {
+    /**
+     * Console prints the summary of a pokemon
+     */
+    public void displayInformation() {
         System.out.print("\nDex No: " + this.pokedex_number + "\t" + this.name);
         if(this.nickname == null) System.out.println();
         else System.out.println(" '" + this.nickname + "' ");
         System.out.println("LVL: " + this.level +  "\t\tHP: " + this.current_hp + " / " + this.current_max_hp);
-
         displayTypes();
-
         System.out.println();
         System.out.println("Attack: " + this.current_attack);
         System.out.println("Defense: " + this.current_defense);
@@ -294,8 +298,7 @@ public abstract class Pokemon implements Serializable{
         System.out.println("Special Defense: " + this.current_special_defense);
         System.out.println("Speed: " + this.current_speed);
 
-        for(int i = 0; i < 4; i++)
-        {
+        for(int i = 0; i < 4; i++) {
             if(moveset[i] == null) System.out.println("\t----");
             else moveset[i].displayMoveInformationBasic();
         }
@@ -304,8 +307,7 @@ public abstract class Pokemon implements Serializable{
     /**
      * Displays information of a Pokemon relevant to seeing it in a the pokedex
      */
-    public void displayPokedexInformation()
-    {
+    public void displayPokedexInformation() {
         System.out.print(this.pokedex_number + "\t" + this.name + " \t");
         displayTypes();
         System.out.println();
@@ -316,16 +318,14 @@ public abstract class Pokemon implements Serializable{
      * =====================
      */
 
-    public void setLevel(int level)
-    {
+    /**
+     * Sets the level of a pokemon and adjusts the stats accordingly. 
+     * Using reference from https://bulbapedia.bulbagarden.net/wiki/Stat#Generations_I_and_II .
+     * Elements not included yet: Nature and EV values
+     * @param level desired level of the pokemon
+     */
+    public void setLevel(int level) {
         this.level = level;
-        // update the current stats of the pokemon
-        /* Note: using GEN 1 and GEN 2 formula
-         * Reference: https://bulbapedia.bulbagarden.net/wiki/Stat#Generations_I_and_II 
-         * Parts missing from later games
-         * 				- nature
-         * 				- ev values (bonus from raising a pokmeon through battle)
-         */
         current_hp = current_max_hp =  ( ( (base_max_hp + this.iv_values.get(0)) * 2 * this.level) / 100 ) + this.level + 10;
         current_attack = ( ( (base_attack + this.iv_values.get(1)) * 2 * this.level) / 100 ) + 5;
         current_defense = ( ( (base_defense + this.iv_values.get(2)) * 2 * this.level) / 100 ) + 5;
@@ -333,15 +333,13 @@ public abstract class Pokemon implements Serializable{
         current_special_defense = ( ( (base_special_defense + this.iv_values.get(4)) * 2 * this.level) / 100 ) + 5;
         current_speed = ( ( (base_speed + this.iv_values.get(5)) * 2 * this.level) / 100 ) + 5;;
 
-        // update the battle stats
         resetBattleStats();
     }
 
     /**
      * Reset the pokemon soft stats after a battle
      */
-    public void resetBattleStats()
-    {
+    public void resetBattleStats() {
         this.battle_attack = current_attack;
         this.battle_special_attack = current_special_attack;
         this.battle_defense = current_defense;
@@ -365,13 +363,19 @@ public abstract class Pokemon implements Serializable{
         this.battle_evasion_count = 0;
     }
 
-    public void giveNickname(String nickname)
-    {
+    /**
+     * Assigns a new nickname to a pokemon
+     * @param nickname new desired nickname
+     */
+    public void giveNickname(String nickname) {
         this.nickname = nickname;
     }
 
-    public void takeDamage(int amount)
-    {
+    /**
+     * Calculates the new health points after a damaging move
+     * @param amount amount of damage to be taking after calculation
+     */
+    public void takeDamage(int amount) {
         this.setCurrent_hp(this.getCurrent_hp() - amount);
         if (this.getCurrent_hp() <= 0) {
             System.out.println("FAINTED");
@@ -380,19 +384,19 @@ public abstract class Pokemon implements Serializable{
         }
     }
 
-    public void healHP(int amount)
-    {
-        if (this.getCurrent_hp() + amount >= this.current_max_hp)
-        {
+    /**
+     * Calculates the new health points after a healing move
+     * @param amount amount of health to be healed
+     */
+    public void healHP(int amount) {
+        if (this.getCurrent_hp() + amount >= this.current_max_hp) {
             this.setCurrent_hp(current_max_hp);
-        }
-        else
-        {
+        } else {
             this.setCurrent_hp(this.getCurrent_hp() + amount);
         }
     }
 
-    // Setters and Getters
+    
     public int getPokedex_number() {
         return pokedex_number;
     }

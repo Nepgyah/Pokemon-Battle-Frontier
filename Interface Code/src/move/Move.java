@@ -7,10 +7,12 @@ import move.modifiers.SpecialAttack;
 import move.modifiers.StatusMove;
 import types.*;
 
+/**
+* Public abstract class that represents the moves a pokemon will be able to use.
+* Moves are both usable in battle as well as contests with different purposes and effects.
+*/
 public abstract class Move implements Serializable{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	protected int tm_no;
 	protected String name;
@@ -20,6 +22,14 @@ public abstract class Move implements Serializable{
 	protected int power;
 	protected double accuracy;
 	
+        /**
+         * Public constructor for the move.
+         * @param tm_no individual number for the move. Works similar to pokedex number
+         * @param name name of the move
+         * @param max_pp maximum power points the move has
+         * @param power the power or strength of a move
+         * @param accuracy how often the move is able to land
+         */
 	public Move(int tm_no, String name, int max_pp, int power, double accuracy) {
             super();
             this.tm_no = tm_no;
@@ -30,21 +40,31 @@ public abstract class Move implements Serializable{
             this.accuracy = accuracy;
 	}
 
+        /**
+         * Creates a copy of the move to be used by a pokemon.
+         * @return copy of the move for the pokemon
+         */
 	public abstract Move copy();
 	
-	public void displayMoveInformationBasic()
-	{
+        /**
+         * Console prints the basic information of a move
+         */
+	public void displayMoveInformationBasic() {
             System.out.print("\t" + this.current_pp + " / " + this.max_pp + "\t");
             System.out.println(this.name + " ");
 	}
 	
-	public void displayMovedexInformation()
-	{
+        /**
+         * Console displays the tm number and name of the move.
+         */
+	public void displayMovedexInformation() {
             System.out.println(this.getTm_no() + "\t" + this.getName());
 	}
 	
-	public void displayMoveInfoDetailed()
-	{	
+        /**
+         * Console displays the details of a move.
+         */
+	public void displayMoveInfoDetailed() {	
             if(this instanceof PhysicalAttack) System.out.print("'Attack' ");
             if(this instanceof SpecialAttack) System.out.print("'Sp Atk' ");
             if(this instanceof StatusMove) System.out.print("'Status' ");
@@ -54,8 +74,10 @@ public abstract class Move implements Serializable{
             System.out.println();
 	}
 	
-	private void displayTypes()
-	{
+        /**
+         * Console displays the type of the move.
+         */
+	private void displayTypes() {
             if(this instanceof Bug) System.out.print("Bug ");
             if(this instanceof Dark) System.out.print("Dark ");
             if(this instanceof Dragon) System.out.print("Dragon ");

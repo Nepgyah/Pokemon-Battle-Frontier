@@ -28,7 +28,7 @@ public class startup {
         
         pokedex.add(new P_019_Rattata());
         
-        pokedex.add(new P_023_Ekans());
+      
         
         pokedex.add(new P_025_Pikachu());
         
@@ -71,7 +71,7 @@ public class startup {
         return itemdex;
     }
     
-    public static Trainer createAsh(ArrayList<Pokemon> pokedex, ArrayList<Move> movedex)
+    public static Trainer createAsh(ArrayList<Pokemon> pokedex, ArrayList<Move> movedex, ArrayList<Item> itemdex)
     {
         Trainer ash = new Trainer("Ash");
 
@@ -88,6 +88,9 @@ public class startup {
             pokemon.assignRandomMoves(movedex);
             pokemon.resetBattleStats();
         }
+        
+        ash.getParty().get(0).giveItem(itemdex.get(1).copy());
+        
         return ash;
     }
     

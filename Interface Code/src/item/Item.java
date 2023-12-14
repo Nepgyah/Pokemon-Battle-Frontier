@@ -16,4 +16,7 @@ public abstract class Item implements Serializable {
     
     public abstract Item copy();
     
+    public String getName() {
+        return name;
+    }
 }

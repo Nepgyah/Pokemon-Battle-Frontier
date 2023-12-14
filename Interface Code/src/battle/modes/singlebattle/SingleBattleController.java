@@ -14,10 +14,12 @@ import javax.swing.JButton;
 import javax.swing.JProgressBar;
 import move.modifiers.TwoTurn;
 import java.awt.CardLayout;
-import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+/**
+ * Acts as connection between other panels (pokemon, bag, move) and the main battle window). Also provides the logic to handle all the events coming in during battle.
+ */
 public class SingleBattleController{
    
     private Timer timer;
@@ -48,6 +50,22 @@ public class SingleBattleController{
     JPanel detailPanel, navPanel;
     CardLayout battleCard, navCard;
     
+    /**
+     * Constructor for the controller.
+     * @param clientFrame main frame of the application
+     * @param navPanel panel containing the navigation buttons for the main menu
+     * @param battleFrame frame containing the current battle
+     * @param detailPanel panel containing information determined by the battle option menu
+     * @param leftTrainer trainer battling from the left side
+     * @param rightTrainer trainer battling from the right side
+     * @param showConsole if true, displays relative information to console (for debugging)
+     * @param textArea area that displays the description of the events during battle
+     * @param leftLabels numerical and visual labels for the pokemon on the left
+     * @param rightLabels mumerical and visual labels for the pokemon on the right
+     * @param leftHPBar visual representation of the left pokemon
+     * @param rightHPBar visual representation of the right pokemon
+     * @param controlButtons button group for the battle option
+     */
     public SingleBattleController(JFrame clientFrame, JPanel navPanel, 
             JFrame battleFrame, JPanel detailPanel,
             Trainer leftTrainer, Trainer rightTrainer, 
@@ -94,13 +112,16 @@ public class SingleBattleController{
         System.out.println("CONTROL CONSOLE: Initialization complete");
     }
     
+    /**
+     * Runs the logic for a single turn.
+     */
     public void runTurn() {
         
         disableControls();
         battleCard.show(detailPanel, "waitingPanel");
         if (showConsole) {
             System.out.println("CONTROL CONSOLE: Running turn");
-//            consoleFlags();
+            //consoleFlags();
         }
         if (leftSwap == true) {
             leftPrevName = leftPokemon.getName();
@@ -123,9 +144,8 @@ public class SingleBattleController{
             rightMovePanel.setMoveButtons(rightPokemon.getMoveset());
         }
         
-        // Right Going first
-        if (leftPokemon.getBattle_speed() < rightPokemon.getBattle_speed()) {
-            // Right Turn
+        // Right going first
+        if (leftPokemon.getBattle_speed() < rightPokemon.getBattle_speed()) {           
             if (rightPokemon.isRecharging()) {
                 BattleEvents.addGenericEvent(eventQueue, textArea, rightPokemon.getName() + " is recharging. It can't move!");
                 rightPokemon.setRecharging(false);
@@ -147,7 +167,8 @@ public class SingleBattleController{
                     if(rightPokemon.isInTwoTurn() == true) rightPokemon.setInTwoTurn(false);
                 }
             }
-            // Left Turn
+            
+            // Left going second
             if (leftPokemon.isFainted() == true) {
                 BattleEvents.addGenericEvent(eventQueue, textArea, leftPokemon.getName() + " fainted!");
                 BattleEvents.addIconRemoveEvent(eventQueue, leftLabels[5]);
@@ -186,7 +207,7 @@ public class SingleBattleController{
             }
         } 
         
-        // Left Going First
+        // Left going first
         if (leftPokemon.getBattle_speed() > rightPokemon.getBattle_speed()) {
             // Left turn
             if (leftPokemon.isRecharging()) {
@@ -215,7 +236,7 @@ public class SingleBattleController{
                     if(leftPokemon.isInTwoTurn() == true) leftPokemon.setInTwoTurn(false);
                 }            
             }
-            // Right turn
+            // Right going second
             if (rightPokemon.isFainted() == true) {
                 BattleEvents.addGenericEvent(eventQueue, textArea, rightPokemon.getName() + " fainted!");
                 BattleEvents.addIconRemoveEvent(eventQueue, rightLabels[5]);
@@ -253,7 +274,6 @@ public class SingleBattleController{
             }
         }
         
-        // Post move checks here
         Mechanics.postMoveEffects(eventQueue, textArea, leftPokemon, rightPokemon, leftLabels[2], rightLabels[2], leftHPBar, rightHPBar);
         if (leftPokemon.isFainted() == true) {
             BattleEvents.addGenericEvent(eventQueue, textArea, leftPokemon.getName() + " fainted!");
@@ -263,6 +283,7 @@ public class SingleBattleController{
                 BattleEvents.addWinnerEvent(eventQueue, textArea, rightTrainer, leftTrainer);
             }
         }
+        
         Mechanics.postMoveEffects(eventQueue, textArea, rightPokemon, leftPokemon, rightLabels[2], leftLabels[2], rightHPBar, leftHPBar);
         if (rightPokemon.isFainted() == true) {
             BattleEvents.addGenericEvent(eventQueue, textArea, rightPokemon.getName() + " fainted!");
@@ -330,7 +351,10 @@ public class SingleBattleController{
         leftSwap = rightSwap = false;
     }
     
-    // Methods for window to call
+    /**
+     * Allows controller to receive input from move panel.
+     * @param pos move to be selected
+     */
     public void setMoveChoice(int pos){
         if (leftTrainerTurn) {
             leftMove = leftPokemon.getMoveset()[pos];
@@ -352,6 +376,10 @@ public class SingleBattleController{
         }
     }
     
+    /**
+     * Allows controller to receive input from move panel.
+     * @param pos pokemon to be selected
+     */
     public void setPokemonSwap(int pos) {
         if(leftTrainerTurn) {
             // Swapping for fainted Pokemon
@@ -359,6 +387,7 @@ public class SingleBattleController{
                 textArea.setText(leftTrainer.getParty().get(pos).getName() + " is unable to battle anymore");
                 return;
             }
+            
             // Swapping mid turn
             if (leftPokemon.isFainted()) {
                 battleCard.show(detailPanel, "waitingPanel");
@@ -420,12 +449,18 @@ public class SingleBattleController{
         }
     }
 
+    /**
+     * Disables the battle control buttons
+     */
     private void disableControls() {
         fightButton.setEnabled(false);
         bagButton.setEnabled(false);
         pokemonButton.setEnabled(false);
     }
     
+    /**
+     * Enables the battle control buttons
+     */
     private void enableControls() {
         fightButton.setEnabled(true);
         bagButton.setEnabled(true);

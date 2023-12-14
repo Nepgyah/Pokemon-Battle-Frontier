@@ -1,5 +1,7 @@
 package utilities;
 
+import item.Item;
+import item.itemdex.*;
 import java.util.ArrayList;
 import pokemon.Pokemon;
 import pokemon.pokedex.*;
@@ -26,14 +28,15 @@ public class startup {
         
         pokedex.add(new P_019_Rattata());
         
+      
+        
         pokedex.add(new P_025_Pikachu());
         
         pokedex.add(new P_143_Snorlax());
         return pokedex;
     }
     
-    public static ArrayList<Move> initializeMovedex()
-    {
+    public static ArrayList<Move> initializeMovedex() {
         ArrayList<Move> movedex = new ArrayList<>();
 
         movedex.add(new M_000_Test());
@@ -56,7 +59,19 @@ public class startup {
         return movedex;
     }
     
-    public static Trainer createAsh(ArrayList<Pokemon> pokedex, ArrayList<Move> movedex)
+    public static ArrayList<Item> initializeItemdex() {
+        ArrayList<Item> itemdex = new ArrayList<>();
+        
+        itemdex.add(new ParalyzeHeal());
+        
+        itemdex.add(new SitrusBerry());
+        
+        itemdex.add(new SuperPotion());
+        
+        return itemdex;
+    }
+    
+    public static Trainer createAsh(ArrayList<Pokemon> pokedex, ArrayList<Move> movedex, ArrayList<Item> itemdex)
     {
         Trainer ash = new Trainer("Ash");
 
@@ -73,6 +88,9 @@ public class startup {
             pokemon.assignRandomMoves(movedex);
             pokemon.resetBattleStats();
         }
+        
+        ash.getParty().get(0).giveItem(itemdex.get(1).copy());
+        
         return ash;
     }
     

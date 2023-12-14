@@ -1,15 +1,12 @@
 package start;
 
-import gameInterface.redo.MainMenu;
 import java.util.ArrayList;
-import pokemon.pokedex.P_025_Pikachu;
 import pokemon.Pokemon;
 import utilities.startup;
 import trainer.Trainer;
 import move.Move;
-import java.util.Timer;
-import java.util.TimerTask;
 import client.Client;
+import item.Item;
 
 public class Start {
     public static void main(String[] args) {
@@ -18,8 +15,14 @@ public class Start {
         
         // Initialize base data (Pokemon / Moves / Items)
         System.out.println("Loading Pokemon");
+        ArrayList<Item> itemdex = startup.initializeItemdex();
+        
+        System.out.println("Items in the game");
+        for (Item item : itemdex) {
+            System.out.println(item.getName());
+        }
         ArrayList<Pokemon> pokedex = startup.initializePokedex();
-        ArrayList<Move> movedex = startup.initializeMovedex();
+        ArrayList<Move> movedex = startup.initializeMovedex();     
         
         // Load custom data (Save Trainers / Settings )
         System.out.println("Loading Saved Data");
@@ -31,27 +34,28 @@ public class Start {
         
         // Objects for basic testin
 
-        System.out.println("Program begin");
         ArrayList<Trainer> trainers = new ArrayList<>();
-        Trainer ash = startup.createAsh(pokedex, movedex);
+        Trainer ash = startup.createAsh(pokedex, movedex, itemdex);
         Trainer gary = startup.createGary(pokedex, movedex);
         trainers.add(ash);
         trainers.add(gary);
-//        for (Pokemon pokemon : ash.getParty()) {
-//            System.out.println(pokemon.getName());
-//        }
-//        Timer timer = new Timer();
-//        
-//        TimerTask task = new TimerTask() {
-//            @Override
-//            public void run() {
-//                System.out.println("DONE!");
-//            }
-//        };
-//        
-//        timer.schedule(task, 3000);
-//        ash.displayPartyDetailed();
 
+        System.out.println("Testing for held items");
+        for (Pokemon pokemon : ash.getParty()) {
+            pokemon.displayHeldItem();
+        }
+        
+        System.out.println("Attempting to remove items");
+        for (Pokemon pokemon : ash.getParty()) {
+            pokemon.takeItem();
+        }
+        
+        System.out.println("Post testing for held items");
+        for (Pokemon pokemon : ash.getParty()) {
+            pokemon.displayHeldItem();
+        }
+        
+        System.out.println("Executing runnable");
         java.awt.EventQueue.invokeLater(new Runnable() {
             
             @Override

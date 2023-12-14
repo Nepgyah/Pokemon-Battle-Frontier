@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 import move.Move;
+import item.Item;
 import types.*;
 
 public abstract class Pokemon implements Serializable{
@@ -24,7 +25,8 @@ public abstract class Pokemon implements Serializable{
     
     protected Move[] moveset = new Move[4];
     protected ArrayList<Integer> learnable_moves = new ArrayList<>();
-
+    protected Item heldItem = null;
+    
     // Base statistics
     protected int level;
     protected int base_max_hp;
@@ -168,27 +170,53 @@ public abstract class Pokemon implements Serializable{
         }
     }
 
-    /**
+    /*
      * Fills in / Replaces slot with desired move
      * 
      * @param move		The move the pokemon will learn
      * @param pos		The moveslot position it will be in
      */
-    public void learnMove(Move move, int pos)
-    {
+    public void learnMove(Move move, int pos) {
         moveset[pos] = move;
     }
 
+    /* =============================
+     * ITEM RELATED MEMBER FUNCTIONS
+     * =============================
+     */
+    
+    public void giveItem(Item item) {
+        if (this.heldItem == null) {
+            this.heldItem = item;
+            System.out.println(name + " is now holding a " + item.getName());
+        } else {
+            System.out.println(name + " is already holding a " + item.getName());
+        }
+    }
+    
+    public Item takeItem() {
+        if (heldItem != null) {
+            System.out.println(name + " is no longer holding a " + heldItem.getName());
+            heldItem = null;
+            return heldItem;
+        } else {
+            System.out.println(name + " isn't holding an item");
+            return null;
+        }
+    }
+    
+    public void displayHeldItem() {
+        if (this.heldItem == null) {
+            System.out.println(name + " isn't holding a item");
+        } else {
+            System.out.println(name + " is holding a " + heldItem.getName());
+        }
+    }
     /* =============================
      * DISPLAY RELATED MEMBER FUNCTIONS
      * =============================
      */
 
-    /**
-     * Displays the current moves a pokemon learned and
-     * can use in battle
-     * 
-     */
     public void displayCurrentMoves()
     {
         System.out.println();

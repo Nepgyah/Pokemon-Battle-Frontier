@@ -177,15 +177,14 @@ public class Mechanics {
         if (canUseMove(user, userLabels, userHPBar,  eventQueue, textArea) == false) return;
         double chance;
         double result;
-        
-        // "Pokemon used moved!"
+           
         BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " used " + userMove.getName() + "!");
         
         if (userMove instanceof HealOverTime) {
             BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + ((HealOverTime) ((HealOverTime)userMove)).getTurnDescription());
             user.setHealingOverTime(true);
         }
-        // Bring back icon on 2nd half two turn
+        
         if (userMove instanceof TwoTurn) {
             BattleEvents.addIconReturnEvent(eventQueue, user, userLabels[5]);
         }
@@ -238,13 +237,14 @@ public class Mechanics {
                     targetHPBar.setValue(target.getCurrent_hp());
                 }
             });
+            /* Add faint event here due to swap mechanice due to fainted pokemon at the end of the turn*/
             target.setFainted(true);
             BattleEvents.addGenericEvent(eventQueue, textArea, "Its a One Hit KO!");
             return;
         }
         
-        // Add damage dealing event
-        if (damage != 0) {
+        // Types of damage events
+        if (damage != 0) {        
             if (userMove instanceof MultiStrike) {
                 int timeHit = (int) ((Math.random() * 3) + 2);
                 for (int i = 0; i < timeHit; i++) {
@@ -254,7 +254,6 @@ public class Mechanics {
             } else {
                 BattleEvents.addDamageEvent(eventQueue, textArea, user.getBattle_status(), damage, target, targetLabels[2], targetHPBar);
             }
-            // Add effect multiplier effect
             if (typeMultiplier < 1.0 && typeMultiplier > 0) {
                 BattleEvents.addGenericEvent(eventQueue, textArea, "Its not very effective...");
             }
@@ -271,16 +270,12 @@ public class Mechanics {
         
         if(userMove instanceof HealsHP) {
             int healAmount = (int) (((HealsHP)userMove).getHealRatio() * user.getCurrent_max_hp());
-            System.out.println("Heal amount - " + Integer.toString(healAmount));
             eventQueue.add(new TimerTask() {
                 @Override
                 public void run() {
                     user.healHP(healAmount);
-
-                    System.out.println("BM: Updating hp display for pure heal");
                     userLabels[2].setText(Integer.toString(user.getCurrent_hp()));
                     userHPBar.setValue(user.getCurrent_hp());
-
                     if (user.getCurrent_hp() > (user.getCurrent_max_hp() / 2)) {
                         userHPBar.setForeground(Color.yellow);
                     }
@@ -292,20 +287,17 @@ public class Mechanics {
             BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " healed some HP!");
         }
         
-        // Add recoil event
         if (userMove instanceof HasRecoil) {
             int recoilDamage = (int) (((HasRecoil)userMove).getRecoilRatio() * damage);
             BattleEvents.addDamageEvent(eventQueue, textArea, user.getBattle_status(), recoilDamage, user, userLabels[2], userHPBar);
             BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " took damage in recoil!");
         }
-        
-        // Add statistic change event
+               
         if (userMove instanceof ApplyStatChange) {
             double statModChange = ( (ApplyStatChange) userMove).getApplyChance();
             double statModResult = Math.random();
             
             if (statModChange > statModResult) {
-                // Note: two sets of modifiers (EX: userAttackPlusOne vs targetAttackPlusOne) requires two sepereate functions?
                 StatisticChanges.applyToTarget(target, userMove, eventQueue, textArea);
                 StatisticChanges.applyToUser(user, userMove, eventQueue, textArea);
             }
@@ -313,7 +305,6 @@ public class Mechanics {
 
         if(target.getCurrent_hp() - damage <= 0)
         {
-            System.out.println("BM: Target fainted mid turn!");
             target.setFainted(true);
             return;
         }
@@ -329,7 +320,6 @@ public class Mechanics {
             user.setRecharging(true);
         }
         
-        // Add status change effect
         if (userMove instanceof ApplyParalyze || userMove instanceof ApplyPoison || 
                 userMove instanceof ApplyBurn || userMove instanceof ApplySleep || userMove instanceof ApplyFrozen) {
             if (!(target.getBattle_status() == null)) {

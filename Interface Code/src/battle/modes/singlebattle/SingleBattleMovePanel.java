@@ -5,6 +5,10 @@ import move.Move;
 import battle.modes.singlebattle.SingleBattleController;
 import java.awt.CardLayout;
 import javax.swing.JLabel;
+
+/**
+ * JPanel for move selection during a single battle.
+ */
 public class SingleBattleMovePanel extends javax.swing.JPanel {
 
     JPanel contentPanel;
@@ -12,6 +16,13 @@ public class SingleBattleMovePanel extends javax.swing.JPanel {
     SingleBattleController controller;
     JLabel hpLabel;
     
+    /**
+     * Constructor for move panel
+     * @param panel link back to battle panel
+     * @param trainer trainer who is currently making a turn
+     * @param moveList list of pokemon's current moves
+     * @param controller single battle controller
+     */
     public SingleBattleMovePanel(JPanel panel, String trainer, Move[] moveList, SingleBattleController controller) {
         initComponents();
         this.contentPanel = panel;
@@ -23,6 +34,10 @@ public class SingleBattleMovePanel extends javax.swing.JPanel {
         setMoveButtons(moveList);
     }
 
+    /**
+     * Displays the current available moves of a pokemon.
+     * @param moveList current list of moves the pokemon can use.
+     */
     public void setMoveButtons(Move[] moveList) {
         if (moveList[0] != null) {
             moveOneButton.setEnabled(true);

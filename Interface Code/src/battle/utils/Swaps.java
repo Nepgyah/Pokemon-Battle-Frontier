@@ -10,6 +10,9 @@ import pokemon.Pokemon;
 import trainer.Trainer;
 import utilities.PokeColors;
 
+/**
+ * Collection of functions that deal with swapping pokemon during battle
+ */
 public class Swaps {
     
     public static void swapPokemon(Trainer trainer, int partyPosition) {

@@ -1,5 +1,9 @@
 package battle.utils;
 
+import static battle.utils.BattleEvents.addHPBarUpdateEvent;
+import item.modifiers.HealRatioHP;
+import item.modifiers.HealSetHP;
+import item.modifiers.TriggeredByHP;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.TimerTask;
@@ -11,27 +15,32 @@ import move.modifiers.*;
 import pokemon.Pokemon;
 import move.status_effect.*;
 import trainer.Trainer;
+
+/**
+ * Collection of all relevant mechanics and logic for a pokemon battle.
+ * Modularized to accommodate the different logic of the types of pokemon battle.
+ */
 public class Mechanics {
     
     final static int MAX_STAT_CHANGE = 2;
     
-    public static void displayBattleStatsToConsole(Pokemon pokemon) {
-        System.out.println("Turn report for: " + pokemon.getName() + " Recharging? -> " + pokemon.isRecharging());
-        System.out.println("Attack: " + pokemon.getBattle_attack() + " (" + pokemon.getCurrent_attack()+ ")");
-        System.out.println("Defense: " + pokemon.getBattle_defense() + " (" + pokemon.getCurrent_defense()+ ")");
-        System.out.println("Special Attack: " + pokemon.getBattle_special_attack() + " (" + pokemon.getCurrent_special_attack()+ ")");
-        System.out.println("Special Defense: " + pokemon.getBattle_special_defense() + " (" + pokemon.getCurrent_special_defense()+ ")");
-        System.out.println("Speed: " + pokemon.getBattle_speed() + " (" + pokemon.getCurrent_speed()+ ")");
-        System.out.println("Current Accuracy Modifier: " + pokemon.getBattle_accuracy());
-        System.out.println("Curretn Evasion Modifier: " + pokemon.getBattle_evasion());
-    }
-    
+    /**
+     * Logic for events happening after moves have been made. Most values are referenced from generation 1.
+     * @param eventQueue queue of events that happen during a single turn in pokemon
+     * @param textArea textarea containing event description
+     * @param user main pokemon receiving the effects
+     * @param target (if applicable) secondary pokemon affected by user's results
+     * @param userHP integer display of user pokemon's hp
+     * @param targetHP integer display of target pokemon's hp
+     * @param userHPBar visual display of user pokemon's hp
+     * @param targetHPBar visual display of target pokemon's hp
+     */
     public static void postMoveEffects(ArrayList<TimerTask> eventQueue, JTextArea textArea, 
             Pokemon user, Pokemon target, 
             JLabel userHP, JLabel targetHP,
             JProgressBar userHPBar, JProgressBar targetHPBar) {
         BattleEvents.addGenericEvent(eventQueue, textArea, "Checking Post move effects for " + user.getName());
-        // Status effects
+
         if (!(user.getBattle_status() == null)) {
             // Note: Gen 1 calculation (1/16)
             if (user.getBattle_status().equals("PSN")) {
@@ -56,8 +65,36 @@ public class Mechanics {
             BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " healed some of its HP!");
         }
         
+        // Berry Check
+        if (user.isHoldingItem()) {
+            BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is holding a " + user.getItem().getName());
+            if (user.getItem() instanceof TriggeredByHP) {
+                BattleEvents.addGenericEvent(eventQueue, textArea, "The item can be triggered by hp");
+                if(((TriggeredByHP)user.getItem()).GetHPActivePoint() * user.getCurrent_max_hp() > user.getCurrent_hp()) {
+                    double healAmount = 0;
+                    if (user.getItem() instanceof HealRatioHP) {
+                        healAmount = ((HealRatioHP)user.getItem()).getHPRatio() * user.getCurrent_max_hp();   
+                    }
+                    if (user.getItem() instanceof HealSetHP) {
+                        healAmount = ((HealSetHP)user.getItem()).getHPAmount();   
+                    }
+                    
+                    BattleEvents.addHealingEvent(eventQueue, textArea, (int) healAmount, user, userHP, userHPBar);
+                    BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " healed some HP with its " + user.getItem().getName() + "!");
+                    user.consumeItem();
+                }
+            }
+            if (user.getItem() instanceof HealsHP) {
+                BattleEvents.addGenericEvent(eventQueue, textArea, "The item will heal the pokemon");
+            }            
+        }
     }
     
+    /**
+     * Returns true if the trainer in question lost the battle.
+     * @param trainer trainer in question
+     * @return true if the trainer lost the battle
+     */
     public static boolean didLose(Trainer trainer) {
         int count = 0;
         for (Pokemon pokemon : trainer.getParty()) {
@@ -71,14 +108,33 @@ public class Mechanics {
             return false;
         }
     }
+    
+    /**
+     * Calculates the value of an attack and several factors. 
+     * Formula ((((2 * Level / 5 + 2) * AttackStat * AttackPower / DefenseStat) / 50) + 2) * STAB * Weakness/Resistance * RandomNumber / 100 ) - From wiki
+     * Variables not included: STAB (Same Type Attack Bonus), Random numbering
+     * @param level level of the pokemon attacking
+     * @param attack attack stat of the pokemon attacking (attack or special attack)
+     * @param defense defense stat of the pokemon receiving the attack
+     * @param power power stat of the move being used
+     * @param type_bonus multiplier based of the type of move vs the receiving pokemon's stat
+     * @return true damage value of the move
+     */
     public static int calcDamage(int level, int attack, int defense, int power, double type_bonus) {
-        /* Calculate damage WIP
-         *  Formula ((((2 * Level / 5 + 2) * AttackStat * AttackPower / DefenseStat) / 50) + 2) * STAB * Weakness/Resistance * RandomNumber / 100 ) - From wiki
-         */
         int damage = (int) (((((2 * level / 5 + 2) * attack * power / defense) / 50) + 2) * type_bonus );
         return damage;
     }
     
+    /**
+     * Returns true if the pokemon is able to use its move in the current turn.
+     * Also determines if the user is able to break out of its current status and updates that change here.
+     * @param user pokemon attempting to use a move
+     * @param userLabels display labels correlating to the user
+     * @param userHPBar visual representation of the health points of a pokemon
+     * @param eventQueue queue of events that happen during a single turn in pokemon
+     * @param textArea textarea containing event descriptions
+     * @return true if the pokemon is able to use its move this turn
+     */
     public static boolean canUseMove(Pokemon user, JLabel [] userLabels, JProgressBar userHPBar, ArrayList<TimerTask> eventQueue, JTextArea textArea) {
         if (user.isFlinched() == true) {
             eventQueue.add(new TimerTask() {
@@ -165,6 +221,19 @@ public class Mechanics {
         return true;
     }
     
+    /**
+     * Logic for a single move event in a pokemon battle.
+     * @param user pokemon conducting the move
+     * @param target pokemon receiving the move (could be self, ally or enemy)
+     * @param userMove move selected by the user
+     * @param targetMove move selected by the target (helps determine success of move. EX: User move failed due to target using fly the previous turn)
+     * @param userLabels display labels corresponding to the pokemon conducting the move
+     * @param targetLabels display labels corresponding to the pokemon receiving the move
+     * @param userHPBar visual representation of the health points of the pokemon conducting the move
+     * @param targetHPBar visual representation of the health points of the pokemon receiving the move
+     * @param eventQueue queue of events that happen during a single turn in pokemon
+     * @param textArea textarea containing event description
+     */
     public static void useMove(
             Pokemon user, Pokemon target,
             Move userMove, Move targetMove,
@@ -189,7 +258,7 @@ public class Mechanics {
             BattleEvents.addIconReturnEvent(eventQueue, user, userLabels[5]);
         }
         
-        // Accuracy Check
+        // Accuracy Check - self created
         chance = (user.getBattle_accuracy() * userMove.getAccuracy() * target.getBattle_evasion() );
         result = Math.random();
         if (target.isInTwoTurn()) {
@@ -219,7 +288,7 @@ public class Mechanics {
         } else {
             damage = 0;
         }
-        
+                
         if (typeMultiplier == 0) {
             BattleEvents.addGenericEvent(eventQueue, textArea, "The move had no effect");
             return;
@@ -237,22 +306,30 @@ public class Mechanics {
                     targetHPBar.setValue(target.getCurrent_hp());
                 }
             });
-            /* Add faint event here due to swap mechanice due to fainted pokemon at the end of the turn*/
+            /* Set faint here so its set immediatly instead of delayed due to event queue */
             target.setFainted(true);
             BattleEvents.addGenericEvent(eventQueue, textArea, "Its a One Hit KO!");
             return;
         }
         
+        System.out.println(userMove.getName() + " will do " + damage);
         // Types of damage events
-        if (damage != 0) {        
+        if (damage != 0) {
+            if (user.getBattle_status() == "BRN") {
+                damage = damage / 2;
+            }
             if (userMove instanceof MultiStrike) {
                 int timeHit = (int) ((Math.random() * 3) + 2);
                 for (int i = 0; i < timeHit; i++) {
-                    BattleEvents.addDamageEvent(eventQueue, textArea, user.getBattle_status(), damage, target, targetLabels[2], targetHPBar);
+                    target.takeDamage(damage);
+//                    BattleEvents.addDamageEvent(eventQueue, textArea, user.getBattle_status(), damage, target, targetLabels[2], targetHPBar);
+                    addHPBarUpdateEvent(eventQueue, textArea, damage, target, targetLabels[2], targetHPBar);
                 }
                 BattleEvents.addGenericEvent(eventQueue, textArea, "It hit " + Integer.toString(timeHit) + " time(s)!");
             } else {
-                BattleEvents.addDamageEvent(eventQueue, textArea, user.getBattle_status(), damage, target, targetLabels[2], targetHPBar);
+                target.takeDamage(damage);
+                addHPBarUpdateEvent(eventQueue, textArea, damage, target, targetLabels[2], targetHPBar);
+//                BattleEvents.addDamageEvent(eventQueue, textArea, user.getBattle_status(), damage, target, targetLabels[2], targetHPBar);
             }
             if (typeMultiplier < 1.0 && typeMultiplier > 0) {
                 BattleEvents.addGenericEvent(eventQueue, textArea, "Its not very effective...");
@@ -262,6 +339,7 @@ public class Mechanics {
             }
         }
         
+        System.out.println(target.getName() + " updated HP: " + target.getCurrent_hp());
         if(userMove instanceof Lifesteal) {
             int netHP = (int) (((Lifesteal)userMove).getLifestealRatio() * damage);
             BattleEvents.addHealingEvent(eventQueue, textArea, netHP, user, userLabels[2], userHPBar);
@@ -289,7 +367,7 @@ public class Mechanics {
         
         if (userMove instanceof HasRecoil) {
             int recoilDamage = (int) (((HasRecoil)userMove).getRecoilRatio() * damage);
-            BattleEvents.addDamageEvent(eventQueue, textArea, user.getBattle_status(), recoilDamage, user, userLabels[2], userHPBar);
+//            BattleEvents.addDamageEvent(eventQueue, textArea, user.getBattle_status(), recoilDamage, user, userLabels[2], userHPBar);
             BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " took damage in recoil!");
         }
                
@@ -303,8 +381,7 @@ public class Mechanics {
             }
         }
 
-        if(target.getCurrent_hp() - damage <= 0)
-        {
+        if(target.getCurrent_hp() <= 0) {
             target.setFainted(true);
             return;
         }

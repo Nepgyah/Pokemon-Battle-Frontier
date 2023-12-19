@@ -91,10 +91,13 @@ public class Startup {
         
         ash.getParty().get(0).giveItem(itemdex.get(1).copy());
         
+        ash.addToBag(itemdex.get(0).copy());
+        ash.addToBag(itemdex.get(2).copy());
+        
         return ash;
     }
     
-     public static Trainer createGary(ArrayList<Pokemon> pokedex, ArrayList<Move> movedex)
+     public static Trainer createGary(ArrayList<Pokemon> pokedex, ArrayList<Move> movedex, ArrayList<Item> itemdex)
     {
         Trainer gary = new Trainer("Gary");
         
@@ -107,6 +110,8 @@ public class Startup {
             pokemon.assignRandomMoves(movedex);
             pokemon.resetBattleStats();
         }
+        
+        gary.addToBag(itemdex.get(2).copy());
         return gary;
     }
 }

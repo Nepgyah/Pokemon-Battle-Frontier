@@ -18,8 +18,9 @@ public class SingleBattleWindow extends javax.swing.JFrame {
     CardLayout controlCard;
     SingleBattleController battleController;
     pokemonPanel leftPokemonPanel, rightPokemonPanel;
-    SingleBattleMovePanel leftMovePanel;
-    SingleBattleMovePanel rightMovePanel;
+    SingleBattleMovePanel leftMovePanel, rightMovePanel;
+    bagPanel leftBagPanel, rightBagPanel;
+    
     boolean showConsole;
     
     public SingleBattleWindow(JFrame clientFrame, JPanel navPanel, Trainer leftTrainer, Trainer rightTrainer, boolean showConsole) {
@@ -74,6 +75,9 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         leftMovePanel = new SingleBattleMovePanel(detailPanel, leftTrainer.getName(), leftTrainer.getParty().get(0).getMoveset(), battleController );
         rightMovePanel = new SingleBattleMovePanel(detailPanel, rightTrainer.getName(), rightTrainer.getParty().get(0).getMoveset(), battleController);
         
+        leftBagPanel = new bagPanel(detailPanel, leftTrainer, battleController);
+        rightBagPanel = new bagPanel(detailPanel, rightTrainer, battleController);
+        
         battleController.setLeftPokePanel(leftPokemonPanel);
         battleController.setRightPokePanel(rightPokemonPanel);
         battleController.setLeftMovePanel(leftMovePanel);
@@ -83,8 +87,8 @@ public class SingleBattleWindow extends javax.swing.JFrame {
        
         detailPanel.add(new waitingPanel(detailPanel), "waitingPanel");
         
-        detailPanel.add(new bagPanel(detailPanel, leftTrainer.getName()), "leftBagPanel");
-        detailPanel.add(new bagPanel(detailPanel, rightTrainer.getName()), "rightBagPanel");
+        detailPanel.add(leftBagPanel, "leftBagPanel");
+        detailPanel.add(rightBagPanel, "rightBagPanel");
         
         detailPanel.add(leftPokemonPanel, "leftPokemonPanel");
         detailPanel.add(rightPokemonPanel, "rightPokemonPanel");

@@ -1,8 +1,10 @@
 package battle.utils;
 
 import static battle.utils.BattleEvents.addHPBarUpdateEvent;
+import item.Item;
 import item.modifiers.HealRatioHP;
 import item.modifiers.HealSetHP;
+import item.modifiers.ItemHealsHP;
 import item.modifiers.TriggeredByHP;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -24,6 +26,18 @@ public class Mechanics {
     
     final static int MAX_STAT_CHANGE = 2;
     
+    
+    public static void preMoveEffects(ArrayList<TimerTask> eventQueue, JTextArea textarea, Trainer trainer,
+            Pokemon user, Item item, JLabel userHP, JProgressBar userHPBar) {
+        BattleEvents.addGenericEvent(eventQueue, textarea, "Checking Pre move effects for " + user.getName());
+        BattleEvents.addGenericEvent(eventQueue, textarea, trainer.getName() + " used a " + item.getName());
+        if (item instanceof ItemHealsHP) {
+            if (item instanceof HealSetHP)
+            {
+                BattleEvents.addHealingEvent(eventQueue, textarea, ((HealSetHP)item).getHPAmount() , user, userHP, userHPBar);
+            }
+        }
+    }
     /**
      * Logic for events happening after moves have been made. Most values are referenced from generation 1.
      * @param eventQueue queue of events that happen during a single turn in pokemon
@@ -67,9 +81,7 @@ public class Mechanics {
         
         // Berry Check
         if (user.isHoldingItem()) {
-            BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is holding a " + user.getItem().getName());
             if (user.getItem() instanceof TriggeredByHP) {
-                BattleEvents.addGenericEvent(eventQueue, textArea, "The item can be triggered by hp");
                 if(((TriggeredByHP)user.getItem()).GetHPActivePoint() * user.getCurrent_max_hp() > user.getCurrent_hp()) {
                     double healAmount = 0;
                     if (user.getItem() instanceof HealRatioHP) {
@@ -85,7 +97,7 @@ public class Mechanics {
                 }
             }
             if (user.getItem() instanceof HealsHP) {
-                BattleEvents.addGenericEvent(eventQueue, textArea, "The item will heal the pokemon");
+                
             }            
         }
     }

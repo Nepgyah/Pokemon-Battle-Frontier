@@ -6,6 +6,7 @@ import pokemon.Pokemon;
 import trainer.Trainer;
 import battle.utils.*;
 import battle.gui.utils.pokemonPanel;
+import item.Item;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
@@ -29,10 +30,13 @@ public class SingleBattleController{
     private Trainer leftTrainer, rightTrainer;
     private Pokemon leftPokemon, rightPokemon;
     private Move leftMove, rightMove;
+    private Item leftItem, rightItem;
     private int leftNextPokemon, rightNextPokemon;
     private String leftPrevName, rightPrevName;
     
     boolean leftTrainerTurn = true,
+            leftItemUse = false,
+            rightItemUse = false,
             leftSwap = false, 
             rightSwap = false,
             leftWins = false, 
@@ -62,7 +66,7 @@ public class SingleBattleController{
      * @param showConsole if true, displays relative information to console (for debugging)
      * @param textArea area that displays the description of the events during battle
      * @param leftLabels numerical and visual labels for the pokemon on the left
-     * @param rightLabels mumerical and visual labels for the pokemon on the right
+     * @param rightLabels numerical and visual labels for the pokemon on the right
      * @param leftHPBar visual representation of the left pokemon
      * @param rightHPBar visual representation of the right pokemon
      * @param controlButtons button group for the battle option
@@ -140,6 +144,15 @@ public class SingleBattleController{
             
             rightPokemonPanel.setPokemonButtons();
             rightMovePanel.setMoveButtons(rightPokemon.getMoveset());
+        }
+        
+        // Item use here
+        if (leftItemUse) {
+            Mechanics.preMoveEffects(eventQueue, textArea, leftTrainer, leftPokemon, leftItem, leftLabels[2], leftHPBar);
+            
+        }
+        if (rightItemUse) {
+            Mechanics.preMoveEffects(eventQueue, textArea, rightTrainer, rightPokemon, rightItem, rightLabels[2], rightHPBar);
         }
         
         // Right going first
@@ -346,7 +359,26 @@ public class SingleBattleController{
 
         // RESET 
         eventQueue.clear();
-        leftSwap = rightSwap = false;
+        leftSwap = rightSwap = leftItemUse = rightItemUse = false;
+    }
+    
+    
+    public void setItemUse(int pos) {
+
+        if(leftTrainerTurn) {
+            leftItem = leftTrainer.getBag().get(pos);
+            if(showConsole) System.out.println("Battle Controller: Left Trainer will use " + leftItem.getName() + " as their turn");
+            leftTrainerTurn = false;
+            leftItemUse = true;
+            battleCard.show(detailPanel, "waitingPanel");
+            textArea.setText("What will " + rightPokemon.getName() + " do?");
+        } else {
+            rightItem = rightTrainer.getBag().get(pos);
+            rightItemUse = true;
+            if(showConsole) System.out.println("Battle Controller: Right Trainer will use " + rightItem.getName() + " as their turn");
+            leftTrainerTurn = true;
+            runTurn();
+        }
     }
     
     /**

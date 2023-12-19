@@ -34,7 +34,7 @@ public class Start {
         ArrayList<Trainer> trainers = new ArrayList<>();
         
         Trainer ash = Startup.createAsh(pokedex, movedex, itemdex);
-        Trainer gary = Startup.createGary(pokedex, movedex);
+        Trainer gary = Startup.createGary(pokedex, movedex, itemdex);
         trainers.add(ash);
         trainers.add(gary);
 

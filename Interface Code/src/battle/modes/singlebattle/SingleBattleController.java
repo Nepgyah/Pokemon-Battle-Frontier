@@ -119,10 +119,6 @@ public class SingleBattleController{
         
         disableControls();
         battleCard.show(detailPanel, "waitingPanel");
-        if (showConsole) {
-            System.out.println("CONTROL CONSOLE: Running turn");
-            //consoleFlags();
-        }
         if (leftSwap == true) {
             leftPrevName = leftPokemon.getName();
             Swaps.swapPokemon(leftTrainer, leftNextPokemon);
@@ -323,9 +319,9 @@ public class SingleBattleController{
                 public void run() {
                     if (showConsole) {
                         System.out.println("Left Trainer");
-                        Mechanics.displayBattleStatsToConsole(leftPokemon);
+                        ConsoleCommands.postTurnSummary(leftPokemon);
                         System.out.println("\nRight Trainer");
-                        Mechanics.displayBattleStatsToConsole(rightPokemon);
+                        ConsoleCommands.postTurnSummary(rightPokemon);
                     }
                     // Both are either recharging or in two turn (Right doesent need a check since left make their turn first)
                     if ( (leftPokemon.isInTwoTurn() || leftPokemon.isRecharging() ) && ( rightPokemon.isInTwoTurn() || rightPokemon.isRecharging() ) ) {

@@ -70,15 +70,11 @@ public class BattleEvents {
      * @param targetHP numerical representation of health points of the target
      * @param targetHPBar visual representation of health points of the target
      */
-    public static void addDamageEvent(ArrayList<TimerTask> eventQueue, JTextArea textArea, String userStatus, int damage, Pokemon target, JLabel targetHP, JProgressBar targetHPBar) {
+    public static void addHPBarUpdateEvent(ArrayList<TimerTask> eventQueue, JTextArea textArea, int damage, Pokemon target, JLabel targetHP, JProgressBar targetHPBar) {
         eventQueue.add(new TimerTask() {
             @Override
             public void run() {
-                 if (userStatus == "BRN") {
-                    target.takeDamage(damage / 2);
-                } else {
-                    target.takeDamage(damage);
-                }
+                // Update the HP Bar
                 targetHP.setText(Integer.toString(target.getCurrent_hp()));
                 targetHPBar.setValue(target.getCurrent_hp());
 

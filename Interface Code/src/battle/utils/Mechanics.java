@@ -1,5 +1,8 @@
 package battle.utils;
 
+import static battle.utils.BattleEvents.addHPBarUpdateEvent;
+import item.modifiers.HealRatioHP;
+import item.modifiers.HealSetHP;
 import item.modifiers.TriggeredByHP;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -20,21 +23,6 @@ import trainer.Trainer;
 public class Mechanics {
     
     final static int MAX_STAT_CHANGE = 2;
-    
-    /**
-     * Console prints information of a pokemon during battle for debugging purposes
-     * @param pokemon pokemon stats to display
-     */
-    public static void displayBattleStatsToConsole(Pokemon pokemon) {
-        System.out.println("Turn report for: " + pokemon.getName() + " Recharging? -> " + pokemon.isRecharging());
-        System.out.println("Attack: " + pokemon.getBattle_attack() + " (" + pokemon.getCurrent_attack()+ ")");
-        System.out.println("Defense: " + pokemon.getBattle_defense() + " (" + pokemon.getCurrent_defense()+ ")");
-        System.out.println("Special Attack: " + pokemon.getBattle_special_attack() + " (" + pokemon.getCurrent_special_attack()+ ")");
-        System.out.println("Special Defense: " + pokemon.getBattle_special_defense() + " (" + pokemon.getCurrent_special_defense()+ ")");
-        System.out.println("Speed: " + pokemon.getBattle_speed() + " (" + pokemon.getCurrent_speed()+ ")");
-        System.out.println("Current Accuracy Modifier: " + pokemon.getBattle_accuracy());
-        System.out.println("Curretn Evasion Modifier: " + pokemon.getBattle_evasion());
-    }
     
     /**
      * Logic for events happening after moves have been made. Most values are referenced from generation 1.
@@ -82,11 +70,18 @@ public class Mechanics {
             BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is holding a " + user.getItem().getName());
             if (user.getItem() instanceof TriggeredByHP) {
                 BattleEvents.addGenericEvent(eventQueue, textArea, "The item can be triggered by hp");
-                System.out.println("HP REQUIREMENT: " + ((TriggeredByHP)user.getItem()).GetHPActivePoint() * user.getCurrent_max_hp());
-                System.out.println("CURRENT HP: " + user.getCurrent_hp());
                 if(((TriggeredByHP)user.getItem()).GetHPActivePoint() * user.getCurrent_max_hp() > user.getCurrent_hp()) {
+                    double healAmount = 0;
+                    if (user.getItem() instanceof HealRatioHP) {
+                        healAmount = ((HealRatioHP)user.getItem()).getHPRatio() * user.getCurrent_max_hp();   
+                    }
+                    if (user.getItem() instanceof HealSetHP) {
+                        healAmount = ((HealSetHP)user.getItem()).getHPAmount();   
+                    }
                     
-                    BattleEvents.addGenericEvent(eventQueue, textArea, "HP meets the requirement to use!");
+                    BattleEvents.addHealingEvent(eventQueue, textArea, (int) healAmount, user, userHP, userHPBar);
+                    BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " healed some HP with its " + user.getItem().getName() + "!");
+                    user.consumeItem();
                 }
             }
             if (user.getItem() instanceof HealsHP) {
@@ -293,7 +288,7 @@ public class Mechanics {
         } else {
             damage = 0;
         }
-        
+                
         if (typeMultiplier == 0) {
             BattleEvents.addGenericEvent(eventQueue, textArea, "The move had no effect");
             return;
@@ -317,16 +312,24 @@ public class Mechanics {
             return;
         }
         
+        System.out.println(userMove.getName() + " will do " + damage);
         // Types of damage events
-        if (damage != 0) {        
+        if (damage != 0) {
+            if (user.getBattle_status() == "BRN") {
+                damage = damage / 2;
+            }
             if (userMove instanceof MultiStrike) {
                 int timeHit = (int) ((Math.random() * 3) + 2);
                 for (int i = 0; i < timeHit; i++) {
-                    BattleEvents.addDamageEvent(eventQueue, textArea, user.getBattle_status(), damage, target, targetLabels[2], targetHPBar);
+                    target.takeDamage(damage);
+//                    BattleEvents.addDamageEvent(eventQueue, textArea, user.getBattle_status(), damage, target, targetLabels[2], targetHPBar);
+                    addHPBarUpdateEvent(eventQueue, textArea, damage, target, targetLabels[2], targetHPBar);
                 }
                 BattleEvents.addGenericEvent(eventQueue, textArea, "It hit " + Integer.toString(timeHit) + " time(s)!");
             } else {
-                BattleEvents.addDamageEvent(eventQueue, textArea, user.getBattle_status(), damage, target, targetLabels[2], targetHPBar);
+                target.takeDamage(damage);
+                addHPBarUpdateEvent(eventQueue, textArea, damage, target, targetLabels[2], targetHPBar);
+//                BattleEvents.addDamageEvent(eventQueue, textArea, user.getBattle_status(), damage, target, targetLabels[2], targetHPBar);
             }
             if (typeMultiplier < 1.0 && typeMultiplier > 0) {
                 BattleEvents.addGenericEvent(eventQueue, textArea, "Its not very effective...");
@@ -336,6 +339,7 @@ public class Mechanics {
             }
         }
         
+        System.out.println(target.getName() + " updated HP: " + target.getCurrent_hp());
         if(userMove instanceof Lifesteal) {
             int netHP = (int) (((Lifesteal)userMove).getLifestealRatio() * damage);
             BattleEvents.addHealingEvent(eventQueue, textArea, netHP, user, userLabels[2], userHPBar);
@@ -363,7 +367,7 @@ public class Mechanics {
         
         if (userMove instanceof HasRecoil) {
             int recoilDamage = (int) (((HasRecoil)userMove).getRecoilRatio() * damage);
-            BattleEvents.addDamageEvent(eventQueue, textArea, user.getBattle_status(), recoilDamage, user, userLabels[2], userHPBar);
+//            BattleEvents.addDamageEvent(eventQueue, textArea, user.getBattle_status(), recoilDamage, user, userLabels[2], userHPBar);
             BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " took damage in recoil!");
         }
                
@@ -377,7 +381,7 @@ public class Mechanics {
             }
         }
 
-        if(target.getCurrent_hp() - damage <= 0) {
+        if(target.getCurrent_hp() <= 0) {
             target.setFainted(true);
             return;
         }

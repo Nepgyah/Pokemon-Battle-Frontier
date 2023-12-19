@@ -203,6 +203,14 @@ public abstract class Pokemon implements Serializable {
     }
     
     /**
+     * "Destroys" the item if used during battle
+     */
+    public void consumeItem() {
+        if (heldItem != null) {
+            heldItem = null;
+        }
+    }
+    /**
      * Returns true if the pokemon is holding a item
      * @return true if the pokemon is holding a item
      */

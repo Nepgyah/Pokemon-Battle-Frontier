@@ -1,5 +1,6 @@
 package battle.modes.singlebattle;
 
+import utilities.ConsoleCommands;
 import move.Move;
 import pokemon.Pokemon;
 import trainer.Trainer;
@@ -77,7 +78,8 @@ public class SingleBattleController{
         
         super();
         
-        System.out.println("CONTROL CONSOLE: Initializing battle controller");
+        this.showConsole = showConsole;
+        if (showConsole) System.out.println("Battle Controller: Initializing battle controller");
         this.timer = new Timer();
         
         this.battleFrame = battleFrame;
@@ -109,7 +111,7 @@ public class SingleBattleController{
         Swaps.setPokemonLabels(leftPokemon, true, leftLabels, leftHPBar);
         Swaps.setPokemonLabels(rightPokemon, false, rightLabels, rightHPBar);
         
-        System.out.println("CONTROL CONSOLE: Initialization complete");
+        if (showConsole) System.out.println("Battle Controller: Initialization complete");
     }
     
     /**
@@ -354,7 +356,7 @@ public class SingleBattleController{
     public void setMoveChoice(int pos){
         if (leftTrainerTurn) {
             leftMove = leftPokemon.getMoveset()[pos];
-            if (!showConsole) System.out.println("CONTROL CONSOLE: Left Pokemon move selected -> " + leftMove.getName());
+            if (showConsole) System.out.println("Battle Controller: Left Pokemon move selected -> " + leftMove.getName());
             if (rightPokemon.isInTwoTurn() || rightPokemon.isRecharging()) {
                 runTurn();
             } else {
@@ -364,7 +366,7 @@ public class SingleBattleController{
             }
         } else {
             rightMove = rightPokemon.getMoveset()[pos];
-            if (!showConsole) System.out.println("CONTROL CONSOLE: Right Pokemon move selected -> " + rightMove.getName());
+            if (showConsole) System.out.println("Battle Controller: Right Pokemon move selected -> " + rightMove.getName());
             runTurn();
             if (leftPokemon.isInTwoTurn() == false && leftPokemon.isRecharging() == false) {
                 leftTrainerTurn = true;

@@ -9,7 +9,7 @@ import move.Move;
 import trainer.Trainer;
 import move.movedex.*;
 
-public class startup {
+public class Startup {
     
     public static ArrayList<Pokemon> initializePokedex()
     {

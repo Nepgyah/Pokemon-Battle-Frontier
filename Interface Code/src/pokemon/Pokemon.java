@@ -181,9 +181,6 @@ public abstract class Pokemon implements Serializable {
     public void giveItem(Item item) {
         if (this.heldItem == null) {
             this.heldItem = item;
-            System.out.println(name + " is now holding a " + item.getName());
-        } else {
-            System.out.println(name + " is already holding a " + item.getName());
         }
     }
     
@@ -193,11 +190,9 @@ public abstract class Pokemon implements Serializable {
      */
     public Item takeItem() {
         if (heldItem != null) {
-            System.out.println(name + " is no longer holding a " + heldItem.getName());
             heldItem = null;
             return heldItem;
         } else {
-            System.out.println(name + " isn't holding an item");
             return null;
         }
     }

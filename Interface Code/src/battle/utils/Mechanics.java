@@ -312,7 +312,6 @@ public class Mechanics {
             return;
         }
         
-        System.out.println(userMove.getName() + " will do " + damage);
         // Types of damage events
         if (damage != 0) {
             if (user.getBattle_status() == "BRN") {
@@ -339,7 +338,6 @@ public class Mechanics {
             }
         }
         
-        System.out.println(target.getName() + " updated HP: " + target.getCurrent_hp());
         if(userMove instanceof Lifesteal) {
             int netHP = (int) (((Lifesteal)userMove).getLifestealRatio() * damage);
             BattleEvents.addHealingEvent(eventQueue, textArea, netHP, user, userLabels[2], userHPBar);

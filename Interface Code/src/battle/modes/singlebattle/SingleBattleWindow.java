@@ -20,11 +20,13 @@ public class SingleBattleWindow extends javax.swing.JFrame {
     pokemonPanel leftPokemonPanel, rightPokemonPanel;
     SingleBattleMovePanel leftMovePanel;
     SingleBattleMovePanel rightMovePanel;
+    boolean showConsole;
     
-    public SingleBattleWindow(JFrame clientFrame, JPanel navPanel, Trainer leftTrainer, Trainer rightTrainer) {
+    public SingleBattleWindow(JFrame clientFrame, JPanel navPanel, Trainer leftTrainer, Trainer rightTrainer, boolean showConsole) {
         initComponents();
 //        this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
         
+        this.showConsole = showConsole;
         fightButton.setBackground(PokeColors.fightButton);
         pokemonButton.setBackground(PokeColors.pokemonButton);
         bagButton.setBackground(PokeColors.bagButton);
@@ -53,7 +55,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         battleController = new SingleBattleController(
                 clientFrame, navPanel, this, detailPanel,
                 leftTrainer, rightTrainer,
-                true,
+                showConsole,
                 eventTextArea,
                 leftLabels, rightLabels,
                 leftHPBar, rightHPBar,
@@ -91,7 +93,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         detailPanel.add(rightMovePanel, "rightMovePanel");
         
         eventTextArea.setText("What will " + leftTrainer.getParty().get(0).getName() + " do?");
-        System.out.println("WINDOW CONSOLE: Initializing single battle between " + leftTrainer.getName() + " vs " + rightTrainer.getName());
+        if (showConsole) System.out.println("WINDOW CONSOLE: Initializing single battle between " + leftTrainer.getName() + " vs " + rightTrainer.getName());
     }
     
     @SuppressWarnings("unchecked")

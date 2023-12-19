@@ -2,7 +2,7 @@ package start;
 
 import java.util.ArrayList;
 import pokemon.Pokemon;
-import utilities.startup;
+import utilities.*;
 import trainer.Trainer;
 import move.Move;
 import client.Client;
@@ -10,48 +10,40 @@ import item.Item;
 
 public class Start {
     public static void main(String[] args) {
-
-        System.out.println("Program Start");
+        boolean showConsole = true;
+        if (showConsole) System.out.println("Program Start");
         
         // Initialize base data (Pokemon / Moves / Items)
-        System.out.println("Loading Pokemon");
-        ArrayList<Item> itemdex = startup.initializeItemdex();
+        if (showConsole) System.out.println("Loading Moves");
+        ArrayList<Item> itemdex = Startup.initializeItemdex();      
         
-        System.out.println("Items in the game");
-        for (Item item : itemdex) {
-            System.out.println(item.getName());
-        }
-        ArrayList<Pokemon> pokedex = startup.initializePokedex();
-        ArrayList<Move> movedex = startup.initializeMovedex();     
+        if (showConsole) System.out.println("Loading Pokemon");
+        ArrayList<Pokemon> pokedex = Startup.initializePokedex();
+        if (showConsole) ConsoleCommands.displayPokedex(pokedex);
+        
+        if (showConsole) System.out.println("Loading Moves");
+        ArrayList<Move> movedex = Startup.initializeMovedex();     
+        if (showConsole) ConsoleCommands.displayMovedex(movedex);
         
         // Load custom data (Save Trainers / Settings )
-        System.out.println("Loading Saved Data");
+        if (showConsole) System.out.println("Loading Saved Data");
         
-        System.out.println("Loading Success");
-        System.out.println("Loading Interface");
-        
-        // Loadup custom data
-        
-        // Objects for basic testin
+        if (showConsole) System.out.println("Loading Success");
+        if (showConsole) System.out.println("Loading Interface");
 
         ArrayList<Trainer> trainers = new ArrayList<>();
-        Trainer ash = startup.createAsh(pokedex, movedex, itemdex);
-        Trainer gary = startup.createGary(pokedex, movedex);
+        
+        Trainer ash = Startup.createAsh(pokedex, movedex, itemdex);
+        Trainer gary = Startup.createGary(pokedex, movedex);
         trainers.add(ash);
         trainers.add(gary);
 
-        System.out.println("Testing for held items");
-        for (Pokemon pokemon : ash.getParty()) {
-            pokemon.displayHeldItem();
-        }        
-        
-        System.out.println("Executing runnable");
         java.awt.EventQueue.invokeLater(new Runnable() {
             
             @Override
             public void run() {
 //                new MainMenu(pokedex).setVisible(true);
-                  new Client(pokedex, trainers).setVisible(true);
+                  new Client(pokedex, trainers, showConsole).setVisible(true);
             }
         });
     }

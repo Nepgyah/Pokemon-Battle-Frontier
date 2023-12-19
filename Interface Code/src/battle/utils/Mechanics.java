@@ -1,5 +1,6 @@
 package battle.utils;
 
+import item.modifiers.TriggeredByHP;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.TimerTask;
@@ -13,7 +14,7 @@ import move.status_effect.*;
 import trainer.Trainer;
 
 /**
- * Contains all relevant mechanics and logic for a pokemon battle.
+ * Collection of all relevant mechanics and logic for a pokemon battle.
  * Modularized to accommodate the different logic of the types of pokemon battle.
  */
 public class Mechanics {
@@ -74,6 +75,23 @@ public class Mechanics {
         if (user.isHealingOverTime()) {
             BattleEvents.addHealingEvent(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userHP, userHPBar);
             BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " healed some of its HP!");
+        }
+        
+        // Berry Check
+        if (user.isHoldingItem()) {
+            BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is holding a " + user.getItem().getName());
+            if (user.getItem() instanceof TriggeredByHP) {
+                BattleEvents.addGenericEvent(eventQueue, textArea, "The item can be triggered by hp");
+                System.out.println("HP REQUIREMENT: " + ((TriggeredByHP)user.getItem()).GetHPActivePoint() * user.getCurrent_max_hp());
+                System.out.println("CURRENT HP: " + user.getCurrent_hp());
+                if(((TriggeredByHP)user.getItem()).GetHPActivePoint() * user.getCurrent_max_hp() > user.getCurrent_hp()) {
+                    
+                    BattleEvents.addGenericEvent(eventQueue, textArea, "HP meets the requirement to use!");
+                }
+            }
+            if (user.getItem() instanceof HealsHP) {
+                BattleEvents.addGenericEvent(eventQueue, textArea, "The item will heal the pokemon");
+            }            
         }
     }
     

@@ -18,7 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
- * Acts as connection between other panels (pokemon, bag, move) and the main battle window). Also provides the logic to handle all the events coming in during battle.
+ * Public class acting as connection between other panels (pokemon, bag, move) and the main battle window). Also provides the logic to handle all the events coming in during battle.
  */
 public class SingleBattleController{
    

@@ -43,17 +43,7 @@ public class Start {
         System.out.println("Testing for held items");
         for (Pokemon pokemon : ash.getParty()) {
             pokemon.displayHeldItem();
-        }
-        
-        System.out.println("Attempting to remove items");
-        for (Pokemon pokemon : ash.getParty()) {
-            pokemon.takeItem();
-        }
-        
-        System.out.println("Post testing for held items");
-        for (Pokemon pokemon : ash.getParty()) {
-            pokemon.displayHeldItem();
-        }
+        }        
         
         System.out.println("Executing runnable");
         java.awt.EventQueue.invokeLater(new Runnable() {

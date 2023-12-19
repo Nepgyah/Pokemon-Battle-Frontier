@@ -203,6 +203,29 @@ public abstract class Pokemon implements Serializable {
     }
     
     /**
+     * Returns true if the pokemon is holding a item
+     * @return true if the pokemon is holding a item
+     */
+    public boolean isHoldingItem() {
+        if (heldItem != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Returns the item object
+     * @return item object the pokemon is
+     */
+    public Item getItem() {
+        if (heldItem == null) {
+            return null;
+        } else {
+            return heldItem;   
+        }
+    }
+    /**
      * Console prints if a pokemon is holding an item
      */
     public void displayHeldItem() {

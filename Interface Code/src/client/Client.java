@@ -14,12 +14,14 @@ public class Client extends javax.swing.JFrame {
     CardLayout navCard;
     
     ImageIcon pikachu = new ImageIcon("pikachu.png");
-    //ArrayList<Pokemon> pokelist;
     ArrayList<Trainer> trainers;
-    public Client(ArrayList<Pokemon> pokedex, ArrayList<Trainer> trainers) {
+    private boolean showConsole;
+    
+    public Client(ArrayList<Pokemon> pokedex, ArrayList<Trainer> trainers, boolean showConsole) {
         initComponents();
         
         this.trainers = trainers;
+        this.showConsole = showConsole;
         // Lable for MainMenu picture
         pictureLabel.setText("");
         pictureLabel.setIcon(pikachu);
@@ -185,9 +187,9 @@ public class Client extends javax.swing.JFrame {
 //        menuCard.show(contentPanel, "selectMode");
         battleButton.setEnabled(false);
         navCard.show(navPanel, "altCard");
-        System.out.println("CLIENT CONSOLE: Initializing Single Battle Window");
-        SingleBattleWindow battleWindow = new SingleBattleWindow(this, navPanel,trainers.get(0), trainers.get(1));
-        System.out.println("CLIENT CONSOLE: Battle Window initialization complete. Battle Start");
+        if(showConsole) System.out.println("Client: Initializing Single Battle Window");
+        SingleBattleWindow battleWindow = new SingleBattleWindow(this, navPanel,trainers.get(0), trainers.get(1), showConsole);
+        if(showConsole) System.out.println("Client: Battle Window initialization complete. Battle Start");
         battleWindow.setVisible(true);
         this.setState(Frame.ICONIFIED);
     }//GEN-LAST:event_battleButtonActionPerformed

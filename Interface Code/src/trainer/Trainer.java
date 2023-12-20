@@ -61,6 +61,9 @@ public class Trainer implements Serializable {
         System.out.println();
     }
 
+    public ArrayList<Item> getBag() {
+        return this.bag;
+    }
     /**
      * Adds an item to the trainers bag
      * @param item item to added

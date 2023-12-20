@@ -29,7 +29,7 @@ public class SingleBattleMovePanel extends javax.swing.JPanel {
         this.controller = controller;
         this.hpLabel = hpLabel;
         
-        card = (CardLayout) panel.getLayout();
+        this.card = (CardLayout) panel.getLayout();
         titleLabel.setText("Moveset for " + trainer);
         setMoveButtons(moveList);
     }

@@ -4,6 +4,7 @@ import battle.gui.utils.waitingPanel;
 import battle.gui.utils.pokemonPanel;
 import battle.gui.utils.bagPanel;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,13 +19,16 @@ public class SingleBattleWindow extends javax.swing.JFrame {
     CardLayout controlCard;
     SingleBattleController battleController;
     pokemonPanel leftPokemonPanel, rightPokemonPanel;
-    SingleBattleMovePanel leftMovePanel;
-    SingleBattleMovePanel rightMovePanel;
+    SingleBattleMovePanel leftMovePanel, rightMovePanel;
+    bagPanel leftBagPanel, rightBagPanel;
     
-    public SingleBattleWindow(JFrame clientFrame, JPanel navPanel, Trainer leftTrainer, Trainer rightTrainer) {
+    boolean showConsole;
+    
+    public SingleBattleWindow(JFrame clientFrame, JPanel navPanel, Trainer leftTrainer, Trainer rightTrainer, boolean showConsole) {
         initComponents();
 //        this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
         
+        this.showConsole = showConsole;
         fightButton.setBackground(PokeColors.fightButton);
         pokemonButton.setBackground(PokeColors.pokemonButton);
         bagButton.setBackground(PokeColors.bagButton);
@@ -53,7 +57,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         battleController = new SingleBattleController(
                 clientFrame, navPanel, this, detailPanel,
                 leftTrainer, rightTrainer,
-                true,
+                showConsole,
                 eventTextArea,
                 leftLabels, rightLabels,
                 leftHPBar, rightHPBar,
@@ -72,6 +76,9 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         leftMovePanel = new SingleBattleMovePanel(detailPanel, leftTrainer.getName(), leftTrainer.getParty().get(0).getMoveset(), battleController );
         rightMovePanel = new SingleBattleMovePanel(detailPanel, rightTrainer.getName(), rightTrainer.getParty().get(0).getMoveset(), battleController);
         
+        leftBagPanel = new bagPanel(detailPanel, leftTrainer, battleController);
+        rightBagPanel = new bagPanel(detailPanel, rightTrainer, battleController);
+        
         battleController.setLeftPokePanel(leftPokemonPanel);
         battleController.setRightPokePanel(rightPokemonPanel);
         battleController.setLeftMovePanel(leftMovePanel);
@@ -81,8 +88,8 @@ public class SingleBattleWindow extends javax.swing.JFrame {
        
         detailPanel.add(new waitingPanel(detailPanel), "waitingPanel");
         
-        detailPanel.add(new bagPanel(detailPanel, leftTrainer.getName()), "leftBagPanel");
-        detailPanel.add(new bagPanel(detailPanel, rightTrainer.getName()), "rightBagPanel");
+        detailPanel.add(leftBagPanel, "leftBagPanel");
+        detailPanel.add(rightBagPanel, "rightBagPanel");
         
         detailPanel.add(leftPokemonPanel, "leftPokemonPanel");
         detailPanel.add(rightPokemonPanel, "rightPokemonPanel");
@@ -91,7 +98,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         detailPanel.add(rightMovePanel, "rightMovePanel");
         
         eventTextArea.setText("What will " + leftTrainer.getParty().get(0).getName() + " do?");
-        System.out.println("WINDOW CONSOLE: Initializing single battle between " + leftTrainer.getName() + " vs " + rightTrainer.getName());
+        if (showConsole) System.out.println("WINDOW CONSOLE: Initializing single battle between " + leftTrainer.getName() + " vs " + rightTrainer.getName());
     }
     
     @SuppressWarnings("unchecked")
@@ -157,20 +164,25 @@ public class SingleBattleWindow extends javax.swing.JFrame {
 
         bagButton.setBackground(new java.awt.Color(255, 102, 0));
         bagButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        bagButton.setForeground(new java.awt.Color(0, 0, 0));
+        bagButton.setForeground(new java.awt.Color(255, 255, 255));
         bagButton.setText("Bag");
+        bagButton.setBorderPainted(false);
         bagButton.setFocusable(false);
+        bagButton.setOpaque(true);
         bagButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bagButtonActionPerformed(evt);
             }
         });
 
-        fightButton.setBackground(new java.awt.Color(204, 0, 51));
+        fightButton.setBackground(new java.awt.Color(236, 56, 57));
         fightButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        fightButton.setForeground(new java.awt.Color(0, 0, 0));
+        fightButton.setForeground(new java.awt.Color(255, 255, 255));
         fightButton.setText("Fight");
+        fightButton.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        fightButton.setBorderPainted(false);
         fightButton.setFocusable(false);
+        fightButton.setOpaque(true);
         fightButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fightButtonActionPerformed(evt);
@@ -179,19 +191,24 @@ public class SingleBattleWindow extends javax.swing.JFrame {
 
         pokemonButton.setBackground(new java.awt.Color(51, 153, 0));
         pokemonButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        pokemonButton.setForeground(new java.awt.Color(0, 0, 0));
+        pokemonButton.setForeground(new java.awt.Color(255, 255, 255));
         pokemonButton.setText("Pokemon");
+        pokemonButton.setBorderPainted(false);
         pokemonButton.setFocusable(false);
+        pokemonButton.setOpaque(true);
         pokemonButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pokemonButtonActionPerformed(evt);
             }
         });
 
+        quitButton.setBackground(new java.awt.Color(40, 147, 203));
         quitButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         quitButton.setForeground(new java.awt.Color(255, 255, 255));
         quitButton.setText("Quit");
+        quitButton.setBorderPainted(false);
         quitButton.setFocusable(false);
+        quitButton.setOpaque(true);
         quitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 quitButtonActionPerformed(evt);
@@ -239,17 +256,21 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         layeredPane.setRequestFocusEnabled(false);
         layeredPane.setVerifyInputWhenFocusTarget(false);
 
+        leftPokemonLabels.setBackground(new java.awt.Color(105, 113, 89));
         leftPokemonLabels.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         leftPokemonLabels.setPreferredSize(new java.awt.Dimension(280, 100));
 
         leftLevelLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         leftLevelLabel.setText("Lv.");
 
+        leftName.setBackground(new java.awt.Color(187, 187, 187));
         leftName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         leftName.setText("Pokemon Name");
 
+        leftHPBar.setBackground(new java.awt.Color(51, 204, 0));
         leftHPBar.setForeground(new java.awt.Color(51, 204, 0));
         leftHPBar.setValue(100);
+        leftHPBar.setString("0%");
 
         leftCurrentHP.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         leftCurrentHP.setText("Current");
@@ -318,6 +339,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
 
         rightIcon.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
+        rightPokemonLabels.setBackground(new java.awt.Color(105, 113, 89));
         rightPokemonLabels.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         rightPokemonLabels.setPreferredSize(new java.awt.Dimension(280, 100));
 

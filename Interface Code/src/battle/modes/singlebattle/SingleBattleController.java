@@ -1,10 +1,12 @@
 package battle.modes.singlebattle;
 
+import utilities.ConsoleCommands;
 import move.Move;
 import pokemon.Pokemon;
 import trainer.Trainer;
 import battle.utils.*;
 import battle.gui.utils.pokemonPanel;
+import item.Item;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
@@ -28,10 +30,13 @@ public class SingleBattleController{
     private Trainer leftTrainer, rightTrainer;
     private Pokemon leftPokemon, rightPokemon;
     private Move leftMove, rightMove;
+    private Item leftItem, rightItem;
     private int leftNextPokemon, rightNextPokemon;
     private String leftPrevName, rightPrevName;
     
     boolean leftTrainerTurn = true,
+            leftItemUse = false,
+            rightItemUse = false,
             leftSwap = false, 
             rightSwap = false,
             leftWins = false, 
@@ -61,7 +66,7 @@ public class SingleBattleController{
      * @param showConsole if true, displays relative information to console (for debugging)
      * @param textArea area that displays the description of the events during battle
      * @param leftLabels numerical and visual labels for the pokemon on the left
-     * @param rightLabels mumerical and visual labels for the pokemon on the right
+     * @param rightLabels numerical and visual labels for the pokemon on the right
      * @param leftHPBar visual representation of the left pokemon
      * @param rightHPBar visual representation of the right pokemon
      * @param controlButtons button group for the battle option
@@ -77,7 +82,8 @@ public class SingleBattleController{
         
         super();
         
-        System.out.println("CONTROL CONSOLE: Initializing battle controller");
+        this.showConsole = showConsole;
+        if (showConsole) System.out.println("Battle Controller: Initializing battle controller");
         this.timer = new Timer();
         
         this.battleFrame = battleFrame;
@@ -109,7 +115,7 @@ public class SingleBattleController{
         Swaps.setPokemonLabels(leftPokemon, true, leftLabels, leftHPBar);
         Swaps.setPokemonLabels(rightPokemon, false, rightLabels, rightHPBar);
         
-        System.out.println("CONTROL CONSOLE: Initialization complete");
+        if (showConsole) System.out.println("Battle Controller: Initialization complete");
     }
     
     /**
@@ -138,6 +144,15 @@ public class SingleBattleController{
             
             rightPokemonPanel.setPokemonButtons();
             rightMovePanel.setMoveButtons(rightPokemon.getMoveset());
+        }
+        
+        // Item use here
+        if (leftItemUse) {
+            Mechanics.preMoveEffects(eventQueue, textArea, leftTrainer, leftPokemon, leftItem, leftLabels[2], leftHPBar);
+            
+        }
+        if (rightItemUse) {
+            Mechanics.preMoveEffects(eventQueue, textArea, rightTrainer, rightPokemon, rightItem, rightLabels[2], rightHPBar);
         }
         
         // Right going first
@@ -270,7 +285,7 @@ public class SingleBattleController{
             }
         }
         
-        Mechanics.postMoveEffects(eventQueue, textArea, leftPokemon, rightPokemon, leftLabels[2], rightLabels[2], leftHPBar, rightHPBar);
+        Mechanics.postMoveEffects(eventQueue, textArea, leftPokemon, rightPokemon, leftLabels, rightLabels, leftHPBar, rightHPBar);
         if (leftPokemon.isFainted() == true) {
             BattleEvents.addGenericEvent(eventQueue, textArea, leftPokemon.getName() + " fainted!");
             BattleEvents.addIconRemoveEvent(eventQueue, leftLabels[5]);
@@ -280,7 +295,7 @@ public class SingleBattleController{
             }
         }
         
-        Mechanics.postMoveEffects(eventQueue, textArea, rightPokemon, leftPokemon, rightLabels[2], leftLabels[2], rightHPBar, leftHPBar);
+        Mechanics.postMoveEffects(eventQueue, textArea, rightPokemon, leftPokemon, rightLabels, leftLabels, rightHPBar, leftHPBar);
         if (rightPokemon.isFainted() == true) {
             BattleEvents.addGenericEvent(eventQueue, textArea, rightPokemon.getName() + " fainted!");
             BattleEvents.addIconRemoveEvent(eventQueue, rightLabels[5]);
@@ -344,7 +359,34 @@ public class SingleBattleController{
 
         // RESET 
         eventQueue.clear();
-        leftSwap = rightSwap = false;
+        leftSwap = rightSwap = leftItemUse = rightItemUse = false;
+    }
+    
+    
+    public void setItemUse(int pos) {
+
+        if(leftTrainerTurn) {
+            leftItem = leftTrainer.getBag().get(pos);
+            if (!Mechanics.canUseItem(leftItem, leftPokemon)) {
+                textArea.setText("You can't use that item!");
+            } else {
+                if(showConsole) System.out.println("Battle Controller: Left Trainer will use " + leftItem.getName() + " as their turn");
+                leftTrainerTurn = false;
+                leftItemUse = true;
+                battleCard.show(detailPanel, "waitingPanel");
+                textArea.setText("What will " + rightPokemon.getName() + " do?");
+            }
+        } else {
+            rightItem = rightTrainer.getBag().get(pos);
+            if (!Mechanics.canUseItem(rightItem, rightPokemon)) {
+                textArea.setText("You can't use that item!");
+            } else {
+                if(showConsole) System.out.println("Battle Controller: Right Trainer will use " + rightItem.getName() + " as their turn");
+                rightItemUse = true;
+                leftTrainerTurn = true;
+                runTurn();
+            }
+        }
     }
     
     /**
@@ -354,7 +396,7 @@ public class SingleBattleController{
     public void setMoveChoice(int pos){
         if (leftTrainerTurn) {
             leftMove = leftPokemon.getMoveset()[pos];
-            if (!showConsole) System.out.println("CONTROL CONSOLE: Left Pokemon move selected -> " + leftMove.getName());
+            if (showConsole) System.out.println("Battle Controller: Left Pokemon move selected -> " + leftMove.getName());
             if (rightPokemon.isInTwoTurn() || rightPokemon.isRecharging()) {
                 runTurn();
             } else {
@@ -364,7 +406,7 @@ public class SingleBattleController{
             }
         } else {
             rightMove = rightPokemon.getMoveset()[pos];
-            if (!showConsole) System.out.println("CONTROL CONSOLE: Right Pokemon move selected -> " + rightMove.getName());
+            if (showConsole) System.out.println("Battle Controller: Right Pokemon move selected -> " + rightMove.getName());
             runTurn();
             if (leftPokemon.isInTwoTurn() == false && leftPokemon.isRecharging() == false) {
                 leftTrainerTurn = true;

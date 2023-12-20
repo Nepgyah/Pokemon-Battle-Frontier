@@ -1,9 +1,9 @@
 package battle.utils;
 
 import static battle.utils.BattleEvents.addHPBarUpdateEvent;
-import item.modifiers.HealRatioHP;
-import item.modifiers.HealSetHP;
-import item.modifiers.TriggeredByHP;
+import item.Item;
+import item.modifiers.*;
+import item.curing.*;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.TimerTask;
@@ -24,6 +24,42 @@ public class Mechanics {
     
     final static int MAX_STAT_CHANGE = 2;
     
+    
+    public static void preMoveEffects(ArrayList<TimerTask> eventQueue, JTextArea textarea, Trainer trainer,
+            Pokemon user, Item item, JLabel userHP, JProgressBar userHPBar) {
+        BattleEvents.addGenericEvent(eventQueue, textarea, "Checking Pre move effects for " + user.getName());
+        BattleEvents.addGenericEvent(eventQueue, textarea, trainer.getName() + " used a " + item.getName());
+        if (item instanceof ItemHealsHP) {
+            if (item instanceof HealSetHP)
+            {
+                BattleEvents.addHealingEvent(eventQueue, textarea, ((HealSetHP)item).getHPAmount() , user, userHP, userHPBar);
+            }
+        }
+    }
+    
+    /**
+     * Returns true if the item is allowed to be used in the current situation
+     * @param item item object with its interfaces
+     * @param user pokemon that the item is intended to be used on
+     * @return true if the item is allowed to be used
+     */
+    public static boolean canUseItem(Item item, Pokemon user ) {
+        System.out.println("Testing item: " + item.getName());
+        
+        if(!(item instanceof ItemHealsHP && (user.getCurrent_hp() == user.getCurrent_max_hp()))) return true;
+        
+        // Pokemon status check
+        if(user.getBattle_status() != null) {
+            if(item instanceof CuresBurn && user.getBattle_status().equals("BRN")) return true;
+            if(item instanceof CuresParalysis && user.getBattle_status().equals("PAR")) return true;
+            if(item instanceof CuresPoison && user.getBattle_status().equals("PSN")) return true;
+            if(item instanceof CuresSleep && user.getBattle_status().equals("SLP")) return true;
+            if(item instanceof CuresFrozen && user.getBattle_status().equals("FRZ")) return true;
+        }
+
+        return false;
+    }
+    
     /**
      * Logic for events happening after moves have been made. Most values are referenced from generation 1.
      * @param eventQueue queue of events that happen during a single turn in pokemon
@@ -37,7 +73,7 @@ public class Mechanics {
      */
     public static void postMoveEffects(ArrayList<TimerTask> eventQueue, JTextArea textArea, 
             Pokemon user, Pokemon target, 
-            JLabel userHP, JLabel targetHP,
+            JLabel [] userLabels, JLabel [] targetLabels,
             JProgressBar userHPBar, JProgressBar targetHPBar) {
         BattleEvents.addGenericEvent(eventQueue, textArea, "Checking Post move effects for " + user.getName());
 
@@ -46,47 +82,61 @@ public class Mechanics {
             if (user.getBattle_status().equals("PSN")) {
                 
                 BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is hurt by its poison!");
-                BattleEvents.addSelfDamageEffect(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userHP, userHPBar);
+                BattleEvents.addSelfDamageEffect(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userLabels[3], userHPBar);
             }
             if (user.getBattle_status().equals("BRN")) {
                 BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is hurt by its burn!");
-                BattleEvents.addSelfDamageEffect(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userHP, userHPBar);
+                BattleEvents.addSelfDamageEffect(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userLabels[3], userHPBar);
             }
         }
         
         if (user.isLeeched()) {
-            BattleEvents.addSelfDamageEffect(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userHP, userHPBar);
+            BattleEvents.addSelfDamageEffect(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userLabels[3], userHPBar);
             BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " had its HP sapped!");
-            BattleEvents.addHealingEvent(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, target, targetHP, targetHPBar);
+            BattleEvents.addHealingEvent(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, target, targetLabels[3], targetHPBar);
         }
         
         if (user.isHealingOverTime()) {
-            BattleEvents.addHealingEvent(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userHP, userHPBar);
+            BattleEvents.addHealingEvent(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userLabels[3], userHPBar);
             BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " healed some of its HP!");
         }
         
         // Berry Check
         if (user.isHoldingItem()) {
-            BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is holding a " + user.getItem().getName());
-            if (user.getItem() instanceof TriggeredByHP) {
-                BattleEvents.addGenericEvent(eventQueue, textArea, "The item can be triggered by hp");
-                if(((TriggeredByHP)user.getItem()).GetHPActivePoint() * user.getCurrent_max_hp() > user.getCurrent_hp()) {
+            Item item = user.getItem();
+            if (item instanceof TriggeredByHP) {
+                if((((TriggeredByHP)item).GetHPActivePoint() * user.getCurrent_max_hp() > user.getCurrent_hp()) ){
                     double healAmount = 0;
-                    if (user.getItem() instanceof HealRatioHP) {
+                    if (item instanceof HealRatioHP) {
                         healAmount = ((HealRatioHP)user.getItem()).getHPRatio() * user.getCurrent_max_hp();   
                     }
-                    if (user.getItem() instanceof HealSetHP) {
+                    if (item instanceof HealSetHP) {
                         healAmount = ((HealSetHP)user.getItem()).getHPAmount();   
                     }
                     
-                    BattleEvents.addHealingEvent(eventQueue, textArea, (int) healAmount, user, userHP, userHPBar);
-                    BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " healed some HP with its " + user.getItem().getName() + "!");
+                    BattleEvents.addHealingEvent(eventQueue, textArea, (int) healAmount, user, userLabels[3], userHPBar);
+                    BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " healed some HP with its " + item.getName() + "!");
                     user.consumeItem();
                 }
             }
-            if (user.getItem() instanceof HealsHP) {
-                BattleEvents.addGenericEvent(eventQueue, textArea, "The item will heal the pokemon");
-            }            
+            
+            if (item instanceof TriggeredByStatus && user.getBattle_status() != null) {
+                if(item instanceof CuresBurn && user.getBattle_status().equals("BRN")) {
+                    user.setBattle_status(null);
+                    BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " cured its burn with a " + item.getName());
+                    BattleEvents.addStatusEvent(eventQueue, textArea, null, user.getName(), userLabels);
+                }
+                if(item instanceof CuresParalysis && user.getBattle_status().equals("PAR")) {
+                    user.setBattle_status(null);
+                    BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " cured its paralysis with a " + item.getName());
+                    BattleEvents.addStatusEvent(eventQueue, textArea, null, user.getName(), userLabels);
+                }
+                if(item instanceof CuresPoison && user.getBattle_status().equals("PSN")) {
+                    user.setBattle_status(null);
+                    BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " cured its poison with a " + item.getName());
+                    BattleEvents.addStatusEvent(eventQueue, textArea, null, user.getName(), userLabels);
+                }
+            }
         }
     }
     
@@ -185,7 +235,7 @@ public class Mechanics {
         if (user.getBattle_status() == "FRZ") {
             int chance_to_thaw = (int) (Math.random() * 5);
             if (chance_to_thaw == 1) {
-                user.setBattle_status("");
+                user.setBattle_status(null);
                 eventQueue.add(new TimerTask() {
                     @Override
                     public void run() {
@@ -207,7 +257,7 @@ public class Mechanics {
                 BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is asleep!");
                 return false;
             } else {
-                user.setBattle_status("");
+                user.setBattle_status(null);
                 eventQueue.add(new TimerTask() {
                     @Override
                     public void run() {
@@ -312,7 +362,6 @@ public class Mechanics {
             return;
         }
         
-        System.out.println(userMove.getName() + " will do " + damage);
         // Types of damage events
         if (damage != 0) {
             if (user.getBattle_status() == "BRN") {
@@ -339,7 +388,6 @@ public class Mechanics {
             }
         }
         
-        System.out.println(target.getName() + " updated HP: " + target.getCurrent_hp());
         if(userMove instanceof Lifesteal) {
             int netHP = (int) (((Lifesteal)userMove).getLifestealRatio() * damage);
             BattleEvents.addHealingEvent(eventQueue, textArea, netHP, user, userLabels[2], userHPBar);

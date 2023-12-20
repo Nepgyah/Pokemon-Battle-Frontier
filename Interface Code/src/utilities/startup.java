@@ -115,8 +115,9 @@ public class Startup {
             pokemon.resetBattleStats();
         }
         
-        gary.getParty().get(0).giveItem(itemdex.get(3).copy());
+        gary.getParty().get(0).giveItem(itemdex.get(4).copy());
         
+        gary.addToBag(itemdex.get(0).copy());
         gary.addToBag(itemdex.get(2).copy());
         return gary;
     }

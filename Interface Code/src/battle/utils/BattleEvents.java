@@ -130,7 +130,6 @@ public class BattleEvents {
                 if(status != null)
                 {
                     labels[4].setText(status);
-
                     if (status.equals("PAR")) {
                         labels[4].setForeground(Color.YELLOW);
                         textArea.setText("Enemy " + name + " was paralyzed!");

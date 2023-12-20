@@ -72,10 +72,8 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         
         leftPokemonPanel = new pokemonPanel(detailPanel, leftTrainer, battleController);
         rightPokemonPanel = new pokemonPanel(detailPanel, rightTrainer, battleController);
-        
         leftMovePanel = new SingleBattleMovePanel(detailPanel, leftTrainer.getName(), leftTrainer.getParty().get(0).getMoveset(), battleController );
         rightMovePanel = new SingleBattleMovePanel(detailPanel, rightTrainer.getName(), rightTrainer.getParty().get(0).getMoveset(), battleController);
-        
         leftBagPanel = new bagPanel(detailPanel, leftTrainer, battleController);
         rightBagPanel = new bagPanel(detailPanel, rightTrainer, battleController);
         
@@ -90,10 +88,8 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         
         detailPanel.add(leftBagPanel, "leftBagPanel");
         detailPanel.add(rightBagPanel, "rightBagPanel");
-        
         detailPanel.add(leftPokemonPanel, "leftPokemonPanel");
         detailPanel.add(rightPokemonPanel, "rightPokemonPanel");
-        
         detailPanel.add(leftMovePanel, "leftMovePanel");
         detailPanel.add(rightMovePanel, "rightMovePanel");
         

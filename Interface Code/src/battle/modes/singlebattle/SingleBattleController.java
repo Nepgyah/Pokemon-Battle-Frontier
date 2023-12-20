@@ -112,6 +112,7 @@ public class SingleBattleController{
         this.pokemonButton = controlButtons[1];
         this.bagButton = controlButtons[2];
 
+        // Set lables for initial send out
         Swaps.setPokemonLabels(leftPokemon, true, leftLabels, leftHPBar);
         Swaps.setPokemonLabels(rightPokemon, false, rightLabels, rightHPBar);
         
@@ -119,19 +120,17 @@ public class SingleBattleController{
     }
     
     /**
-     * Runs the logic for a single turn.
+     * Executes the logic for a single turn.
      */
     public void runTurn() {
-        
         disableControls();
         battleCard.show(detailPanel, "waitingPanel");
+        // 1st Phase - Pokemon swaps
         if (leftSwap == true) {
             leftPrevName = leftPokemon.getName();
             Swaps.swapPokemon(leftTrainer, leftNextPokemon);
             leftPokemon = leftTrainer.getParty().get(0);
-        
             Swaps.addSwapEvent(eventQueue, leftPrevName, leftPokemon, true, leftLabels, leftHPBar, textArea);
-            
             leftPokemonPanel.setPokemonButtons();
             leftMovePanel.setMoveButtons(leftPokemon.getMoveset());
         }
@@ -139,21 +138,13 @@ public class SingleBattleController{
             rightPrevName = rightPokemon.getName();
             Swaps.swapPokemon(rightTrainer, rightNextPokemon);
             rightPokemon = rightTrainer.getParty().get(0);
-            
             Swaps.addSwapEvent(eventQueue, rightPrevName, rightPokemon, false,rightLabels, rightHPBar, textArea);
-            
             rightPokemonPanel.setPokemonButtons();
             rightMovePanel.setMoveButtons(rightPokemon.getMoveset());
         }
-        
-        // Item use here
-        if (leftItemUse) {
-            Mechanics.preMoveEffects(eventQueue, textArea, leftTrainer, leftPokemon, leftItem, leftLabels[2], leftHPBar);
-            
-        }
-        if (rightItemUse) {
-            Mechanics.preMoveEffects(eventQueue, textArea, rightTrainer, rightPokemon, rightItem, rightLabels[2], rightHPBar);
-        }
+        // 2nd Phrase - Item use
+        if (leftItemUse) Mechanics.preMoveEffects(eventQueue, textArea, leftTrainer, leftPokemon, leftItem, leftLabels[2], leftHPBar);
+        if (rightItemUse) Mechanics.preMoveEffects(eventQueue, textArea, rightTrainer, rightPokemon, rightItem, rightLabels[2], rightHPBar);
         
         // Right going first
         if (leftPokemon.getBattle_speed() < rightPokemon.getBattle_speed()) {           
@@ -178,7 +169,6 @@ public class SingleBattleController{
                     if(rightPokemon.isInTwoTurn() == true) rightPokemon.setInTwoTurn(false);
                 }
             }
-            
             // Left going second
             if (leftPokemon.isFainted() == true) {
                 BattleEvents.addGenericEvent(eventQueue, textArea, leftPokemon.getName() + " fainted!");
@@ -193,15 +183,9 @@ public class SingleBattleController{
                 BattleEvents.addGenericEvent(eventQueue, textArea, leftPokemon.getName() + " is recharging. It can't move!");
                 leftPokemon.setRecharging(false);
             } else if (leftMove != null) {
-                if(leftMove instanceof TwoTurn && leftPokemon.isInTwoTurn() == false)
-                {
+                if(leftMove instanceof TwoTurn && leftPokemon.isInTwoTurn() == false) {
                     BattleEvents.addGenericEvent(eventQueue, textArea, leftPokemon.getName() + ((TwoTurn)leftMove).getTurnDescription());
-                    eventQueue.add(new TimerTask() {
-                        @Override
-                        public void run() {
-                            leftLabels[5].setIcon(null);
-                        }
-                    });
+                    BattleEvents.addIconRemoveEvent(eventQueue, leftLabels[5]);
                     leftPokemon.setInTwoTurn(true);
                 } else {
                     Mechanics.useMove(
@@ -220,20 +204,13 @@ public class SingleBattleController{
         
         // Left going first
         if (leftPokemon.getBattle_speed() > rightPokemon.getBattle_speed()) {
-            // Left turn
             if (leftPokemon.isRecharging()) {
                 BattleEvents.addGenericEvent(eventQueue, textArea, leftPokemon.getName() + " is recharging. It can't move!");
                 leftPokemon.setRecharging(false);
             } else if( leftMove != null) {
-                if(leftMove instanceof TwoTurn && leftPokemon.isInTwoTurn() == false)
-                {
+                if(leftMove instanceof TwoTurn && leftPokemon.isInTwoTurn() == false) {
                     BattleEvents.addGenericEvent(eventQueue, textArea, leftPokemon.getName() + ((TwoTurn)leftMove).getTurnDescription());
-                    eventQueue.add(new TimerTask() {
-                        @Override
-                        public void run() {
-                            leftLabels[5].setIcon(null);
-                        }
-                    });
+                    BattleEvents.addIconRemoveEvent(eventQueue, leftLabels[5]);
                     leftPokemon.setInTwoTurn(true);
                 } else {
                     Mechanics.useMove(
@@ -263,12 +240,7 @@ public class SingleBattleController{
             } else if (rightMove != null) { 
                 if(rightMove instanceof TwoTurn && rightPokemon.isInTwoTurn() == false) {
                     BattleEvents.addGenericEvent(eventQueue, textArea, rightPokemon.getName() + ((TwoTurn)rightMove).getTurnDescription());
-                    eventQueue.add(new TimerTask() {
-                        @Override
-                        public void run() {
-                            rightLabels[5].setIcon(null);
-                        }
-                    });
+                    BattleEvents.addIconRemoveEvent(eventQueue, rightLabels[5]);
                     rightPokemon.setInTwoTurn(true);
                 } else {
                     Mechanics.useMove(
@@ -285,6 +257,7 @@ public class SingleBattleController{
             }
         }
         
+        // 3rd Phrase - Post move events
         Mechanics.postMoveEffects(eventQueue, textArea, leftPokemon, rightPokemon, leftLabels, rightLabels, leftHPBar, rightHPBar);
         if (leftPokemon.isFainted() == true) {
             BattleEvents.addGenericEvent(eventQueue, textArea, leftPokemon.getName() + " fainted!");
@@ -294,7 +267,6 @@ public class SingleBattleController{
                 BattleEvents.addWinnerEvent(eventQueue, textArea, rightTrainer, leftTrainer);
             }
         }
-        
         Mechanics.postMoveEffects(eventQueue, textArea, rightPokemon, leftPokemon, rightLabels, leftLabels, rightHPBar, leftHPBar);
         if (rightPokemon.isFainted() == true) {
             BattleEvents.addGenericEvent(eventQueue, textArea, rightPokemon.getName() + " fainted!");
@@ -304,7 +276,7 @@ public class SingleBattleController{
                 BattleEvents.addWinnerEvent(eventQueue, textArea, leftTrainer, rightTrainer);
             }
         }
-        
+        // Check for winner
         if (leftPokemon.isFainted() && rightWins == false) {
             eventQueue.add(new TimerTask() {
                 @Override
@@ -338,21 +310,21 @@ public class SingleBattleController{
                         System.out.println("\nRight Trainer");
                         ConsoleCommands.postTurnSummary(rightPokemon);
                     }
-                    // Both are either recharging or in two turn (Right doesent need a check since left make their turn first)
+                    // Both are either recharging or in two turn (Right doesent need a check since left makes their turn first)
                     if ( (leftPokemon.isInTwoTurn() || leftPokemon.isRecharging() ) && ( rightPokemon.isInTwoTurn() || rightPokemon.isRecharging() ) ) {
                         runTurn();
-                // LeftPokemon only recharging or two turn
+                    // LeftPokemon only recharging or two turn
                     } else if (leftPokemon.isInTwoTurn() || leftPokemon.isRecharging()) {
                         textArea.setText("What will " + rightPokemon.getName() + " do?");
-                        enableControls();
                     } else {
                         textArea.setText("What will " + leftPokemon.getName() + " do?");
-                        enableControls();
                     }
+                    enableControls();
                 }
             });
         }
         
+        // Run all "visual" events for the turn
         for (int i = 0; i < eventQueue.size(); i++) {
             timer.schedule(eventQueue.get(i), i * 2000);
         }
@@ -362,9 +334,11 @@ public class SingleBattleController{
         leftSwap = rightSwap = leftItemUse = rightItemUse = false;
     }
     
-    
+    /**
+     * Allows controller to receive input from bag panel.
+     * @param pos item to be selected
+     */
     public void setItemUse(int pos) {
-
         if(leftTrainerTurn) {
             leftItem = leftTrainer.getBag().get(pos);
             if (!Mechanics.canUseItem(leftItem, leftPokemon)) {

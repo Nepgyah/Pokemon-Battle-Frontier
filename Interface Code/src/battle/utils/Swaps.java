@@ -23,11 +23,9 @@ public class Swaps {
         eventQueue.add(new TimerTask() {
             @Override
             public void run() {
-                System.out.println("BM: Describing switch");
                 textArea.setText(previousName + ", switch out!" + "\nCome back!");
             }
-        });
-        
+        });       
         eventQueue.add(new TimerTask() {
             @Override
             public void run() {
@@ -73,6 +71,5 @@ public class Swaps {
         } else {
             hpBar.setForeground(PokeColors.redHP);
         }
-        
     }
 }

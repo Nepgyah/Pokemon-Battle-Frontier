@@ -56,7 +56,6 @@ public class Mechanics {
             if(item instanceof CuresSleep && user.getBattle_status().equals("SLP")) return true;
             if(item instanceof CuresFrozen && user.getBattle_status().equals("FRZ")) return true;
         }
-
         return false;
     }
     
@@ -89,18 +88,15 @@ public class Mechanics {
                 BattleEvents.addSelfDamageEffect(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userLabels[3], userHPBar);
             }
         }
-        
         if (user.isLeeched()) {
             BattleEvents.addSelfDamageEffect(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userLabels[3], userHPBar);
             BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " had its HP sapped!");
             BattleEvents.addHealingEvent(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, target, targetLabels[3], targetHPBar);
         }
-        
         if (user.isHealingOverTime()) {
             BattleEvents.addHealingEvent(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userLabels[3], userHPBar);
             BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " healed some of its HP!");
         }
-        
         // Berry Check
         if (user.isHoldingItem()) {
             Item item = user.getItem();
@@ -148,9 +144,7 @@ public class Mechanics {
     public static boolean didLose(Trainer trainer) {
         int count = 0;
         for (Pokemon pokemon : trainer.getParty()) {
-            if (pokemon.isFainted()) {
-                count++;
-            }
+            if (pokemon.isFainted()) count++;
         }
         if (count == trainer.getParty().size()) {
             return true;
@@ -161,7 +155,7 @@ public class Mechanics {
     
     /**
      * Calculates the value of an attack and several factors. 
-     * Formula ((((2 * Level / 5 + 2) * AttackStat * AttackPower / DefenseStat) / 50) + 2) * STAB * Weakness/Resistance * RandomNumber / 100 ) - From wiki
+     * Formula ((((2 * Level / 5 + 2) * AttackStat * AttackPower / DefenseStat) / 50) + 2) * STAB * Weakness/Resistance * RandomNumber / 100 ) - Gen 1
      * Variables not included: STAB (Same Type Attack Bonus), Random numbering
      * @param level level of the pokemon attacking
      * @param attack attack stat of the pokemon attacking (attack or special attack)
@@ -222,7 +216,6 @@ public class Mechanics {
                 return false;
             }
         }
-
         if (user.getBattle_status() == "PAR") {
             int chance_to_be_paralyzed = (int) (Math.random() * 4);
             if (chance_to_be_paralyzed != 1) return true;
@@ -272,9 +265,9 @@ public class Mechanics {
     }
     
     /**
-     * Logic for a single move event in a pokemon battle.
+     * Logic for when a pokemon uses a move
      * @param user pokemon conducting the move
-     * @param target pokemon receiving the move (could be self, ally or enemy)
+     * @param target pokemon receiving the move (self, ally or enemy)
      * @param userMove move selected by the user
      * @param targetMove move selected by the target (helps determine success of move. EX: User move failed due to target using fly the previous turn)
      * @param userLabels display labels corresponding to the pokemon conducting the move
@@ -291,8 +284,8 @@ public class Mechanics {
             JProgressBar userHPBar, JProgressBar targetHPBar,
             ArrayList<TimerTask> eventQueue,
             JTextArea textArea) {
-        // Pre move check
-         
+        
+        // Pre move check (Status, Confusion, Flinch etc)
         if (canUseMove(user, userLabels, userHPBar,  eventQueue, textArea) == false) return;
         double chance;
         double result;
@@ -300,15 +293,11 @@ public class Mechanics {
         BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " used " + userMove.getName() + "!");
         
         if (userMove instanceof HealOverTime) {
-            BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + ((HealOverTime) ((HealOverTime)userMove)).getTurnDescription());
+            BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + (((HealOverTime)userMove)).getTurnDescription());
             user.setHealingOverTime(true);
         }
         
-        if (userMove instanceof TwoTurn) {
-            BattleEvents.addIconReturnEvent(eventQueue, user, userLabels[5]);
-        }
-        
-        // Accuracy Check - self created
+        // Accuracy check
         chance = (user.getBattle_accuracy() * userMove.getAccuracy() * target.getBattle_evasion() );
         result = Math.random();
         if (target.isInTwoTurn()) {
@@ -319,26 +308,29 @@ public class Mechanics {
             return;
         }
         
+        // Second half of twoTurn move
+        if (userMove instanceof TwoTurn) {
+            BattleEvents.addIconReturnEvent(eventQueue, user, userLabels[5]);
+        }
+        
         if (userMove instanceof ApplyLeech) {
             target.setLeeched(true);
             BattleEvents.addGenericEvent(eventQueue, textArea, target.getName() + " was seeded!");
             return;
         }
         
-        // Calculate the damage
+        // Damage
         double typeMultiplier = TypeModifier.getMultiplier(userMove, target);
 
-        int damage;
+        int damage = 0;
         if (userMove instanceof SetDamage) {
             damage = ((SetDamage)userMove).getDamage();
         } else if(userMove instanceof PhysicalAttack) {
             damage = calcDamage(user.getLevel(), user.getBattle_attack(), target.getBattle_defense(), userMove.getPower(), typeMultiplier);   
         } else if(userMove instanceof SpecialAttack){
             damage = calcDamage(user.getLevel(), user.getBattle_special_attack(), target.getBattle_special_defense(), userMove.getPower(), typeMultiplier);
-        } else {
-            damage = 0;
         }
-                
+        
         if (typeMultiplier == 0) {
             BattleEvents.addGenericEvent(eventQueue, textArea, "The move had no effect");
             return;
@@ -348,46 +340,34 @@ public class Mechanics {
             eventQueue.add(new TimerTask() {
                 @Override
                 public void run() {
-                    // IMPORTANT - TARGET RECIEVES THE DAMAGE HERE
                     target.setCurrent_hp(0);
-
-                    System.out.println("BM: Updating hp display");
                     targetLabels[2].setText(Integer.toString(target.getCurrent_hp()));
                     targetHPBar.setValue(target.getCurrent_hp());
-                }
-            });
-            /* Set faint here so its set immediatly instead of delayed due to event queue */
-            target.setFainted(true);
+                }});
             BattleEvents.addGenericEvent(eventQueue, textArea, "Its a One Hit KO!");
-            return;
         }
         
         // Types of damage events
         if (damage != 0) {
-            if (user.getBattle_status() == "BRN") {
-                damage = damage / 2;
-            }
+            if (user.getBattle_status() == "BRN") damage = damage / 2;
             if (userMove instanceof MultiStrike) {
                 int timeHit = (int) ((Math.random() * 3) + 2);
                 for (int i = 0; i < timeHit; i++) {
                     target.takeDamage(damage);
-//                    BattleEvents.addDamageEvent(eventQueue, textArea, user.getBattle_status(), damage, target, targetLabels[2], targetHPBar);
                     addHPBarUpdateEvent(eventQueue, textArea, damage, target, targetLabels[2], targetHPBar);
                 }
                 BattleEvents.addGenericEvent(eventQueue, textArea, "It hit " + Integer.toString(timeHit) + " time(s)!");
             } else {
                 target.takeDamage(damage);
                 addHPBarUpdateEvent(eventQueue, textArea, damage, target, targetLabels[2], targetHPBar);
-//                BattleEvents.addDamageEvent(eventQueue, textArea, user.getBattle_status(), damage, target, targetLabels[2], targetHPBar);
-            }
-            if (typeMultiplier < 1.0 && typeMultiplier > 0) {
-                BattleEvents.addGenericEvent(eventQueue, textArea, "Its not very effective...");
-            }
-            if (typeMultiplier > 1.0) {
-                BattleEvents.addGenericEvent(eventQueue, textArea, "Its super effective!");
             }
         }
         
+        if (!(userMove instanceof OneHitKO) && typeMultiplier != 1) {
+            if(typeMultiplier > 1.0) BattleEvents.addGenericEvent(eventQueue, textArea, "Its super effective!");
+            if(typeMultiplier < 1.0 && typeMultiplier > 0) BattleEvents.addGenericEvent(eventQueue, textArea, "Its not very effective...");
+        }
+       
         if(userMove instanceof Lifesteal) {
             int netHP = (int) (((Lifesteal)userMove).getLifestealRatio() * damage);
             BattleEvents.addHealingEvent(eventQueue, textArea, netHP, user, userLabels[2], userHPBar);
@@ -396,26 +376,13 @@ public class Mechanics {
         
         if(userMove instanceof HealsHP) {
             int healAmount = (int) (((HealsHP)userMove).getHealRatio() * user.getCurrent_max_hp());
-            eventQueue.add(new TimerTask() {
-                @Override
-                public void run() {
-                    user.healHP(healAmount);
-                    userLabels[2].setText(Integer.toString(user.getCurrent_hp()));
-                    userHPBar.setValue(user.getCurrent_hp());
-                    if (user.getCurrent_hp() > (user.getCurrent_max_hp() / 2)) {
-                        userHPBar.setForeground(Color.yellow);
-                    }
-                    if (user.getCurrent_hp() > (user.getCurrent_max_hp() / 2)) {
-                        userHPBar.setForeground(Color.green);
-                    }
-                }
-            });
+            BattleEvents.addHealingEvent(eventQueue, textArea, healAmount, user, userLabels[2], userHPBar);
             BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " healed some HP!");
         }
         
         if (userMove instanceof HasRecoil) {
             int recoilDamage = (int) (((HasRecoil)userMove).getRecoilRatio() * damage);
-//            BattleEvents.addDamageEvent(eventQueue, textArea, user.getBattle_status(), recoilDamage, user, userLabels[2], userHPBar);
+            BattleEvents.addSelfDamageEffect(eventQueue, textArea, damage, user, userLabels[2], userHPBar);
             BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " took damage in recoil!");
         }
                
@@ -428,12 +395,13 @@ public class Mechanics {
                 StatisticChanges.applyToUser(user, userMove, eventQueue, textArea);
             }
         }
-
+ 
         if(target.getCurrent_hp() <= 0) {
             target.setFainted(true);
             return;
         }
-        
+
+        // Events that happen as a result of the move
         if (userMove instanceof ApplyFlinch) {
             int chance_to_be_flinch = (int) (Math.random() * 10);
             if ( chance_to_be_flinch <= 3 ) {

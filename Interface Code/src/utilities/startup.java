@@ -28,8 +28,6 @@ public class Startup {
         
         pokedex.add(new P_019_Rattata());
         
-      
-        
         pokedex.add(new P_025_Pikachu());
         
         pokedex.add(new P_143_Snorlax());
@@ -54,6 +52,8 @@ public class Startup {
         movedex.add(new M_085_ThunderBolt());
         movedex.add(new M_086_ThunderWave());
         
+        movedex.add(new M_262_WillOWisp());
+        
         movedex.add(new M_392_AquaRing());
         
         return movedex;
@@ -68,6 +68,10 @@ public class Startup {
         
         itemdex.add(new SuperPotion());
         
+        itemdex.add(new CherryBerry());
+        
+        itemdex.add(new RawstBerry());
+        
         return itemdex;
     }
     
@@ -75,9 +79,9 @@ public class Startup {
     {
         Trainer ash = new Trainer("Ash");
 
+        ash.addToParty(pokedex.get(2).copy());
         ash.addToParty(pokedex.get(7).copy());
         ash.addToParty(pokedex.get(1).copy());
-        ash.addToParty(pokedex.get(2).copy());
         ash.addToParty(pokedex.get(3).copy());
         ash.addToParty(pokedex.get(4).copy());
         ash.addToParty(pokedex.get(8).copy());
@@ -101,8 +105,8 @@ public class Startup {
     {
         Trainer gary = new Trainer("Gary");
         
-        gary.addToParty(pokedex.get(5).copy());
         gary.addToParty(pokedex.get(0).copy());
+        gary.addToParty(pokedex.get(5).copy());
         
         for(Pokemon pokemon : gary.getParty())
         {
@@ -110,6 +114,8 @@ public class Startup {
             pokemon.assignRandomMoves(movedex);
             pokemon.resetBattleStats();
         }
+        
+        gary.getParty().get(0).giveItem(itemdex.get(3).copy());
         
         gary.addToBag(itemdex.get(2).copy());
         return gary;

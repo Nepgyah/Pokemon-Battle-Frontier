@@ -127,27 +127,32 @@ public class BattleEvents {
         eventQueue.add(new TimerTask() {
             @Override
             public void run() {
-                labels[4].setText(status);
-                
-                if (status.equals("PAR")) {
-                    labels[4].setForeground(Color.YELLOW);
-                    textArea.setText("Enemy " + name + " was paralyzed!");
-                }
-                if (status.equals("PSN")) {
-                    labels[4].setForeground(Color.MAGENTA);
-                    textArea.setText("Enemy " + name + " was poisoned!");
-                }
-                if (status.equals("BRN")) {
-                    labels[4].setForeground(Color.RED);
-                    textArea.setText("Enemy " + name + " was burned!");
-                }
-                if (status.equals("SLP")) {
-                    labels[4].setForeground(Color.DARK_GRAY);
-                    textArea.setText("Enemy " + name + " was put to sleep!");
-                }
-                if (status.equals("FRZ")) {
-                    labels[4].setForeground(Color.CYAN);
-                    textArea.setText("Enemy " + name + " was frozen solid!");
+                if(status != null)
+                {
+                    labels[4].setText(status);
+
+                    if (status.equals("PAR")) {
+                        labels[4].setForeground(Color.YELLOW);
+                        textArea.setText("Enemy " + name + " was paralyzed!");
+                    }
+                    if (status.equals("PSN")) {
+                        labels[4].setForeground(Color.MAGENTA);
+                        textArea.setText("Enemy " + name + " was poisoned!");
+                    }
+                    if (status.equals("BRN")) {
+                        labels[4].setForeground(Color.RED);
+                        textArea.setText("Enemy " + name + " was burned!");
+                    }
+                    if (status.equals("SLP")) {
+                        labels[4].setForeground(Color.DARK_GRAY);
+                        textArea.setText("Enemy " + name + " was put to sleep!");
+                    }
+                    if (status.equals("FRZ")) {
+                        labels[4].setForeground(Color.CYAN);
+                        textArea.setText("Enemy " + name + " was frozen solid!");
+                    }
+                } else {
+                    labels[4].setText("");
                 }
             }
         });

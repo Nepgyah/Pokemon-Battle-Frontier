@@ -285,7 +285,7 @@ public class SingleBattleController{
             }
         }
         
-        Mechanics.postMoveEffects(eventQueue, textArea, leftPokemon, rightPokemon, leftLabels[2], rightLabels[2], leftHPBar, rightHPBar);
+        Mechanics.postMoveEffects(eventQueue, textArea, leftPokemon, rightPokemon, leftLabels, rightLabels, leftHPBar, rightHPBar);
         if (leftPokemon.isFainted() == true) {
             BattleEvents.addGenericEvent(eventQueue, textArea, leftPokemon.getName() + " fainted!");
             BattleEvents.addIconRemoveEvent(eventQueue, leftLabels[5]);
@@ -295,7 +295,7 @@ public class SingleBattleController{
             }
         }
         
-        Mechanics.postMoveEffects(eventQueue, textArea, rightPokemon, leftPokemon, rightLabels[2], leftLabels[2], rightHPBar, leftHPBar);
+        Mechanics.postMoveEffects(eventQueue, textArea, rightPokemon, leftPokemon, rightLabels, leftLabels, rightHPBar, leftHPBar);
         if (rightPokemon.isFainted() == true) {
             BattleEvents.addGenericEvent(eventQueue, textArea, rightPokemon.getName() + " fainted!");
             BattleEvents.addIconRemoveEvent(eventQueue, rightLabels[5]);
@@ -367,17 +367,25 @@ public class SingleBattleController{
 
         if(leftTrainerTurn) {
             leftItem = leftTrainer.getBag().get(pos);
-            if(showConsole) System.out.println("Battle Controller: Left Trainer will use " + leftItem.getName() + " as their turn");
-            leftTrainerTurn = false;
-            leftItemUse = true;
-            battleCard.show(detailPanel, "waitingPanel");
-            textArea.setText("What will " + rightPokemon.getName() + " do?");
+            if (!Mechanics.canUseItem(leftItem, leftPokemon)) {
+                textArea.setText("You can't use that item!");
+            } else {
+                if(showConsole) System.out.println("Battle Controller: Left Trainer will use " + leftItem.getName() + " as their turn");
+                leftTrainerTurn = false;
+                leftItemUse = true;
+                battleCard.show(detailPanel, "waitingPanel");
+                textArea.setText("What will " + rightPokemon.getName() + " do?");
+            }
         } else {
             rightItem = rightTrainer.getBag().get(pos);
-            rightItemUse = true;
-            if(showConsole) System.out.println("Battle Controller: Right Trainer will use " + rightItem.getName() + " as their turn");
-            leftTrainerTurn = true;
-            runTurn();
+            if (!Mechanics.canUseItem(rightItem, rightPokemon)) {
+                textArea.setText("You can't use that item!");
+            } else {
+                if(showConsole) System.out.println("Battle Controller: Right Trainer will use " + rightItem.getName() + " as their turn");
+                rightItemUse = true;
+                leftTrainerTurn = true;
+                runTurn();
+            }
         }
     }
     

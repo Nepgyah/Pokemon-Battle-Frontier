@@ -32,33 +32,6 @@ public class BattleEvents {
             }
         });
     }
-    
-    /**
-     * Adds a event of a pokemon taking damage to itself such as recoil.
-     * @param eventQueue queue of events that happen during a single turn in pokemon
-     * @param textArea textarea containing event description
-     * @param damage value of damage taken
-     * @param user pokemon receiving the damage
-     * @param userHP numerical representation of the health points of the user
-     * @param userHPBar visual representation of the health points of the pokemon
-     */
-    public static void addSelfDamageEffect(ArrayList<TimerTask> eventQueue, JTextArea textArea, int damage, Pokemon user, JLabel userHP, JProgressBar userHPBar) {
-        user.takeDamage(damage);
-        eventQueue.add(new TimerTask() {
-            @Override
-            public void run() {
-                userHP.setText(Integer.toString(user.getCurrent_hp()));
-                userHPBar.setValue(user.getCurrent_hp());
-
-                if (user.getCurrent_hp() < (user.getCurrent_max_hp() / 2)) {
-                    userHPBar.setForeground(PokeColors.yellowHP);
-                }
-                if (user.getCurrent_hp() < (user.getCurrent_max_hp() / 4)) {
-                    userHPBar.setForeground(Color.red);
-                }
-            }
-        });
-    }
  
     /**
      * Adds a event of a pokemon taking damage from an attack.
@@ -70,7 +43,7 @@ public class BattleEvents {
      * @param targetHP numerical representation of health points of the target
      * @param targetHPBar visual representation of health points of the target
      */
-    public static void addHPBarUpdateEvent(ArrayList<TimerTask> eventQueue, JTextArea textArea, int damage, Pokemon target, JLabel targetHP, JProgressBar targetHPBar) {
+    public static void addDamageEvent(ArrayList<TimerTask> eventQueue, JTextArea textArea, int damage, Pokemon target, JLabel targetHP, JProgressBar targetHPBar) {
         eventQueue.add(new TimerTask() {
             @Override
             public void run() {
@@ -116,7 +89,7 @@ public class BattleEvents {
     }
     
     /**
-     * Adds a status application event
+     * Adds/removes a status application event
      * @param eventQueue queue of events that happen during a single turn in pokemon
      * @param textArea textarea containing event description
      * @param status (If applicable) the current status of the pokemon

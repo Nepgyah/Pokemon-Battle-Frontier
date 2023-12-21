@@ -143,8 +143,8 @@ public class SingleBattleController{
             rightMovePanel.setMoveButtons(rightPokemon.getMoveset());
         }
         // 2nd Phrase - Item use
-        if (leftItemUse) Mechanics.preMoveEffects(eventQueue, textArea, leftTrainer, leftPokemon, leftItem, leftLabels[2], leftHPBar);
-        if (rightItemUse) Mechanics.preMoveEffects(eventQueue, textArea, rightTrainer, rightPokemon, rightItem, rightLabels[2], rightHPBar);
+        if (leftItemUse) Mechanics.preMoveEffects(eventQueue, textArea, leftTrainer, leftPokemon, leftItem, leftLabels, leftHPBar);
+        if (rightItemUse) Mechanics.preMoveEffects(eventQueue, textArea, rightTrainer, rightPokemon, rightItem, rightLabels, rightHPBar);
         
         // Right going first
         if (leftPokemon.getBattle_speed() < rightPokemon.getBattle_speed()) {           
@@ -171,8 +171,8 @@ public class SingleBattleController{
             }
             // Left going second
             if (leftPokemon.isFainted() == true) {
-                BattleEvents.addGenericEvent(eventQueue, textArea, leftPokemon.getName() + " fainted!");
-                BattleEvents.addIconRemoveEvent(eventQueue, leftLabels[5]);
+//                BattleEvents.addGenericEvent(eventQueue, textArea, leftPokemon.getName() + " fainted!");
+//                BattleEvents.addIconRemoveEvent(eventQueue, leftLabels[5]);
                 if (Mechanics.didLose(leftTrainer)) {
                     rightWins = true;
                     BattleEvents.addWinnerEvent(eventQueue, textArea, rightTrainer, leftTrainer);
@@ -226,8 +226,8 @@ public class SingleBattleController{
             }
             // Right going second
             if (rightPokemon.isFainted() == true) {
-                BattleEvents.addGenericEvent(eventQueue, textArea, rightPokemon.getName() + " fainted!");
-                BattleEvents.addIconRemoveEvent(eventQueue, rightLabels[5]);
+//                BattleEvents.addGenericEvent(eventQueue, textArea, rightPokemon.getName() + " fainted!");
+//                BattleEvents.addIconRemoveEvent(eventQueue, rightLabels[5]);
                 if (Mechanics.didLose(rightTrainer)) {
                     leftWins = true;
                     BattleEvents.addWinnerEvent(eventQueue, textArea, leftTrainer, rightTrainer);

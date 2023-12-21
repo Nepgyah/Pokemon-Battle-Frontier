@@ -149,7 +149,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         eventTextArea.setFocusable(false);
         eventPanel.setViewportView(eventTextArea);
 
-        detailPanel.setBackground(new java.awt.Color(51, 51, 51));
+        detailPanel.setBackground(new java.awt.Color(112, 96, 112));
         detailPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         detailPanel.setEnabled(false);
         detailPanel.setFocusable(false);
@@ -257,10 +257,12 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         leftPokemonLabels.setPreferredSize(new java.awt.Dimension(280, 100));
 
         leftLevelLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        leftLevelLabel.setForeground(new java.awt.Color(255, 255, 255));
         leftLevelLabel.setText("Lv.");
 
         leftName.setBackground(new java.awt.Color(187, 187, 187));
         leftName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        leftName.setForeground(new java.awt.Color(255, 255, 255));
         leftName.setText("Pokemon Name");
 
         leftHPBar.setBackground(new java.awt.Color(51, 204, 0));
@@ -269,15 +271,19 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         leftHPBar.setString("0%");
 
         leftCurrentHP.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        leftCurrentHP.setForeground(new java.awt.Color(255, 255, 255));
         leftCurrentHP.setText("Current");
 
         leftMaxHP.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        leftMaxHP.setForeground(new java.awt.Color(255, 255, 255));
         leftMaxHP.setText("Max");
 
         leftSlash.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        leftSlash.setForeground(new java.awt.Color(255, 255, 255));
         leftSlash.setText("/");
 
         leftLevelValue.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        leftLevelValue.setForeground(new java.awt.Color(255, 255, 255));
         leftLevelValue.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         leftLevelValue.setText("100");
 
@@ -340,25 +346,31 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         rightPokemonLabels.setPreferredSize(new java.awt.Dimension(280, 100));
 
         rightLevelLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        rightLevelLabel.setForeground(new java.awt.Color(255, 255, 255));
         rightLevelLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         rightLevelLabel.setText("Lv.");
 
         rightName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        rightName.setForeground(new java.awt.Color(255, 255, 255));
         rightName.setText("Pokemon Name");
 
         rightHPBar.setForeground(new java.awt.Color(51, 204, 0));
         rightHPBar.setValue(100);
 
         rightCurrentHP.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        rightCurrentHP.setForeground(new java.awt.Color(255, 255, 255));
         rightCurrentHP.setText("Current");
 
         rightMaxHP.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        rightMaxHP.setForeground(new java.awt.Color(255, 255, 255));
         rightMaxHP.setText("Max");
 
         rightSlash.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        rightSlash.setForeground(new java.awt.Color(255, 255, 255));
         rightSlash.setText("/");
 
         rightLevelValue.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        rightLevelValue.setForeground(new java.awt.Color(255, 255, 255));
         rightLevelValue.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         rightStatus.setBackground(new java.awt.Color(0, 0, 0));

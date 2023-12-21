@@ -1,6 +1,5 @@
 package battle.utils;
 
-import static battle.utils.BattleEvents.addHPBarUpdateEvent;
 import item.Item;
 import item.modifiers.*;
 import item.curing.*;
@@ -24,15 +23,33 @@ public class Mechanics {
     
     final static int MAX_STAT_CHANGE = 2;
     
-    
     public static void preMoveEffects(ArrayList<TimerTask> eventQueue, JTextArea textarea, Trainer trainer,
-            Pokemon user, Item item, JLabel userHP, JProgressBar userHPBar) {
+            Pokemon user, Item item, JLabel [] userLabels, JProgressBar userHPBar) {
         BattleEvents.addGenericEvent(eventQueue, textarea, "Checking Pre move effects for " + user.getName());
         BattleEvents.addGenericEvent(eventQueue, textarea, trainer.getName() + " used a " + item.getName());
         if (item instanceof ItemHealsHP) {
-            if (item instanceof HealSetHP)
-            {
-                BattleEvents.addHealingEvent(eventQueue, textarea, ((HealSetHP)item).getHPAmount() , user, userHP, userHPBar);
+            if (item instanceof HealSetHP) BattleEvents.addHealingEvent(eventQueue, textarea, ((HealSetHP)item).getHPAmount() , user, userLabels[2], userHPBar);
+        }
+        if (item instanceof ItemHealStatus) {
+            if (item instanceof CuresParalysis) {
+                BattleEvents.addStatusEvent(eventQueue, textarea, null, user.getName(), userLabels);
+                BattleEvents.addGenericEvent(eventQueue, textarea, user.getName() + " was cured of its paralysis!");
+            }
+            if (item instanceof CuresSleep) {
+                BattleEvents.addStatusEvent(eventQueue, textarea, null, user.getName(), userLabels);
+                BattleEvents.addGenericEvent(eventQueue, textarea, user.getName() + " woke up!");
+            }
+            if (item instanceof CuresBurn) {
+                BattleEvents.addStatusEvent(eventQueue, textarea, null, user.getName(), userLabels);
+                BattleEvents.addGenericEvent(eventQueue, textarea, user.getName() + " was cured of its burn!");
+            }
+            if (item instanceof CuresFrozen) {
+                BattleEvents.addStatusEvent(eventQueue, textarea, null, user.getName(), userLabels);
+                BattleEvents.addGenericEvent(eventQueue, textarea, user.getName() + " thawed out!");
+            }
+            if (item instanceof CuresPoison) {
+                BattleEvents.addStatusEvent(eventQueue, textarea, null, user.getName(), userLabels);
+                BattleEvents.addGenericEvent(eventQueue, textarea, user.getName() + " was cured of its poison");
             }
         }
     }
@@ -78,23 +95,18 @@ public class Mechanics {
 
         if (!(user.getBattle_status() == null)) {
             // Note: Gen 1 calculation (1/16)
-            if (user.getBattle_status().equals("PSN")) {
-                
-                BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is hurt by its poison!");
-                BattleEvents.addSelfDamageEffect(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userLabels[3], userHPBar);
-            }
-            if (user.getBattle_status().equals("BRN")) {
-                BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is hurt by its burn!");
-                BattleEvents.addSelfDamageEffect(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userLabels[3], userHPBar);
-            }
+            int damage = user.getCurrent_max_hp() * 1/16;
+            if (user.getBattle_status().equals("PSN")) BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is hurt by its poison!");
+            if (user.getBattle_status().equals("BRN")) BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " is hurt by its burn!");
+            BattleEvents.addDamageEvent(eventQueue, textArea, damage, user, userLabels[2], userHPBar);
         }
         if (user.isLeeched()) {
-            BattleEvents.addSelfDamageEffect(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userLabels[3], userHPBar);
+            BattleEvents.addDamageEvent(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userLabels[2], userHPBar);
             BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " had its HP sapped!");
-            BattleEvents.addHealingEvent(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, target, targetLabels[3], targetHPBar);
+            BattleEvents.addHealingEvent(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, target, targetLabels[2], targetHPBar);
         }
         if (user.isHealingOverTime()) {
-            BattleEvents.addHealingEvent(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userLabels[3], userHPBar);
+            BattleEvents.addHealingEvent(eventQueue, textArea, user.getCurrent_max_hp() * 1/16, user, userLabels[2], userHPBar);
             BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " healed some of its HP!");
         }
         // Berry Check
@@ -109,8 +121,7 @@ public class Mechanics {
                     if (item instanceof HealSetHP) {
                         healAmount = ((HealSetHP)user.getItem()).getHPAmount();   
                     }
-                    
-                    BattleEvents.addHealingEvent(eventQueue, textArea, (int) healAmount, user, userLabels[3], userHPBar);
+                    BattleEvents.addHealingEvent(eventQueue, textArea, (int) healAmount, user, userLabels[2], userHPBar);
                     BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " healed some HP with its " + item.getName() + "!");
                     user.consumeItem();
                 }
@@ -354,16 +365,16 @@ public class Mechanics {
                 int timeHit = (int) ((Math.random() * 3) + 2);
                 for (int i = 0; i < timeHit; i++) {
                     target.takeDamage(damage);
-                    addHPBarUpdateEvent(eventQueue, textArea, damage, target, targetLabels[2], targetHPBar);
+                    BattleEvents.addDamageEvent(eventQueue, textArea, damage, target, targetLabels[2], targetHPBar);
                 }
                 BattleEvents.addGenericEvent(eventQueue, textArea, "It hit " + Integer.toString(timeHit) + " time(s)!");
             } else {
                 target.takeDamage(damage);
-                addHPBarUpdateEvent(eventQueue, textArea, damage, target, targetLabels[2], targetHPBar);
+                BattleEvents.addDamageEvent(eventQueue, textArea, damage, target, targetLabels[2], targetHPBar);
             }
         }
         
-        if (!(userMove instanceof OneHitKO) && typeMultiplier != 1) {
+        if ((!(userMove instanceof OneHitKO) && typeMultiplier != 1) &&  damage != 0) {
             if(typeMultiplier > 1.0) BattleEvents.addGenericEvent(eventQueue, textArea, "Its super effective!");
             if(typeMultiplier < 1.0 && typeMultiplier > 0) BattleEvents.addGenericEvent(eventQueue, textArea, "Its not very effective...");
         }
@@ -382,7 +393,7 @@ public class Mechanics {
         
         if (userMove instanceof HasRecoil) {
             int recoilDamage = (int) (((HasRecoil)userMove).getRecoilRatio() * damage);
-            BattleEvents.addSelfDamageEffect(eventQueue, textArea, damage, user, userLabels[2], userHPBar);
+            BattleEvents.addDamageEvent(eventQueue, textArea, recoilDamage, user, userLabels[2], userHPBar);
             BattleEvents.addGenericEvent(eventQueue, textArea, user.getName() + " took damage in recoil!");
         }
                
@@ -416,22 +427,11 @@ public class Mechanics {
         if (userMove instanceof ApplyParalyze || userMove instanceof ApplyPoison || 
                 userMove instanceof ApplyBurn || userMove instanceof ApplySleep || userMove instanceof ApplyFrozen) {
             if (!(target.getBattle_status() == null)) {
-                if (target.getBattle_status().equals("PAR")) {
-                    BattleEvents.addGenericEvent(eventQueue, textArea, "The target is already paralyzed!");
-                }
-                if (target.getBattle_status().equals("PSN")) {
-                    BattleEvents.addGenericEvent(eventQueue, textArea, "The target is already poisoned!");
-                }
-                if (target.getBattle_status().equals("BRN")) {
-                    BattleEvents.addGenericEvent(eventQueue, textArea, "The target is already burned!");
-                }
-                if (target.getBattle_status().equals("SLP")) {
-                    BattleEvents.addGenericEvent(eventQueue, textArea, "The target is already asleep!");
-                }
-                if (target.getBattle_status().equals("FRZ")) {
-                    BattleEvents.addGenericEvent(eventQueue, textArea, "The target is already frozen!");
-                }
-                return;
+                if (target.getBattle_status().equals("PAR")) BattleEvents.addGenericEvent(eventQueue, textArea, "The target is already paralyzed!");
+                if (target.getBattle_status().equals("PSN")) BattleEvents.addGenericEvent(eventQueue, textArea, "The target is already poisoned!");
+                if (target.getBattle_status().equals("BRN")) BattleEvents.addGenericEvent(eventQueue, textArea, "The target is already burned!");
+                if (target.getBattle_status().equals("SLP")) BattleEvents.addGenericEvent(eventQueue, textArea, "The target is already asleep!");
+                if (target.getBattle_status().equals("FRZ")) BattleEvents.addGenericEvent(eventQueue, textArea, "The target is already frozen!");
             } else {
                 result = Math.random();
                 if (userMove instanceof ApplyParalyze) {

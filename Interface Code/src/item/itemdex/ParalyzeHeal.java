@@ -2,8 +2,9 @@ package item.itemdex;
 
 import item.Item;
 import item.curing.CuresParalysis;
+import item.modifiers.ItemHealStatus;
 
-public class ParalyzeHeal extends Item implements CuresParalysis {
+public class ParalyzeHeal extends Item implements ItemHealStatus, CuresParalysis {
 
     public ParalyzeHeal() {
         super("Paralyze Heal", 

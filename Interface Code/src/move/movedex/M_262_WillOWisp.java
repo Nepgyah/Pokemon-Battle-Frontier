@@ -6,9 +6,9 @@ package move.movedex;
 
 import move.Move;
 import move.status_effect.ApplyBurn;
-import types.Electric;
+import types.Fire;
 
-public class M_262_WillOWisp extends Move implements Electric, ApplyBurn {
+public class M_262_WillOWisp extends Move implements Fire, ApplyBurn {
 
     public M_262_WillOWisp() {
         super(262, "Will-O-Wisp", 15, 0, .85);

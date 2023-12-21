@@ -79,8 +79,8 @@ public class Startup {
     {
         Trainer ash = new Trainer("Ash");
 
-        ash.addToParty(pokedex.get(2).copy());
         ash.addToParty(pokedex.get(7).copy());
+        ash.addToParty(pokedex.get(2).copy());
         ash.addToParty(pokedex.get(1).copy());
         ash.addToParty(pokedex.get(3).copy());
         ash.addToParty(pokedex.get(4).copy());

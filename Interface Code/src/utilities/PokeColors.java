@@ -37,4 +37,7 @@ public class PokeColors {
     public static Color pokemonButton  = new Color(81,157,45);
     public static Color bagButton = new Color(201,147,51);
     public static Color quitButton = new Color(53,140,181);
+    
+    public static Color pokemonSwapButton = new Color(120,184,240);
+    public static Color battleBackground = new Color(112,96,112);
 }

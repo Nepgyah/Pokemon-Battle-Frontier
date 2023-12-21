@@ -125,6 +125,7 @@ public class SingleBattleController{
     public void runTurn() {
         disableControls();
         battleCard.show(detailPanel, "waitingPanel");
+        
         // 1st Phase - Pokemon swaps
         if (leftSwap == true) {
             leftPrevName = leftPokemon.getName();

@@ -415,6 +415,7 @@ public abstract class Pokemon implements Serializable {
      * @param amount amount of health to be healed
      */
     public void healHP(int amount) {
+        System.out.println("Pokemon method called. " + " Healing " + amount + " to " + this.current_hp + " hp.");
         if (this.getCurrent_hp() + amount >= this.current_max_hp) {
             this.setCurrent_hp(current_max_hp);
         } else {

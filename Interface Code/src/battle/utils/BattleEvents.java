@@ -33,6 +33,24 @@ public class BattleEvents {
         });
     }
  
+    public static void addHPUpdateEvent(ArrayList<TimerTask> eventQueue, JTextArea textArea, Pokemon pokemon, JLabel hpLabel, JProgressBar hpBar) {
+        eventQueue.add(new TimerTask() {
+            @Override
+            public void run() {
+                // Update the HP Bar
+                hpLabel.setText(Integer.toString(pokemon.getCurrent_hp()));
+                hpBar.setValue(pokemon.getCurrent_hp());
+
+                if (pokemon.getCurrent_hp() < (pokemon.getCurrent_max_hp() / 2)) {
+                    hpBar.setForeground(PokeColors.yellowHP);
+                }
+                if (pokemon.getCurrent_hp() < (pokemon.getCurrent_max_hp() / 4)) {
+                    hpBar.setForeground(Color.red);
+                }
+            }
+        });
+    }
+    
     /**
      * Adds a event of a pokemon taking damage from an attack.
      * @param eventQueue queue of events that happen during a single turn in pokemon
@@ -70,11 +88,11 @@ public class BattleEvents {
      * @param userHP numerical representation of health points of the user
      * @param userHPBar visual representation of health points of the user
      */
-    public static void addHealingEvent(ArrayList<TimerTask> eventQueue, JTextArea textArea, int healAmount, Pokemon user, JLabel userHP, JProgressBar userHPBar) {
+    public static void addHealingEvent(ArrayList<TimerTask> eventQueue, JTextArea textArea, Pokemon user, JLabel userHP, JProgressBar userHPBar) {
         eventQueue.add(new TimerTask() {
             @Override
             public void run() {
-                user.healHP(healAmount);
+                System.out.println("Healing Event called. Updating hp to " + user.getCurrent_hp());
                 userHP.setText(Integer.toString(user.getCurrent_hp()));
                 userHPBar.setValue(user.getCurrent_hp());
 

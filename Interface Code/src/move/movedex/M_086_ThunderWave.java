@@ -5,10 +5,11 @@
 package move.movedex;
 
 import move.Move;
+import move.modifiers.StatusMove;
 import move.status_effect.ApplyParalyze;
 import types.Electric;
 
-public class M_086_ThunderWave extends Move implements Electric, ApplyParalyze {
+public class M_086_ThunderWave extends Move implements StatusMove, Electric, ApplyParalyze {
 
     public M_086_ThunderWave() {
         super(86, "Thunder Wave", 20, 0, .9);

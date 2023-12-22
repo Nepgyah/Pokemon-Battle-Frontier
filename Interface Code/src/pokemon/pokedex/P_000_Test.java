@@ -7,7 +7,7 @@ import pokemon.Pokemon;
 import types.Grass;
 import types.Poison;
 
-public class P_000_Test extends Pokemon implements Grass, Poison{
+public class P_000_Test extends Pokemon implements Poison{
 
 	/**
 	 * 
@@ -17,7 +17,7 @@ public class P_000_Test extends Pokemon implements Grass, Poison{
 	public P_000_Test()
 	{
 		super();
-		this.name = this.nickname = "Testemon";
+		this.name = this.nickname = "Missing No";
 		this.pokedex_number = 0;
 		
 		this.base_max_hp = 40;

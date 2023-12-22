@@ -9,7 +9,7 @@ import move.Move;
 import trainer.Trainer;
 import move.movedex.*;
 
-public class startup {
+public class Startup {
     
     public static ArrayList<Pokemon> initializePokedex()
     {
@@ -27,8 +27,6 @@ public class startup {
         pokedex.add(new P_016_Pidgey());
         
         pokedex.add(new P_019_Rattata());
-        
-      
         
         pokedex.add(new P_025_Pikachu());
         
@@ -54,6 +52,8 @@ public class startup {
         movedex.add(new M_085_ThunderBolt());
         movedex.add(new M_086_ThunderWave());
         
+        movedex.add(new M_262_WillOWisp());
+        
         movedex.add(new M_392_AquaRing());
         
         return movedex;
@@ -68,6 +68,10 @@ public class startup {
         
         itemdex.add(new SuperPotion());
         
+        itemdex.add(new CherryBerry());
+        
+        itemdex.add(new RawstBerry());
+        
         return itemdex;
     }
     
@@ -76,8 +80,8 @@ public class startup {
         Trainer ash = new Trainer("Ash");
 
         ash.addToParty(pokedex.get(7).copy());
-        ash.addToParty(pokedex.get(1).copy());
         ash.addToParty(pokedex.get(2).copy());
+        ash.addToParty(pokedex.get(1).copy());
         ash.addToParty(pokedex.get(3).copy());
         ash.addToParty(pokedex.get(4).copy());
         ash.addToParty(pokedex.get(8).copy());
@@ -91,15 +95,18 @@ public class startup {
         
         ash.getParty().get(0).giveItem(itemdex.get(1).copy());
         
+        ash.addToBag(itemdex.get(0).copy());
+        ash.addToBag(itemdex.get(2).copy());
+        
         return ash;
     }
     
-     public static Trainer createGary(ArrayList<Pokemon> pokedex, ArrayList<Move> movedex)
+     public static Trainer createGary(ArrayList<Pokemon> pokedex, ArrayList<Move> movedex, ArrayList<Item> itemdex)
     {
         Trainer gary = new Trainer("Gary");
         
-        gary.addToParty(pokedex.get(5).copy());
         gary.addToParty(pokedex.get(0).copy());
+        gary.addToParty(pokedex.get(5).copy());
         
         for(Pokemon pokemon : gary.getParty())
         {
@@ -107,6 +114,11 @@ public class startup {
             pokemon.assignRandomMoves(movedex);
             pokemon.resetBattleStats();
         }
+        
+        gary.getParty().get(0).giveItem(itemdex.get(4).copy());
+        
+        gary.addToBag(itemdex.get(0).copy());
+        gary.addToBag(itemdex.get(2).copy());
         return gary;
     }
 }

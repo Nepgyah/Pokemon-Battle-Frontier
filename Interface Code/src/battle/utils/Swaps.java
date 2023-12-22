@@ -10,6 +10,9 @@ import pokemon.Pokemon;
 import trainer.Trainer;
 import utilities.PokeColors;
 
+/**
+ * Collection of functions that deal with swapping pokemon during battle
+ */
 public class Swaps {
     
     public static void swapPokemon(Trainer trainer, int partyPosition) {
@@ -20,11 +23,9 @@ public class Swaps {
         eventQueue.add(new TimerTask() {
             @Override
             public void run() {
-                System.out.println("BM: Describing switch");
                 textArea.setText(previousName + ", switch out!" + "\nCome back!");
             }
-        });
-        
+        });       
         eventQueue.add(new TimerTask() {
             @Override
             public void run() {
@@ -70,6 +71,5 @@ public class Swaps {
         } else {
             hpBar.setForeground(PokeColors.redHP);
         }
-        
     }
 }

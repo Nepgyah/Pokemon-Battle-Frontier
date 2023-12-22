@@ -5,12 +5,13 @@ import pokemon.Pokemon;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Trainer implements Serializable{
-    /**
-     * Public class that represents the trainers of pokemon.
-     * Trainers can have a party of pokemon, hold items and have personal 
-     * accolades associated with them
-     */
+/**
+* Public class that represents the trainers of pokemon game.
+* Trainers can have a party of pokemon, hold items and have personal 
+* accolades associated with them
+*/
+public class Trainer implements Serializable {
+    
     private static final long serialVersionUID = 1L;
 
     String name;
@@ -27,27 +28,32 @@ public class Trainer implements Serializable{
         this.hometown = "Battle Frontier";
     }
 
-    public void addToParty(Pokemon pokemon)
-    {
+    /**
+     * Adds a pokemon to the trainers party
+     * @param pokemon pokemon to be added
+     */
+    public void addToParty(Pokemon pokemon) {
         party.add(pokemon);
     }
 
-    public void displayPartyDetailed()
-    {
+    /**
+     * Console displays the trainers party in detail
+     */
+    public void displayPartyDetailed() {
         System.out.println("\n" + this.name + "'" + this.title + "'");
         System.out.println("Party Pokemon");
-        for(Pokemon pokemon : party)
-        {
+        for(Pokemon pokemon : party) {
             pokemon.displayInformation();
         }
         System.out.println();
     }
 
-    public void displayPartyBasic()
-    {
+    /**
+     * Console displays the trainers party with basic information
+     */
+    public void displayPartyBasic() {
         System.out.println("\n" + this.name + "'s Party");
-        for(int i = 0; i < party.size(); i++)
-        {
+        for(int i = 0; i < party.size(); i++) {
             System.out.print((i+1) + ". " + party.get(i).getName());
             if(party.get(i).isFainted()) System.out.println(" FNT");
             else System.out.println();
@@ -55,11 +61,21 @@ public class Trainer implements Serializable{
         System.out.println();
     }
 
-    
+    public ArrayList<Item> getBag() {
+        return this.bag;
+    }
+    /**
+     * Adds an item to the trainers bag
+     * @param item item to added
+     */
     public void addToBag(Item item) {
         bag.add(item);
     }
     
+    /**
+     * Removes an item from a trainers bag
+     * @param item item to be removed
+     */
     public void removeFromBag(Item item) {
         int index = bag.indexOf(item);
         bag.remove(index);

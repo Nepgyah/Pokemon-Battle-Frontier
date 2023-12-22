@@ -70,8 +70,8 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         backgroundLabel.setIcon(new ImageIcon(new ImageIcon("resources/battleScenes/grassfield.png").getImage().getScaledInstance(928, 392, Image.SCALE_DEFAULT)));
         layeredPane.add(backgroundLabel);
         
-        leftPokemonPanel = new pokemonPanel(detailPanel, leftTrainer, battleController);
-        rightPokemonPanel = new pokemonPanel(detailPanel, rightTrainer, battleController);
+        leftPokemonPanel = new pokemonPanel(detailPanel, leftTrainer, battleController, eventTextArea);
+        rightPokemonPanel = new pokemonPanel(detailPanel, rightTrainer, battleController, eventTextArea);
         leftMovePanel = new SingleBattleMovePanel(detailPanel, leftTrainer.getName(), leftTrainer.getParty().get(0).getMoveset(), battleController );
         rightMovePanel = new SingleBattleMovePanel(detailPanel, rightTrainer.getName(), rightTrainer.getParty().get(0).getMoveset(), battleController);
         leftBagPanel = new bagPanel(detailPanel, leftTrainer, battleController);
@@ -131,6 +131,8 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         rightSlash = new javax.swing.JLabel();
         rightLevelValue = new javax.swing.JLabel();
         rightStatus = new javax.swing.JLabel();
+        pokemonDetailsPanel = new javax.swing.JPanel();
+        testButton = new javax.swing.JButton();
 
         jButton1.setText("jButton1");
 
@@ -461,6 +463,32 @@ public class SingleBattleWindow extends javax.swing.JFrame {
                 .addComponent(leftIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        pokemonDetailsPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        testButton.setText("Swap to Details");
+        testButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                testButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pokemonDetailsPanelLayout = new javax.swing.GroupLayout(pokemonDetailsPanel);
+        pokemonDetailsPanel.setLayout(pokemonDetailsPanelLayout);
+        pokemonDetailsPanelLayout.setHorizontalGroup(
+            pokemonDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pokemonDetailsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(testButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pokemonDetailsPanelLayout.setVerticalGroup(
+            pokemonDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pokemonDetailsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(testButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -474,7 +502,9 @@ public class SingleBattleWindow extends javax.swing.JFrame {
                         .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(layeredPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(detailPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(detailPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
+                    .addComponent(pokemonDetailsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -486,8 +516,9 @@ public class SingleBattleWindow extends javax.swing.JFrame {
                     .addComponent(layeredPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(eventPanel)
-                    .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(eventPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                    .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pokemonDetailsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -522,6 +553,10 @@ public class SingleBattleWindow extends javax.swing.JFrame {
         eventTextArea.setText("There's no running from a trainer battle!");
     }//GEN-LAST:event_quitButtonActionPerformed
 
+    private void testButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_testButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bagButton;
@@ -543,6 +578,7 @@ public class SingleBattleWindow extends javax.swing.JFrame {
     private javax.swing.JLabel leftSlash;
     private javax.swing.JLabel leftStatus;
     private javax.swing.JButton pokemonButton;
+    private javax.swing.JPanel pokemonDetailsPanel;
     private javax.swing.JButton quitButton;
     private javax.swing.JLabel rightCurrentHP;
     private javax.swing.JProgressBar rightHPBar;
@@ -554,5 +590,6 @@ public class SingleBattleWindow extends javax.swing.JFrame {
     private javax.swing.JPanel rightPokemonLabels;
     private javax.swing.JLabel rightSlash;
     private javax.swing.JLabel rightStatus;
+    private javax.swing.JButton testButton;
     // End of variables declaration//GEN-END:variables
 }

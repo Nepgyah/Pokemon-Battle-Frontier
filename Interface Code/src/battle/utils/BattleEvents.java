@@ -1,5 +1,6 @@
 package battle.utils;
 
+import static battle.utils.Swaps.setPokemonLabels;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -18,6 +19,122 @@ import utilities.PokeColors;
  */
 public class BattleEvents {
     
+    
+    public static void addHPUpdateEvent(ArrayList<TimerTask> eventQueue, JTextArea textArea, 
+            int visualHP, int maxHP,
+            JLabel hpLabel, JProgressBar hpBar) {
+        eventQueue.add(new TimerTask() {
+            @Override
+            public void run() {
+                hpLabel.setText(Integer.toString(visualHP));
+                hpBar.setValue(visualHP);
+
+                if (visualHP < (maxHP / 2)) {
+                    hpBar.setForeground(PokeColors.yellowHP);
+                }
+                if (visualHP < (maxHP / 4)) {
+                    hpBar.setForeground(Color.red);
+                }
+            }
+        }); 
+    }
+    
+   
+    public static void addGiveStatusEvent(ArrayList<TimerTask> eventQueue, JTextArea textArea, 
+            String name, String status, JLabel statusLabel) {
+        eventQueue.add(new TimerTask() {
+            @Override
+            public void run() {
+                statusLabel.setText(status);
+                if (status.equals("PAR")) {
+                    statusLabel.setForeground(Color.YELLOW);
+                    textArea.setText("Enemy " + name + " was paralyzed!");
+                }
+                if (status.equals("PSN")) {
+                    statusLabel.setForeground(Color.MAGENTA);
+                    textArea.setText("Enemy " + name + " was poisoned!");
+                }
+                if (status.equals("BRN")) {
+                    statusLabel.setForeground(Color.RED);
+                    textArea.setText("Enemy " + name + " was burned!");
+                }
+                if (status.equals("SLP")) {
+                    statusLabel.setForeground(Color.DARK_GRAY);
+                    textArea.setText("Enemy " + name + " was put to sleep!");
+                }
+                if (status.equals("FRZ")) {
+                    statusLabel.setForeground(Color.CYAN);
+                    textArea.setText("Enemy " + name + " was frozen solid!");
+                }
+            }
+        }); 
+    }
+    
+    public static void addRemoveStatusEvent(ArrayList<TimerTask> eventQueue, JTextArea textArea, JLabel statusLabel) {
+        eventQueue.add(new TimerTask() {
+            @Override
+            public void run() {
+                statusLabel.setText("");
+            }
+        }); 
+    }
+    public static void setPokemonLabels(Pokemon pokemon, Boolean isLeftSide, int visualHP, String visualStatus, JLabel [] labelArray, JProgressBar hpBar) {
+        labelArray[0].setText(pokemon.getName());
+        labelArray[1].setText(Integer.toString(pokemon.getLevel()));
+        labelArray[2].setText(Integer.toString(visualHP));
+        labelArray[3].setText(Integer.toString(pokemon.getCurrent_max_hp()));
+        if (visualStatus != null) {
+            labelArray[4].setText(visualStatus);
+        } else {
+            labelArray[4].setText("");
+        }
+        labelArray[4].setForeground(getStatusColor(visualStatus));
+        if (isLeftSide) {
+            labelArray[5].setIcon(pokemon.getBackIcon());
+        } else {
+            labelArray[5].setIcon(pokemon.getFrontIcon());
+        }
+        hpBar.setMaximum(pokemon.getCurrent_max_hp());
+        hpBar.setValue(visualHP);
+        if (pokemon.getCurrent_hp() > pokemon.getCurrent_max_hp() / 2) {
+            hpBar.setForeground(PokeColors.greenHP);
+        } else if (pokemon.getCurrent_hp() > pokemon.getCurrent_max_hp() / 4) {
+            hpBar.setForeground(PokeColors.yellowHP);
+        } else {
+            hpBar.setForeground(PokeColors.redHP);
+        }
+    }
+    
+    private static Color getStatusColor(String status) {
+        if(status != null) {
+            if (status.equals("PAR")) return Color.YELLOW;
+            if (status.equals("PSN")) return Color.MAGENTA;
+            if (status.equals("BRN")) return Color.RED;
+            if (status.equals("SLP")) return Color.DARK_GRAY;
+            if (status.equals("FRZ")) return Color.CYAN;
+        }
+        return Color.BLACK;
+    }
+    
+    
+        public static void addSwapEvent(ArrayList<TimerTask> eventQueue, JTextArea textArea,
+                String previousName, Pokemon pokemon, int visualHP, String visualStatus,
+                Boolean isLeftSide, JLabel [] labelArray, JProgressBar hpBar) {
+        eventQueue.add(new TimerTask() {
+            @Override
+            public void run() {
+                textArea.setText(previousName + ", switch out!" + "\nCome back!");
+            }
+        });       
+        eventQueue.add(new TimerTask() {
+            @Override
+            public void run() {
+                setPokemonLabels(pokemon, isLeftSide, visualHP, visualStatus, labelArray, hpBar);
+                textArea.setText("Go " + pokemon.getName() + "!");
+            }
+        });
+    }
+    
     /**
      * Adds a generic text event such as declaring a pokenon swap or move use.
      * @param eventQueue queue of events that happen during a single turn in pokemon
@@ -29,121 +146,6 @@ public class BattleEvents {
             @Override
             public void run() {
                 textArea.setText(event);
-            }
-        });
-    }
- 
-    public static void addHPUpdateEvent(ArrayList<TimerTask> eventQueue, JTextArea textArea, Pokemon pokemon, JLabel hpLabel, JProgressBar hpBar) {
-        eventQueue.add(new TimerTask() {
-            @Override
-            public void run() {
-                // Update the HP Bar
-                hpLabel.setText(Integer.toString(pokemon.getCurrent_hp()));
-                hpBar.setValue(pokemon.getCurrent_hp());
-
-                if (pokemon.getCurrent_hp() < (pokemon.getCurrent_max_hp() / 2)) {
-                    hpBar.setForeground(PokeColors.yellowHP);
-                }
-                if (pokemon.getCurrent_hp() < (pokemon.getCurrent_max_hp() / 4)) {
-                    hpBar.setForeground(Color.red);
-                }
-            }
-        });
-    }
-    
-    /**
-     * Adds a event of a pokemon taking damage from an attack.
-     * @param eventQueue queue of events that happen during a single turn in pokemon
-     * @param textArea textarea containing event description
-     * @param userStatus current battle status of the pokemon conducting the move
-     * @param damage value of damage taken
-     * @param target pokemon receiving the attack
-     * @param targetHP numerical representation of health points of the target
-     * @param targetHPBar visual representation of health points of the target
-     */
-    public static void addDamageEvent(ArrayList<TimerTask> eventQueue, JTextArea textArea, int damage, Pokemon target, JLabel targetHP, JProgressBar targetHPBar) {
-        eventQueue.add(new TimerTask() {
-            @Override
-            public void run() {
-                // Update the HP Bar
-                targetHP.setText(Integer.toString(target.getCurrent_hp()));
-                targetHPBar.setValue(target.getCurrent_hp());
-
-                if (target.getCurrent_hp() < (target.getCurrent_max_hp() / 2)) {
-                    targetHPBar.setForeground(PokeColors.yellowHP);
-                }
-                if (target.getCurrent_hp() < (target.getCurrent_max_hp() / 4)) {
-                    targetHPBar.setForeground(Color.red);
-                }
-            }
-        });
-    }
-    
-    /**
-     * Adds a event of a pokemon healing their health points
-     * @param eventQueue queue of events that happen during a single turn in pokemon
-     * @param textArea textarea containing event description
-     * @param healAmount value of the amount healed from the move
-     * @param user pokemon receiving the heal
-     * @param userHP numerical representation of health points of the user
-     * @param userHPBar visual representation of health points of the user
-     */
-    public static void addHealingEvent(ArrayList<TimerTask> eventQueue, JTextArea textArea, Pokemon user, JLabel userHP, JProgressBar userHPBar) {
-        eventQueue.add(new TimerTask() {
-            @Override
-            public void run() {
-                System.out.println("Healing Event called. Updating hp to " + user.getCurrent_hp());
-                userHP.setText(Integer.toString(user.getCurrent_hp()));
-                userHPBar.setValue(user.getCurrent_hp());
-
-                if (user.getCurrent_hp() > (user.getCurrent_max_hp() / 2)) {
-                    userHPBar.setForeground(PokeColors.greenHP);
-                }
-                if (user.getCurrent_hp() < (user.getCurrent_max_hp() / 2)) {
-                    userHPBar.setForeground(PokeColors.yellowHP);
-                }
-            }
-        });
-    }
-    
-    /**
-     * Adds/removes a status application event
-     * @param eventQueue queue of events that happen during a single turn in pokemon
-     * @param textArea textarea containing event description
-     * @param status (If applicable) the current status of the pokemon
-     * @param name name of the pokemon receiving the status change
-     * @param labels numerical representation of the pokemon receiving the change
-     */
-    public static void addStatusEvent(ArrayList<TimerTask> eventQueue, JTextArea textArea, String status, String name, JLabel [] labels) {
-        eventQueue.add(new TimerTask() {
-            @Override
-            public void run() {
-                if(status != null)
-                {
-                    labels[4].setText(status);
-                    if (status.equals("PAR")) {
-                        labels[4].setForeground(Color.YELLOW);
-                        textArea.setText("Enemy " + name + " was paralyzed!");
-                    }
-                    if (status.equals("PSN")) {
-                        labels[4].setForeground(Color.MAGENTA);
-                        textArea.setText("Enemy " + name + " was poisoned!");
-                    }
-                    if (status.equals("BRN")) {
-                        labels[4].setForeground(Color.RED);
-                        textArea.setText("Enemy " + name + " was burned!");
-                    }
-                    if (status.equals("SLP")) {
-                        labels[4].setForeground(Color.DARK_GRAY);
-                        textArea.setText("Enemy " + name + " was put to sleep!");
-                    }
-                    if (status.equals("FRZ")) {
-                        labels[4].setForeground(Color.CYAN);
-                        textArea.setText("Enemy " + name + " was frozen solid!");
-                    }
-                } else {
-                    labels[4].setText("");
-                }
             }
         });
     }

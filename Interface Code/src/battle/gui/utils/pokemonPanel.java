@@ -10,19 +10,25 @@ import utilities.PokeColors;
 
 public class pokemonPanel extends javax.swing.JPanel {
 
-    JPanel contentPanel;
-    CardLayout card;
+    JPanel contentPanel, battlePanel;
+    CardLayout card, battleCard;
     Trainer trainer;
+    pokemonDetails pokemonDetailPanel;
     SingleBattleController controller;
     JTextArea textArea;
     int pokemonSelected = 0;
-    public pokemonPanel(JPanel panel, Trainer trainer, SingleBattleController controller, JTextArea textArea) {
+    public pokemonPanel(JPanel menuPanel, Trainer trainer, SingleBattleController controller, JTextArea textArea, JPanel battlePanel, pokemonDetails pokemonDetailPanel) {
         initComponents();
-        this.contentPanel = panel;
+        this.contentPanel = menuPanel;
+        this.battlePanel = battlePanel;
         this.trainer = trainer;
         this.controller = controller;
         this.textArea = textArea;
-        card = (CardLayout) panel.getLayout();
+        this.pokemonDetailPanel = pokemonDetailPanel;
+        
+        card = (CardLayout) menuPanel.getLayout();
+        battleCard = (CardLayout) battlePanel.getLayout();
+        
         shiftButton.setBackground(PokeColors.quitButton);
         summaryButton.setBackground(PokeColors.quitButton);
         cancelButton.setBackground(PokeColors.quitButton);
@@ -214,41 +220,54 @@ public class pokemonPanel extends javax.swing.JPanel {
 
     private void pokemonOneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonOneActionPerformed
         this.pokemonSelected = 0;
+        pokemonDetailPanel.setLabels(trainer.getParty().get(0));
+        battleCard.show(battlePanel, "battlefield");
         textArea.setText("What would you like to do with " + pokemonOne.getName());
     }//GEN-LAST:event_pokemonOneActionPerformed
 
     private void pokemonTwoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonTwoActionPerformed
         this.pokemonSelected = 1;
+        pokemonDetailPanel.setLabels(trainer.getParty().get(1));
+        battleCard.show(battlePanel, "battlefield");
         textArea.setText("What would you like to do with " + pokemonTwo.getName());
     }//GEN-LAST:event_pokemonTwoActionPerformed
 
     private void pokemonThreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonThreeActionPerformed
         this.pokemonSelected = 2;
+        pokemonDetailPanel.setLabels(trainer.getParty().get(2));
+        battleCard.show(battlePanel, "battlefield");
         textArea.setText("What would you like to do with " + pokemonThree.getName());
     }//GEN-LAST:event_pokemonThreeActionPerformed
 
     private void pokemonFourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonFourActionPerformed
         this.pokemonSelected = 3;
+        pokemonDetailPanel.setLabels(trainer.getParty().get(3));
+        battleCard.show(battlePanel, "battlefield");
         textArea.setText("What would you like to do with " + pokemonFour.getName());
     }//GEN-LAST:event_pokemonFourActionPerformed
 
     private void pokemonFiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonFiveActionPerformed
         this.pokemonSelected = 4;
+        pokemonDetailPanel.setLabels(trainer.getParty().get(4));
+        battleCard.show(battlePanel, "battlefield");
         textArea.setText("What would you like to do with " + pokemonFive.getName());
     }//GEN-LAST:event_pokemonFiveActionPerformed
 
     private void pokemonSixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonSixActionPerformed
         this.pokemonSelected = 5;
+        pokemonDetailPanel.setLabels(trainer.getParty().get(5));
+        battleCard.show(battlePanel, "battlefield");
         textArea.setText("What would you like to do with " + pokemonSix.getName());
     }//GEN-LAST:event_pokemonSixActionPerformed
 
     private void shiftButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shiftButtonActionPerformed
         controller.setPokemonSwap(pokemonSelected);
+        battleCard.show(battlePanel, "battlefield");
         card.show(contentPanel, "waitingPanel");
     }//GEN-LAST:event_shiftButtonActionPerformed
 
     private void summaryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_summaryButtonActionPerformed
-        // TODO add your handling code here:
+        battleCard.show(battlePanel, "pokemonDetails");
     }//GEN-LAST:event_summaryButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed

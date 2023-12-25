@@ -1,5 +1,6 @@
 package battle.modes.singlebattle;
 
+import battle.gui.utils.pokemonDetails;
 import utilities.ConsoleCommands;
 import move.Move;
 import pokemon.Pokemon;
@@ -31,7 +32,7 @@ public class SingleBattleController{
     private Pokemon leftPokemon, rightPokemon;
     private Move leftMove, rightMove;
     private Item leftItem, rightItem;
-    
+    private pokemonDetails pokemonDetailPanel;
     // Testing for variables to hold the 'visual' health points during battle
     private int leftNextPokemon, rightNextPokemon, leftVisualHP, rightVisualHP;
     
@@ -82,7 +83,8 @@ public class SingleBattleController{
             JTextArea textArea, 
             JLabel [] leftLabels, JLabel [] rightLabels,
             JProgressBar leftHPBar, JProgressBar rightHPBar,
-            JButton [] controlButtons) {
+            JButton [] controlButtons,
+            pokemonDetails pokemonDetailPanel) {
         
         super();
         
@@ -115,7 +117,8 @@ public class SingleBattleController{
         this.fightButton = controlButtons[0];
         this.pokemonButton = controlButtons[1];
         this.bagButton = controlButtons[2];
-
+        this.pokemonDetailPanel = pokemonDetailPanel;
+        
         // Set lables for initial send out
         Swaps.setPokemonLabels(leftPokemon, true, leftLabels, leftHPBar);
         Swaps.setPokemonLabels(rightPokemon, false, rightLabels, rightHPBar);

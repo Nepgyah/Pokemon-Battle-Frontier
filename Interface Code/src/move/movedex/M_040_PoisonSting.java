@@ -10,7 +10,7 @@ public class M_040_PoisonSting extends Move implements PhysicalAttack, Poison, A
     private static final long serialVersionUID = 1L;
 
     public M_040_PoisonSting() {
-        super(40, "Poison Sting", 35, 15, 1);
+        super(40, "Poison Sting", 35, 15, 1, "	The foe is stabbed with a toxic barb, etc. It may poison the foe.");
     }
     
     public M_040_PoisonSting copy()

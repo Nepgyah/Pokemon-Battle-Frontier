@@ -1,22 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package battle.gui.utils;
-
+import move.Move;
 import pokemon.Pokemon;
 
-/**
- *
- * @author auston
- */
 public class pokemonDetails extends javax.swing.JPanel {
 
+    Move move1, move2, move3, move4;
     /**
      * Creates new form pokemonDetails
      */
     public pokemonDetails() {
         initComponents();
+        move1Description.setWrapStyleWord(true);
+        move2Description.setWrapStyleWord(true);
+        move3Description.setWrapStyleWord(true);
+        move4Description.setWrapStyleWord(true);
     }
 
     public void setLabels(Pokemon pokemon) {
@@ -34,11 +31,50 @@ public class pokemonDetails extends javax.swing.JPanel {
         spDefHolder.setText(Integer.toString(pokemon.getCurrent_special_defense()));
         speedHolder.setText(Integer.toString(pokemon.getCurrent_speed()));
         
-        move1.setText(pokemon.getMoveset()[0].getName());
-        move2.setText(pokemon.getMoveset()[1].getName());
-        move3.setText(pokemon.getMoveset()[2].getName());
-        move4.setText(pokemon.getMoveset()[3].getName());
+        move1 = pokemon.getMoveset()[0];
+        move2 = pokemon.getMoveset()[1];
+        move3 = pokemon.getMoveset()[2];
+        move4 = pokemon.getMoveset()[3];
         
+        if (move1 != null) {
+            move1Name.setText(move1.getName());
+            move1Description.setText(move1.getDescription());
+            move1PP.setText(Integer.toString(move1.getCurrent_pp()));
+            move1Max.setText(Integer.toString(move1.getMax_pp()));
+            move1Category.setText(move1.getCategory());
+            move1Type.setText(move1.getType());
+            move1Type.setForeground(move1.getColor());
+        }
+        
+        if (move2 != null) {
+            move2Name.setText(move2.getName());
+            move2Description.setText(move2.getDescription());
+            move2PP.setText(Integer.toString(move2.getCurrent_pp()));
+            move2Max.setText(Integer.toString(move2.getMax_pp()));
+            move2Category.setText(move2.getCategory());
+            move2Type.setText(move2.getType());
+            move2Type.setForeground(move2.getColor());
+        }
+        
+        if (move3 != null) {
+            move3Name.setText(move3.getName());
+            move3Description.setText(move3.getDescription());
+            move3PP.setText(Integer.toString(move3.getCurrent_pp()));
+            move3Max.setText(Integer.toString(move3.getMax_pp()));
+            move3Category.setText(move3.getCategory());
+            move3Type.setText(move3.getType());
+            move3Type.setForeground(move3.getColor());
+        }
+        
+        if (move4 != null) {
+            move4Name.setText(move4.getName());
+            move4Description.setText(move4.getDescription());
+            move4PP.setText(Integer.toString(move4.getCurrent_pp()));
+            move4Max.setText(Integer.toString(move4.getMax_pp()));
+            move4Category.setText(move4.getCategory());
+            move4Type.setText(move4.getType());
+            move4Type.setForeground(move4.getColor());
+        } 
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -67,11 +103,43 @@ public class pokemonDetails extends javax.swing.JPanel {
         itemLabel = new javax.swing.JLabel();
         itemHolder = new javax.swing.JLabel();
         pokemonIcon = new javax.swing.JLabel();
-        atkLabel1 = new javax.swing.JLabel();
-        move3 = new javax.swing.JLabel();
-        move1 = new javax.swing.JLabel();
-        move2 = new javax.swing.JLabel();
-        move4 = new javax.swing.JLabel();
+        moveDetailsLabel = new javax.swing.JLabel();
+        move3Name = new javax.swing.JLabel();
+        move1Name = new javax.swing.JLabel();
+        move2Name = new javax.swing.JLabel();
+        move4Name = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        move3Description = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        move2Description = new javax.swing.JTextArea();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        move1Description = new javax.swing.JTextArea();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        move4Description = new javax.swing.JTextArea();
+        move1Max = new javax.swing.JLabel();
+        move1Slash = new javax.swing.JLabel();
+        move1PP = new javax.swing.JLabel();
+        move2Category = new javax.swing.JLabel();
+        move1Type = new javax.swing.JLabel();
+        move1Category = new javax.swing.JLabel();
+        move2PP = new javax.swing.JLabel();
+        move1Slash1 = new javax.swing.JLabel();
+        move2Max = new javax.swing.JLabel();
+        move2Type = new javax.swing.JLabel();
+        move3Category = new javax.swing.JLabel();
+        move4Type = new javax.swing.JLabel();
+        move3PP = new javax.swing.JLabel();
+        move1Slash2 = new javax.swing.JLabel();
+        move3Max = new javax.swing.JLabel();
+        move4Category = new javax.swing.JLabel();
+        move4Max = new javax.swing.JLabel();
+        move1Slash3 = new javax.swing.JLabel();
+        move4PP = new javax.swing.JLabel();
+        move3Type = new javax.swing.JLabel();
+
+        setMaximumSize(new java.awt.Dimension(932, 396));
+        setMinimumSize(new java.awt.Dimension(932, 396));
+        setPreferredSize(new java.awt.Dimension(932, 396));
 
         jLabel1.setText("Pokemon Details");
 
@@ -107,15 +175,87 @@ public class pokemonDetails extends javax.swing.JPanel {
 
         itemHolder.setText("Level");
 
-        atkLabel1.setText("Move Details");
+        moveDetailsLabel.setText("Move Details");
 
-        move3.setText("move3");
+        move3Name.setText("move3Name");
 
-        move1.setText("Move1");
+        move1Name.setText("Move1");
 
-        move2.setText("Move2");
+        move2Name.setText("Move2");
 
-        move4.setText("move4");
+        move4Name.setText("move4");
+
+        move3Description.setEditable(false);
+        move3Description.setColumns(20);
+        move3Description.setLineWrap(true);
+        move3Description.setRows(5);
+        move3Description.setMaximumSize(new java.awt.Dimension(232, 89));
+        move3Description.setMinimumSize(new java.awt.Dimension(232, 89));
+        jScrollPane2.setViewportView(move3Description);
+
+        move2Description.setEditable(false);
+        move2Description.setColumns(20);
+        move2Description.setLineWrap(true);
+        move2Description.setRows(5);
+        move2Description.setMaximumSize(new java.awt.Dimension(232, 89));
+        move2Description.setMinimumSize(new java.awt.Dimension(232, 89));
+        jScrollPane3.setViewportView(move2Description);
+
+        move1Description.setEditable(false);
+        move1Description.setColumns(20);
+        move1Description.setLineWrap(true);
+        move1Description.setRows(5);
+        move1Description.setMaximumSize(new java.awt.Dimension(232, 89));
+        move1Description.setMinimumSize(new java.awt.Dimension(232, 89));
+        jScrollPane4.setViewportView(move1Description);
+
+        move4Description.setEditable(false);
+        move4Description.setColumns(20);
+        move4Description.setLineWrap(true);
+        move4Description.setRows(5);
+        move4Description.setMaximumSize(new java.awt.Dimension(232, 89));
+        move4Description.setMinimumSize(new java.awt.Dimension(232, 89));
+        jScrollPane5.setViewportView(move4Description);
+
+        move1Max.setText("Curr");
+
+        move1Slash.setText("/");
+
+        move1PP.setText("Curr");
+
+        move2Category.setText("Move1Category");
+
+        move1Type.setText("Move1Type");
+
+        move1Category.setText("Move1Category");
+
+        move2PP.setText("Curr");
+
+        move1Slash1.setText("/");
+
+        move2Max.setText("Curr");
+
+        move2Type.setText("Move1Type");
+
+        move3Category.setText("Move1Category");
+
+        move4Type.setText("Move1Type");
+
+        move3PP.setText("Curr");
+
+        move1Slash2.setText("/");
+
+        move3Max.setText("Curr");
+
+        move4Category.setText("Move1Category");
+
+        move4Max.setText("Curr");
+
+        move1Slash3.setText("/");
+
+        move4PP.setText("Curr");
+
+        move3Type.setText("Move1Type");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -135,10 +275,13 @@ public class pokemonDetails extends javax.swing.JPanel {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(nameHolder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(defenseLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(atkLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGap(24, 24, 24)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(defenseLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGap(24, 24, 24))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(atkLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(atkHolder, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(defHolder, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -160,13 +303,76 @@ public class pokemonDetails extends javax.swing.JPanel {
                         .addComponent(itemHolder, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pokemonIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 248, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(atkLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(move1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(move2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(move3, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(move4, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(moveDetailsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(move3Name, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(move3Category, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(move1Name, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+                                            .addComponent(move1Type, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(move1PP)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(move1Slash)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(move1Max))
+                                            .addComponent(move1Category, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(move2Name, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(move2Type, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(move2PP)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(move1Slash1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(move2Max))
+                                    .addComponent(move2Category, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(move4Name, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(move4Type, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(move4PP)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(move1Slash3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(move4Max)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(move4Category, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(move3Type, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(move3PP)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(move1Slash2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(move3Max)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -175,19 +381,8 @@ public class pokemonDetails extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(atkLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(move1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(move2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(move3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(move4)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -200,30 +395,79 @@ public class pokemonDetails extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(itemLabel)
-                                    .addComponent(itemHolder))
-                                .addGap(0, 154, Short.MAX_VALUE))
-                            .addComponent(pokemonIcon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(atkLabel)
-                            .addComponent(atkHolder))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(defenseLabel)
-                            .addComponent(defHolder))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(spAtkLabel)
-                            .addComponent(spAtkHolder))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(spDefLabel)
-                            .addComponent(spDefHolder))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(speedLabel)
-                            .addComponent(speedHolder))))
-                .addContainerGap())
+                                    .addComponent(itemHolder)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(moveDetailsLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(move1Name)
+                                    .addComponent(move2Name)
+                                    .addComponent(move2Category)
+                                    .addComponent(move1Category))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(move2Max)
+                                        .addComponent(move1Slash1)
+                                        .addComponent(move2PP)
+                                        .addComponent(move2Type))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(move1Max)
+                                        .addComponent(move1Slash)
+                                        .addComponent(move1PP)
+                                        .addComponent(move1Type)))
+                                .addGap(37, 37, 37)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(move3Name)
+                                    .addComponent(move4Name)
+                                    .addComponent(move3Category)
+                                    .addComponent(move4Category))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(move3Max)
+                                    .addComponent(move1Slash2)
+                                    .addComponent(move3PP)
+                                    .addComponent(move4Max)
+                                    .addComponent(move1Slash3)
+                                    .addComponent(move4PP)
+                                    .addComponent(move4Type)
+                                    .addComponent(move3Type))
+                                .addGap(252, 252, 252)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(atkHolder)
+                                    .addComponent(atkLabel))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(defenseLabel)
+                                    .addComponent(defHolder))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(spAtkLabel)
+                                    .addComponent(spAtkHolder))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(spDefLabel)
+                                    .addComponent(spDefHolder))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(speedLabel)
+                                    .addComponent(speedHolder)))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jScrollPane5)
+                                .addComponent(jScrollPane2)))
+                        .addGap(121, 121, 121))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(pokemonIcon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(298, 298, 298))))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -231,18 +475,46 @@ public class pokemonDetails extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel atkHolder;
     private javax.swing.JLabel atkLabel;
-    private javax.swing.JLabel atkLabel1;
     private javax.swing.JLabel defHolder;
     private javax.swing.JLabel defenseLabel;
     private javax.swing.JLabel itemHolder;
     private javax.swing.JLabel itemLabel;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JLabel lvlHolder;
     private javax.swing.JLabel lvlLabel;
-    private javax.swing.JLabel move1;
-    private javax.swing.JLabel move2;
-    private javax.swing.JLabel move3;
-    private javax.swing.JLabel move4;
+    private javax.swing.JLabel move1Category;
+    private javax.swing.JTextArea move1Description;
+    private javax.swing.JLabel move1Max;
+    private javax.swing.JLabel move1Name;
+    private javax.swing.JLabel move1PP;
+    private javax.swing.JLabel move1Slash;
+    private javax.swing.JLabel move1Slash1;
+    private javax.swing.JLabel move1Slash2;
+    private javax.swing.JLabel move1Slash3;
+    private javax.swing.JLabel move1Type;
+    private javax.swing.JLabel move2Category;
+    private javax.swing.JTextArea move2Description;
+    private javax.swing.JLabel move2Max;
+    private javax.swing.JLabel move2Name;
+    private javax.swing.JLabel move2PP;
+    private javax.swing.JLabel move2Type;
+    private javax.swing.JLabel move3Category;
+    private javax.swing.JTextArea move3Description;
+    private javax.swing.JLabel move3Max;
+    private javax.swing.JLabel move3Name;
+    private javax.swing.JLabel move3PP;
+    private javax.swing.JLabel move3Type;
+    private javax.swing.JLabel move4Category;
+    private javax.swing.JTextArea move4Description;
+    private javax.swing.JLabel move4Max;
+    private javax.swing.JLabel move4Name;
+    private javax.swing.JLabel move4PP;
+    private javax.swing.JLabel move4Type;
+    private javax.swing.JLabel moveDetailsLabel;
     private javax.swing.JLabel nameHolder;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JLabel pokemonIcon;

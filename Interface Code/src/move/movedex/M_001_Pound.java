@@ -9,7 +9,7 @@ public class M_001_Pound extends Move implements PhysicalAttack, Normal{
 	private static final long serialVersionUID = 1L;
         
 	public M_001_Pound() {
-            super(1, "Pound", 35, 40, 1);
+            super(1, "Pound", 35, 40, 1, "Pounds the foe with forelegs or tail.");
 	}
 	public M_001_Pound copy()
 	{

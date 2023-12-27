@@ -12,7 +12,7 @@ public class M_033_Tackle extends Move implements PhysicalAttack, Normal {
 	private static final long serialVersionUID = 1L;
 
 	public M_033_Tackle() {
-            super(33, "Tackle", 30, 35, 1);
+            super(33, "Tackle", 30, 35, 1, "A physical attack in which the user charges, full body, into the foe.");
             // TODO Auto-generated constructor stub
 	}
 	

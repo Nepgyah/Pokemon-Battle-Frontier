@@ -1,11 +1,13 @@
 package move;
 
+import java.awt.Color;
 import java.io.Serializable;
 
 import move.modifiers.PhysicalAttack;
 import move.modifiers.SpecialAttack;
 import move.modifiers.StatusMove;
 import types.*;
+import utilities.PokeColors;
 
 /**
 * Public abstract class that represents the moves a pokemon will be able to use.
@@ -21,7 +23,8 @@ public abstract class Move implements Serializable{
 	protected int max_pp;
 	protected int power;
 	protected double accuracy;
-	
+        protected String description;
+        
         /**
          * Public constructor for the move.
          * @param tm_no individual number for the move. Works similar to pokedex number
@@ -30,7 +33,7 @@ public abstract class Move implements Serializable{
          * @param power the power or strength of a move
          * @param accuracy how often the move is able to land
          */
-	public Move(int tm_no, String name, int max_pp, int power, double accuracy) {
+	public Move(int tm_no, String name, int max_pp, int power, double accuracy, String description) {
             super();
             this.tm_no = tm_no;
             this.name = name;
@@ -38,6 +41,7 @@ public abstract class Move implements Serializable{
             this.max_pp = max_pp;
             this.power = power;
             this.accuracy = accuracy;
+            this.description = description;
 	}
 
         /**
@@ -68,7 +72,6 @@ public abstract class Move implements Serializable{
             if(this instanceof PhysicalAttack) System.out.print("'Attack' ");
             if(this instanceof SpecialAttack) System.out.print("'Sp Atk' ");
             if(this instanceof StatusMove) System.out.print("'Status' ");
-            displayTypes();
             System.out.print("\t" + this.current_pp + " / " + this.max_pp + "\t");
             System.out.print(this.name + " ");
             System.out.println();
@@ -77,25 +80,53 @@ public abstract class Move implements Serializable{
         /**
          * Console displays the type of the move.
          */
-	private void displayTypes() {
-            if(this instanceof Bug) System.out.print("Bug ");
-            if(this instanceof Dark) System.out.print("Dark ");
-            if(this instanceof Dragon) System.out.print("Dragon ");
-            if(this instanceof Electric) System.out.print("Electric ");
-            if(this instanceof Fighting) System.out.print("Fighting ");
-            if(this instanceof Fire) System.out.print("Fire ");
-            if(this instanceof Flying) System.out.print("Flying ");
-            if(this instanceof Ghost) System.out.print("Ghost ");
-            if(this instanceof Grass) System.out.print("Grass ");
-            if(this instanceof Ground) System.out.print("Ground ");
-            if(this instanceof Ice) System.out.print("Ice ");
-            if(this instanceof Normal) System.out.print("Normal ");
-            if(this instanceof Poison) System.out.print("Poison ");
-            if(this instanceof Psychic) System.out.print("Psychic ");
-            if(this instanceof Rock) System.out.print("Rock ");
-            if(this instanceof Steel) System.out.print("Steel ");
-            if(this instanceof Water) System.out.print("Water ");
+	public String getType() {
+            if(this instanceof Bug) return ("Bug");
+            if(this instanceof Dark) return("Dark");
+            if(this instanceof Dragon) return("Dragon");
+            if(this instanceof Electric) return("Electric");
+            if(this instanceof Fighting) return("Fighting");
+            if(this instanceof Fire) return("Fire");
+            if(this instanceof Flying) return("Flying");
+            if(this instanceof Ghost) return("Ghost");
+            if(this instanceof Grass) return("Grass");
+            if(this instanceof Ground) return("Ground");
+            if(this instanceof Ice) return("Ice");
+            if(this instanceof Normal) return("Normal");
+            if(this instanceof Poison) return("Poison");
+            if(this instanceof Psychic) return("Psychic");
+            if(this instanceof Rock) return("Rock");
+            if(this instanceof Steel) return("Steel");
+            if(this instanceof Water) return("Water");
+            return "";
 	}
+        
+        public Color getColor() {
+            if(this instanceof Bug) return PokeColors.bug;
+            if(this instanceof Dark) return PokeColors.dark;
+            if(this instanceof Dragon) return PokeColors.dragon;
+            if(this instanceof Electric) return PokeColors.electric;
+            if(this instanceof Fighting) return PokeColors.fighting;
+            if(this instanceof Fire) return PokeColors.fire;
+            if(this instanceof Flying) return PokeColors.flying;
+            if(this instanceof Ghost) return PokeColors.ghost;
+            if(this instanceof Grass) return PokeColors.grass;
+            if(this instanceof Ground) return PokeColors.ground;
+            if(this instanceof Ice) return PokeColors.ice;
+            if(this instanceof Normal) return PokeColors.normal;
+            if(this instanceof Poison) return PokeColors.poison;
+            if(this instanceof Psychic) return PokeColors.psychic;
+            if(this instanceof Rock) return PokeColors.rock;
+            if(this instanceof Steel) return PokeColors.steel;
+            if(this instanceof Water) return PokeColors.water;
+            return Color.black;
+        }
+        public String getCategory() {
+            if(this instanceof PhysicalAttack) return "Physical";
+            if(this instanceof SpecialAttack) return "Special";
+            if(this instanceof StatusMove) return "Status";
+            return "N/A";
+        }
 	
 	public int getTm_no() {
 		return tm_no;
@@ -113,9 +144,6 @@ public abstract class Move implements Serializable{
 		this.name = name;
 	}
 
-	public String getType() {
-		return type;
-	}
 
 	public void setType(String type) {
 		this.type = type;
@@ -152,5 +180,8 @@ public abstract class Move implements Serializable{
 		this.accuracy = accuracy;
 	}
 	
+        public String getDescription() {
+            return this.description;
+        }
 }
 

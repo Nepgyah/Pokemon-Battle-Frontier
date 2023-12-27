@@ -10,7 +10,7 @@ public class M_000_Test extends Move implements SpecialAttack, SetDamage, Grass 
     private static final long serialVersionUID = 1L;
 
     public M_000_Test() {
-        super(0, "TEST", 30, 0, 1);
+        super(0, "TEST", 30, 0, 1, "Move created to test new mechanics");
     }
 
     @Override

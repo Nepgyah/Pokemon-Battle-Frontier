@@ -9,7 +9,7 @@ public class M_055_WaterGun extends Move implements Water, SpecialAttack{
     private static final long serialVersionUID = 1L;
 
     public M_055_WaterGun() {
-        super(55, "Water Gun", 25, 40, 1);
+        super(55, "Water Gun", 25, 40, 1, "Squirts water to attack the foe.");
     }
 
     @Override

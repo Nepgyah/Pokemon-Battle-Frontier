@@ -222,42 +222,42 @@ public class pokemonPanel extends javax.swing.JPanel {
         this.pokemonSelected = 0;
         pokemonDetailPanel.setLabels(trainer.getParty().get(0));
         battleCard.show(battlePanel, "battlefield");
-        textArea.setText("What would you like to do with " + pokemonOne.getName());
+        textArea.setText("What would you like to do with " + trainer.getParty().get(0).getName() + "?");
     }//GEN-LAST:event_pokemonOneActionPerformed
 
     private void pokemonTwoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonTwoActionPerformed
         this.pokemonSelected = 1;
         pokemonDetailPanel.setLabels(trainer.getParty().get(1));
         battleCard.show(battlePanel, "battlefield");
-        textArea.setText("What would you like to do with " + pokemonTwo.getName());
+        textArea.setText("What would you like to do with " + trainer.getParty().get(1).getName() + "?");
     }//GEN-LAST:event_pokemonTwoActionPerformed
 
     private void pokemonThreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonThreeActionPerformed
         this.pokemonSelected = 2;
         pokemonDetailPanel.setLabels(trainer.getParty().get(2));
         battleCard.show(battlePanel, "battlefield");
-        textArea.setText("What would you like to do with " + pokemonThree.getName());
+        textArea.setText("What would you like to do with " + trainer.getParty().get(2).getName() + "?");
     }//GEN-LAST:event_pokemonThreeActionPerformed
 
     private void pokemonFourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonFourActionPerformed
         this.pokemonSelected = 3;
         pokemonDetailPanel.setLabels(trainer.getParty().get(3));
         battleCard.show(battlePanel, "battlefield");
-        textArea.setText("What would you like to do with " + pokemonFour.getName());
+        textArea.setText("What would you like to do with " + trainer.getParty().get(3).getName() + "?");
     }//GEN-LAST:event_pokemonFourActionPerformed
 
     private void pokemonFiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonFiveActionPerformed
         this.pokemonSelected = 4;
         pokemonDetailPanel.setLabels(trainer.getParty().get(4));
         battleCard.show(battlePanel, "battlefield");
-        textArea.setText("What would you like to do with " + pokemonFive.getName());
+        textArea.setText("What would you like to do with " + trainer.getParty().get(4).getName() + "?");
     }//GEN-LAST:event_pokemonFiveActionPerformed
 
     private void pokemonSixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokemonSixActionPerformed
         this.pokemonSelected = 5;
         pokemonDetailPanel.setLabels(trainer.getParty().get(5));
         battleCard.show(battlePanel, "battlefield");
-        textArea.setText("What would you like to do with " + pokemonSix.getName());
+        textArea.setText("What would you like to do with " + trainer.getParty().get(5).getName() + "?");
     }//GEN-LAST:event_pokemonSixActionPerformed
 
     private void shiftButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shiftButtonActionPerformed

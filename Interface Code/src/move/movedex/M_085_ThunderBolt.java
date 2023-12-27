@@ -10,7 +10,7 @@ public class M_085_ThunderBolt extends Move implements Electric, SpecialAttack, 
     private static final long serialVersionUID = 1L;
 
     public M_085_ThunderBolt() {
-        super(85, "Thunderbolt", 15, 90, 1);
+        super(85, "Thunderbolt", 15, 90, 1, "A strong electrical attack that may also leave the foe paralyzed.");
     }
 
     public M_085_ThunderBolt copy()

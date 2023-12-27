@@ -12,7 +12,7 @@ import types.Electric;
 public class M_086_ThunderWave extends Move implements StatusMove, Electric, ApplyParalyze {
 
     public M_086_ThunderWave() {
-        super(86, "Thunder Wave", 20, 0, .9);
+        super(86, "Thunder Wave", 20, 0, .9, "A weak electric shock that is sure to cause paralysis if it hits.");
     }
 
     public Move copy() {

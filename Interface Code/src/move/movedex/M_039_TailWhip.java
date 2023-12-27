@@ -11,7 +11,7 @@ public class M_039_TailWhip extends Move implements StatusMove, Normal, ApplySta
     private static final long serialVersionUID = 1L;
 
     public M_039_TailWhip() {
-        super(39, "Tail Whip", 30, 0, 1);
+        super(39, "Tail Whip", 30, 0, 1, "The user wags its tail cutely, making the foe lower its Defense stat.");
     }
 
     @Override

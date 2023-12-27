@@ -9,7 +9,7 @@ import types.Normal;
 public class M_014_SwordsDance extends Move implements StatusMove, Normal, ApplyStatChange, UserAttackPlusTwo{
 
     public M_014_SwordsDance() {
-        super(14, "Swords Dance", 20, 0, 1);
+        super(14, "Swords Dance", 20, 0, 1, "A frenetic dance of fighting. It sharply raises the Attack stat.");
     }
     
     @Override

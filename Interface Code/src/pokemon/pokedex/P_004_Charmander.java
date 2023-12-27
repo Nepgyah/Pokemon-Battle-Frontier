@@ -23,7 +23,7 @@ public class P_004_Charmander extends Pokemon implements Fire{
         this.base_special_defense = 50;
         this.base_speed = 65;
 
-        this.learnable_moves = new ArrayList<Integer>(Arrays.asList(14, 33, 39, 262));
+        this.learnable_moves = new ArrayList<Integer>(Arrays.asList(14, 33, 39, 261));
     }
 
     @Override

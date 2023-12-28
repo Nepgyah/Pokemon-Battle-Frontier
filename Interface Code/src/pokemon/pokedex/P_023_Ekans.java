@@ -17,7 +17,8 @@ public class P_023_Ekans extends Pokemon implements Electric, Normal{
 		super();
 		this.name = this.nickname = "Ekans";
 		this.pokedex_number = 23;
-                
+                this.height = 2;
+                this.weight = 6.9;
 		this.base_max_hp = 30;
 		this.base_attack = 60;
 		this.base_defense = 44;

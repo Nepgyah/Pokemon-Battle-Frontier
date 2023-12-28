@@ -15,7 +15,8 @@ public class P_004_Charmander extends Pokemon implements Fire{
         super();
         this.name = this.nickname = "Charmander";
         this.pokedex_number = 4;
-
+        this.height = .6;
+        this.weight = 8.5;
         this.base_max_hp = 39;
         this.base_attack = 52;
         this.base_defense = 43;

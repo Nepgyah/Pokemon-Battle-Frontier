@@ -17,7 +17,8 @@ public class P_025_Pikachu extends Pokemon implements Electric, Normal{
 		super();
 		this.name = this.nickname = "Pikachu";
 		this.pokedex_number = 25;
-                
+                this.height = .4;
+                this.weight = 6.0;
 		this.base_max_hp = 35;
 		this.base_attack = 55;
 		this.base_defense = 30;

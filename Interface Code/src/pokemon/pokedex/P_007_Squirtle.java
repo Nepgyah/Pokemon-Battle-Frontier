@@ -15,7 +15,8 @@ public class P_007_Squirtle extends Pokemon implements Water{
         super();
         this.name = this.nickname = "Squirtle";
         this.pokedex_number = 7;
-
+        this.height = .5;
+        this.weight = 9.0;
         this.base_max_hp = 44;
         this.base_attack = 48;
         this.base_defense = 65;

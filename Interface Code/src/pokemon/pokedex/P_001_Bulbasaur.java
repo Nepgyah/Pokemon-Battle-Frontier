@@ -19,7 +19,8 @@ public class P_001_Bulbasaur extends Pokemon implements Grass, Poison{
 		super();
 		this.name = this.nickname = "Bulbasaur";
 		this.pokedex_number = 1;
-		
+		this.height = .7;
+                this.weight = 6.9;
 		this.base_max_hp = 45;
 		this.base_attack = 49;
 		this.base_defense = 49;

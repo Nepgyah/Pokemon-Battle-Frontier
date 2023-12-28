@@ -7,9 +7,7 @@ import javax.swing.ImageIcon;
 
 import move.Move;
 import item.Item;
-import java.awt.Color;
 import types.*;
-import utilities.PokeColors;
 
 /**
 *  Public abstract class that represents all aspects about a pokemon
@@ -21,14 +19,17 @@ public abstract class Pokemon implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
-    // General Information
+    // General Information - Displayed on the pokedex
     protected int pokedex_number;
     protected String name;
     protected String nickname;
     protected String iconPath;
     protected String typeOne;
     protected String typeTwo;
-    
+    protected String title;
+    protected String dex_description;
+    protected double height;
+    protected double weight;
     protected Move[] moveset = new Move[4];
     protected ArrayList<Integer> learnable_moves = new ArrayList<>();
     protected Item heldItem = null;
@@ -470,6 +471,13 @@ public abstract class Pokemon implements Serializable {
         this.nickname = nickname;
     }
 
+    public double getHeight() {
+        return this.height;
+    }
+    
+    public double getWeight() {
+        return this.weight;
+    }
     public Move[] getMoveset() {
         return moveset;
     }

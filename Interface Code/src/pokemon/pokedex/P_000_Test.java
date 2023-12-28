@@ -19,7 +19,8 @@ public class P_000_Test extends Pokemon implements Poison{
 		super();
 		this.name = this.nickname = "Missing No";
 		this.pokedex_number = 0;
-		
+		this.height = .7;
+                this.weight = 6.9;
 		this.base_max_hp = 40;
 		this.base_attack = 49;
 		this.base_defense = 49;

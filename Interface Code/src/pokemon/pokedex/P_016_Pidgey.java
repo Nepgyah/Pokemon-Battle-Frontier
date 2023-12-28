@@ -16,7 +16,8 @@ public class P_016_Pidgey extends Pokemon implements Normal, Flying{
         super();
         this.name = this.nickname = "Pidgey";
         this.pokedex_number = 16;
-
+        this.height = .3;
+        this.weight = 1.8;
         this.base_max_hp = 40;
         this.base_attack = 45;
         this.base_defense = 40;

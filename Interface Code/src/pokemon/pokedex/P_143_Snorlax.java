@@ -16,7 +16,8 @@ public class P_143_Snorlax extends Pokemon implements Normal{
 		super();
 		this.name = this.nickname = "Snorlax";
 		this.pokedex_number = 143;
-                
+                this.height = 2.1;
+                this.weight = 460;
 		this.base_max_hp = 160;
 		this.base_attack = 110;
 		this.base_defense = 65;

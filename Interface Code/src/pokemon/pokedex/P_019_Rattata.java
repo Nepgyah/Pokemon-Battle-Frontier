@@ -16,7 +16,8 @@ public class P_019_Rattata extends Pokemon implements Normal {
         super();
         this.name = this.nickname = "Rattata";
         this.pokedex_number = 19;
-
+        this.height = .3;
+        this.weight = 3.5;
         this.base_max_hp = 30;
         this.base_attack = 56;
         this.base_defense = 35;

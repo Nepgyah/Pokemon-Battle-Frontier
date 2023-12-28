@@ -17,7 +17,8 @@ public class P_012_Butterfree extends Pokemon implements Bug, Normal{
 		super();
 		this.name = this.nickname = "Butterfree";
 		this.pokedex_number = 12;
-                
+                this.height = 1.1;
+                this.weight = 32.0;
 		this.base_max_hp = 60;
 		this.base_attack = 45;
 		this.base_defense = 50;

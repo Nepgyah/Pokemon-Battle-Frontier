@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import pokemon.Pokemon;
-import types.Electric;
+import types.Bug;
 import types.Normal;
 
-public class P_012_Butterfree extends Pokemon implements Electric, Normal{
+public class P_012_Butterfree extends Pokemon implements Bug, Normal{
 	/**
 	 * 
 	 */

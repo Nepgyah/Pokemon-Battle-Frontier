@@ -7,7 +7,7 @@ import pokemon.Pokemon;
 import types.Flying;
 import types.Normal;
 
-public class P_019_Rattata extends Pokemon implements Normal, Flying{
+public class P_019_Rattata extends Pokemon implements Normal {
 
     private static final long serialVersionUID = 1L;
 

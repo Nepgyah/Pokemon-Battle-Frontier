@@ -3,11 +3,13 @@ package client;
 import javax.swing.JPanel;
 import pokemon.Pokemon;
 import java.util.ArrayList;
+import utilities.PokeColors;
 
 public class PokedexPanel extends javax.swing.JPanel {
 
     JPanel contentPanel;
     ArrayList<Pokemon> pokedex;
+    ArrayList<String> tempTypes;
     Pokemon temp;
     public PokedexPanel(JPanel panel, ArrayList<Pokemon> dex) {
         initComponents();
@@ -32,8 +34,11 @@ public class PokedexPanel extends javax.swing.JPanel {
         pokedexList = new java.awt.List();
         pokemonNameValue = new java.awt.Label();
         pokemonNameLabel = new java.awt.Label();
-        dexNumberLabel = new java.awt.Label();
+        type2 = new java.awt.Label();
         dexNumberValue = new java.awt.Label();
+        imageLabel = new javax.swing.JLabel();
+        dexNumberLabel1 = new java.awt.Label();
+        type1 = new java.awt.Label();
 
         setPreferredSize(new java.awt.Dimension(715, 400));
 
@@ -51,10 +56,18 @@ public class PokedexPanel extends javax.swing.JPanel {
         pokemonNameLabel.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         pokemonNameLabel.setText("Name:");
 
-        dexNumberLabel.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        dexNumberLabel.setText("Dex no.");
+        type2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        type2.setText("Dex no.");
 
         dexNumberValue.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+
+        imageLabel.setText("jLabel2");
+
+        dexNumberLabel1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        dexNumberLabel1.setText("Dex no.");
+
+        type1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        type1.setText("Dex no.");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -64,15 +77,28 @@ public class PokedexPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(pokedexList, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dexNumberLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
-                .addComponent(dexNumberValue, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pokemonNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pokemonNameValue, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(dexNumberLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addComponent(dexNumberValue, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(pokemonNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(type1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 141, Short.MAX_VALUE)
+                                .addComponent(type2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(68, 68, 68))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(pokemonNameValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(22, 22, 22))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -83,10 +109,19 @@ public class PokedexPanel extends javax.swing.JPanel {
                     .addComponent(pokedexList, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pokemonNameValue, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dexNumberLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pokemonNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dexNumberValue, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(dexNumberValue, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(dexNumberLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(pokemonNameValue, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(pokemonNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(type2, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(type1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -97,15 +132,28 @@ public class PokedexPanel extends javax.swing.JPanel {
         temp = pokedex.get(Integer.valueOf(pokedexList.getSelectedIndex()));
         dexNumberValue.setText(String.valueOf(temp.getPokedex_number()));
         pokemonNameValue.setText(temp.getName());
+        imageLabel.setIcon(temp.getFrontIcon());
+        tempTypes = temp.getTypes();
+        type1.setText(tempTypes.get(0));
+        type1.setForeground(PokeColors.getTypeColor(type1.getText()));
+        if(tempTypes.size() == 2) {
+            type2.setText(tempTypes.get(1));
+            type2.setForeground(PokeColors.getTypeColor(type2.getText()));
+        } else {
+            type2.setText("");
+        }
     }//GEN-LAST:event_pokedexListMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private java.awt.Label dexNumberLabel;
+    private java.awt.Label dexNumberLabel1;
     private java.awt.Label dexNumberValue;
+    private javax.swing.JLabel imageLabel;
     private javax.swing.JLabel jLabel1;
     private java.awt.List pokedexList;
     private java.awt.Label pokemonNameLabel;
     private java.awt.Label pokemonNameValue;
+    private java.awt.Label type1;
+    private java.awt.Label type2;
     // End of variables declaration//GEN-END:variables
 }

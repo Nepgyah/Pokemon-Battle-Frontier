@@ -7,7 +7,9 @@ import javax.swing.ImageIcon;
 
 import move.Move;
 import item.Item;
+import java.awt.Color;
 import types.*;
+import utilities.PokeColors;
 
 /**
 *  Public abstract class that represents all aspects about a pokemon
@@ -24,6 +26,8 @@ public abstract class Pokemon implements Serializable {
     protected String name;
     protected String nickname;
     protected String iconPath;
+    protected String typeOne;
+    protected String typeTwo;
     
     protected Move[] moveset = new Move[4];
     protected ArrayList<Integer> learnable_moves = new ArrayList<>();
@@ -106,10 +110,27 @@ public abstract class Pokemon implements Serializable {
         }
     }
     
-    /* =============================
-     * MOVE RELATED MEMBER FUNCTIONS
-     * =============================
-     */
+    public ArrayList<String> getTypes() {
+        ArrayList<String> types = new ArrayList<String>(2);
+        if(this instanceof Bug) types.add("Bug");
+        if(this instanceof Dark) types.add("Dark");
+        if(this instanceof Dragon) types.add("Dragon");
+        if(this instanceof Electric) types.add("Electric");
+        if(this instanceof Fighting) types.add("Fighting");
+        if(this instanceof Fire) types.add("Fire");
+        if(this instanceof Flying) types.add("Flying");
+        if(this instanceof Ghost) types.add("Ghost");
+        if(this instanceof Grass) types.add("Grass");
+        if(this instanceof Ground) types.add("Ground");
+        if(this instanceof Ice) types.add("Ice");
+        if(this instanceof Normal) types.add("Normal");
+        if(this instanceof Poison) types.add("Poison");
+        if(this instanceof Psychic) types.add("Psychic");
+        if(this instanceof Rock) types.add("Rock");
+        if(this instanceof Steel) types.add("Steel");
+        if(this instanceof Water) types.add("Water");
+        return types;
+    }
     
     /**
      * Retrieves the front icon of a pokemon
@@ -128,6 +149,7 @@ public abstract class Pokemon implements Serializable {
         ImageIcon icon = new ImageIcon(new ImageIcon("resources/pokedexPhotos/back/" + Integer.toString(this.pokedex_number) + ".png").getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
         return icon;
     }
+    
     /* =============================
      * MOVE RELATED MEMBER FUNCTIONS
      * =============================

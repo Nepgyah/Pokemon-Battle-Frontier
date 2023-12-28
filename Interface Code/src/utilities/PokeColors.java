@@ -1,8 +1,29 @@
 package utilities;
 import java.awt.Color;
+import types.*;
 
 public class PokeColors {
     
+    public static Color getTypeColor(String type) {
+        if(type.equals("Bug")) return PokeColors.bug;
+        if(type.equals("Dark")) return PokeColors.dark;
+        if(type.equals("Dragon")) return PokeColors.dragon;
+        if(type.equals("Electric")) return PokeColors.electric;
+        if(type.equals("Fighting")) return PokeColors.fighting;
+        if(type.equals("Fire")) return PokeColors.fire;
+        if(type.equals("Flying")) return PokeColors.flying;
+        if(type.equals("Ghost")) return PokeColors.ghost;
+        if(type.equals("Grass")) return PokeColors.grass;
+        if(type.equals("Ground")) return PokeColors.ground;
+        if(type.equals("Ice")) return PokeColors.ice;
+        if(type.equals("Normal")) return PokeColors.normal;
+        if(type.equals("Poison")) return PokeColors.poison;
+        if(type.equals("Psychic")) return PokeColors.psychic;
+        if(type.equals("Rock")) return PokeColors.rock;
+        if(type.equals("Steel")) return PokeColors.steel;
+        if(type.equals("Water")) return PokeColors.water;
+        return Color.black;
+    }
     // Types
     public static Color bug = new Color(168,184,32);
     public static Color dark = new Color(112,88,72);

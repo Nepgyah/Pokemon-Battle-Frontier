@@ -13,7 +13,7 @@ import move.Move;
 import move.modifiers.*;
 import pokemon.Pokemon;
 import move.status_effect.*;
-import trainer.Trainer;
+import people.Trainer;
 
 /**
  * Collection of all relevant mechanics and logic for a pokemon battle.

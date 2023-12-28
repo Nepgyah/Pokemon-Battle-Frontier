@@ -3,7 +3,7 @@ package start;
 import java.util.ArrayList;
 import pokemon.Pokemon;
 import utilities.*;
-import trainer.Trainer;
+import people.Trainer;
 import move.Move;
 import client.Client;
 import item.Item;

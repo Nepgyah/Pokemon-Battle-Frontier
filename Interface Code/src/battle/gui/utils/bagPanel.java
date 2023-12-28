@@ -5,7 +5,7 @@ import item.Item;
 import java.awt.CardLayout;
 import java.util.ArrayList;
 import javax.swing.JPanel;
-import trainer.Trainer;
+import people.Trainer;
 
 public class bagPanel extends javax.swing.JPanel {
 

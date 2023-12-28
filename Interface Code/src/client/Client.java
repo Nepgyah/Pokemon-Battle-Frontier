@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import java.awt.*;
 import pokemon.Pokemon;
-import trainer.Trainer;
+import people.Trainer;
 
 public class Client extends javax.swing.JFrame {
 

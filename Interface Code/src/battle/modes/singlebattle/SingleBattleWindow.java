@@ -11,7 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import trainer.Trainer;
+import people.Trainer;
 import utilities.PokeColors;
 
 public class SingleBattleWindow extends javax.swing.JFrame {

@@ -1,4 +1,4 @@
-package trainer;
+package people;
 import item.Item;
 import pokemon.Pokemon;
 

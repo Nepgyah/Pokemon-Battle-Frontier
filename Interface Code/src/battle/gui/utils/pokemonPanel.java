@@ -5,7 +5,7 @@ import java.awt.CardLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import trainer.Trainer;
+import people.Trainer;
 import utilities.PokeColors;
 
 public class pokemonPanel extends javax.swing.JPanel {

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import pokemon.Pokemon;
 import pokemon.pokedex.*;
 import move.Move;
-import trainer.Trainer;
+import people.Trainer;
 import move.movedex.*;
 
 public class Startup {

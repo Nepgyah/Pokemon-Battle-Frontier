@@ -4,7 +4,7 @@ import battle.gui.utils.pokemonDetails;
 import utilities.ConsoleCommands;
 import move.Move;
 import pokemon.Pokemon;
-import trainer.Trainer;
+import people.Trainer;
 import battle.utils.*;
 import battle.gui.utils.pokemonPanel;
 import item.Item;
@@ -129,7 +129,7 @@ public class SingleBattleController{
     /**
      * Executes the logic for a single turn.
      */
-    public void runTurn() {
+    private void runTurn() {
         disableControls();
         battleCard.show(detailPanel, "waitingPanel");
         

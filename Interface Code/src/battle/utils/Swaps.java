@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import pokemon.Pokemon;
-import trainer.Trainer;
+import people.Trainer;
 import utilities.PokeColors;
 
 /**

@@ -34,6 +34,8 @@ public class pokemonPanel extends javax.swing.JPanel {
         cancelButton.setBackground(PokeColors.quitButton);
         setPokemonButtons();
         titleLabel.setText("Party Pokemon for " + trainer.getName());
+        confirmSwapButton.setEnabled(false);
+        cancelButton.setEnabled(false);
         
     }
     
@@ -49,6 +51,7 @@ public class pokemonPanel extends javax.swing.JPanel {
         return buttons;
     }
     
+        
     public void setPokemonButtons() {
         this.pokemonOne.setText(trainer.getParty().get(0).displayButtonInfo());
         if (trainer.getParty().size() > 1) {
@@ -91,6 +94,7 @@ public class pokemonPanel extends javax.swing.JPanel {
         shiftButton = new javax.swing.JButton();
         summaryButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
+        confirmSwapButton = new javax.swing.JButton();
 
         titleLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
@@ -164,6 +168,15 @@ public class pokemonPanel extends javax.swing.JPanel {
             }
         });
 
+        confirmSwapButton.setText("Confirm");
+        confirmSwapButton.setBorderPainted(false);
+        confirmSwapButton.setOpaque(true);
+        confirmSwapButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                confirmSwapButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -189,6 +202,9 @@ public class pokemonPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(summaryButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(confirmSwapButton))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(cancelButton)))
                 .addContainerGap())
         );
@@ -209,12 +225,14 @@ public class pokemonPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(pokemonFive, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(pokemonSix, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(shiftButton)
                     .addComponent(summaryButton)
-                    .addComponent(cancelButton))
-                .addGap(35, 35, 35))
+                    .addComponent(confirmSwapButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cancelButton)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -261,9 +279,9 @@ public class pokemonPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_pokemonSixActionPerformed
 
     private void shiftButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shiftButtonActionPerformed
-        controller.setPokemonSwap(pokemonSelected);
-        battleCard.show(battlePanel, "battlefield");
-        card.show(contentPanel, "waitingPanel");
+        confirmSwapButton.setEnabled(true);
+        cancelButton.setEnabled(true);
+        textArea.setText("Confirm to swap with " + trainer.getParty().get(pokemonSelected).getName() + "?");
     }//GEN-LAST:event_shiftButtonActionPerformed
 
     private void summaryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_summaryButtonActionPerformed
@@ -271,12 +289,23 @@ public class pokemonPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_summaryButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        // TODO add your handling code here:
+        textArea.setText("Select a pokemon.");
+        cancelButton.setEnabled(false);
+        confirmSwapButton.setEnabled(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void confirmSwapButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmSwapButtonActionPerformed
+        controller.setPokemonSwap(pokemonSelected);
+        battleCard.show(battlePanel, "battlefield");
+        card.show(contentPanel, "waitingPanel");
+        cancelButton.setEnabled(false);
+        confirmSwapButton.setEnabled(false);
+    }//GEN-LAST:event_confirmSwapButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
+    private javax.swing.JButton confirmSwapButton;
     private javax.swing.JButton pokemonFive;
     private javax.swing.JButton pokemonFour;
     private javax.swing.JButton pokemonOne;

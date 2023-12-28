@@ -357,6 +357,18 @@ public class Mechanics {
             damage = calcDamage(user.getLevel(), user.getBattle_special_attack(), target.getBattle_special_defense(), userMove.getPower(), typeMultiplier);
         }
         
+        // Critical hit
+        int critChance = (int) ((Math.random() * 16) + 1);
+        System.out.println("Crit number: " + critChance);
+        if (critChance == 1) {
+            System.out.println("Crit successful");
+            System.out.println("Old damage: " + damage);
+            BattleEvents.addGenericEvent(eventQueue, textArea, "A critical hit");
+            damage *= 1.5;
+            System.out.println("New damage: " + damage);
+        }
+        
+        
         if (typeMultiplier == 0) {
             BattleEvents.addGenericEvent(eventQueue, textArea, "The move had no effect");
             return;

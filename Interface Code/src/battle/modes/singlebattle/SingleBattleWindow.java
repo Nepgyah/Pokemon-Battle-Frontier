@@ -5,7 +5,6 @@ import battle.gui.utils.pokemonPanel;
 import battle.gui.utils.bagPanel;
 import battle.gui.utils.pokemonDetails;
 import java.awt.CardLayout;
-import java.awt.Component;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
